@@ -1,0 +1,1757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>God's Plan Academy – School Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --green:#1D9E75;--green-dark:#085041;--green-light:#E1F5EE;--green-mid:#9FE1CB;
+  --amber:#EF9F27;--amber-light:#FAEEDA;--red:#E24B4A;--red-light:#FCEBEB;
+  --blue:#378ADD;--blue-light:#E6F1FB;--purple:#7F77DD;--purple-light:#EEEDFE;
+  --pink:#D4537E;--pink-light:#FBEAF0;
+  --text:#1a1a1a;--muted:#5a6a70;--bg:#f0f5f3;--white:#fff;
+  --border:rgba(0,0,0,0.09);--radius:14px;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Nunito',sans-serif;color:var(--text);background:var(--bg);font-size:15px;line-height:1.6;min-height:100vh;}
+@keyframes spin{to{transform:rotate(360deg);}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.fade-in{animation:fadeIn .3s ease;}
+
+/* LANG BAR */
+.lang-bar{background:#04342C;display:flex;align-items:center;justify-content:center;gap:6px;padding:6px 16px;flex-wrap:wrap;}
+.lang-bar span{color:rgba(255,255,255,0.5);font-size:12px;font-weight:700;}
+.lang-btn{background:none;border:1.5px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.7);font-size:12px;font-weight:800;padding:4px 13px;border-radius:20px;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s;}
+.lang-btn:hover,.lang-btn.active{background:rgba(255,255,255,0.18);border-color:white;color:white;}
+
+/* NAV */
+nav{background:var(--green-dark);display:flex;flex-direction:column;align-items:center;padding:12px 28px 0;box-shadow:0 3px 16px rgba(0,0,0,0.2);position:sticky;top:0;z-index:500;}
+.nav-top{display:flex;align-items:center;justify-content:space-between;width:100%;margin-bottom:8px;}
+.nav-logo{color:white;font-size:19px;font-weight:900;text-decoration:none;display:flex;align-items:center;gap:8px;}
+.nav-user-info{display:flex;align-items:center;gap:8px;}
+.nav-user-badge{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.25);color:white;font-size:12px;padding:4px 12px;border-radius:20px;font-weight:700;}
+.nav-links{display:flex;gap:3px;align-items:center;flex-wrap:wrap;justify-content:center;padding-bottom:10px;}
+.nav-links button{background:none;border:none;color:rgba(255,255,255,0.8);font-size:13px;font-weight:700;padding:6px 12px;border-radius:8px;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s;}
+.nav-links button:hover,.nav-links button.active{background:rgba(255,255,255,0.18);color:white;}
+.nav-cta{background:var(--amber)!important;color:white!important;border-radius:8px!important;}
+.nav-cta:hover{background:#d48b1a!important;}
+
+/* PAGES */
+.page{display:none;animation:fadeIn .3s ease;}
+.page.active{display:block;}
+.container{max-width:1060px;margin:0 auto;padding:28px 18px;}
+
+/* CARDS */
+.card{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);padding:22px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,0.04);}
+.card-title{font-size:17px;font-weight:800;color:var(--green-dark);margin-bottom:3px;}
+.card-sub{font-size:13px;color:var(--muted);margin-bottom:16px;}
+.section-hdr{text-align:center;margin-bottom:28px;}
+.section-hdr h2{font-family:'Playfair Display',serif;font-size:28px;color:var(--green-dark);margin-bottom:6px;}
+.section-hdr p{color:var(--muted);font-size:14px;}
+.section-line{width:44px;height:4px;background:var(--green);border-radius:4px;margin:8px auto 0;}
+
+/* FORMS */
+.fg{margin-bottom:13px;}
+.fg label{display:block;font-size:13px;font-weight:700;color:var(--text);margin-bottom:5px;}
+.fg input,.fg select,.fg textarea{width:100%;padding:10px 13px;border-radius:9px;border:1.5px solid var(--border);font-family:'Nunito',sans-serif;font-size:14px;color:var(--text);outline:none;transition:border-color .2s;background:var(--white);}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--green);}
+.fg textarea{height:80px;resize:vertical;}
+.fg small{display:block;font-size:11px;color:var(--muted);margin-top:3px;}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.btn{padding:10px 20px;border-radius:9px;font-size:14px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;border:none;transition:all .2s;display:inline-block;}
+.btn-green{background:var(--green);color:white;}.btn-green:hover{background:var(--green-dark);}
+.btn-amber{background:var(--amber);color:white;}.btn-amber:hover{background:#d48b1a;}
+.btn-red{background:var(--red);color:white;}.btn-red:hover{background:#b83a3a;}
+.btn-outline{background:none;border:2px solid var(--green);color:var(--green);}.btn-outline:hover{background:var(--green);color:white;}
+.btn-blue{background:var(--blue);color:white;}.btn-blue:hover{background:#1f6bbf;}
+.btn-sm{padding:5px 13px;font-size:12px;border-radius:7px;}
+.btn-block{width:100%;margin-top:6px;text-align:center;}
+
+/* TABLES */
+.tw{overflow-x:auto;border-radius:10px;border:1px solid var(--border);}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{background:var(--green-dark);color:white;padding:10px 13px;text-align:left;font-weight:700;font-size:12px;}
+td{padding:9px 13px;border-bottom:1px solid var(--border);}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:#f5fdf9;}
+.badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;}
+.bg-green{background:var(--green-light);color:var(--green-dark);}
+.bg-amber{background:var(--amber-light);color:#633806;}
+.bg-red{background:var(--red-light);color:#501313;}
+.bg-blue{background:var(--blue-light);color:#042C53;}
+.bg-purple{background:var(--purple-light);color:#26215C;}
+
+/* ALERTS */
+.alert{padding:10px 15px;border-radius:9px;font-size:13px;font-weight:600;margin-bottom:12px;display:none;}
+.alert.show{display:block;}
+.a-success{background:#EAF3DE;border:1px solid #C0DD97;color:#173404;}
+.a-error{background:var(--red-light);border:1px solid #F09595;color:#501313;}
+.a-info{background:var(--blue-light);border:1px solid #B5D4F4;color:#042C53;}
+.a-warn{background:var(--amber-light);border:1px solid #FAC775;color:#412402;}
+
+/* MODAL */
+.mbg{position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:900;display:none;align-items:center;justify-content:center;padding:16px;}
+.mbg.open{display:flex;}
+.modal{background:white;border-radius:16px;padding:26px;max-width:500px;width:100%;max-height:90vh;overflow-y:auto;position:relative;}
+.modal-close{position:absolute;top:13px;right:15px;background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);}
+.modal h3{font-size:17px;font-weight:800;color:var(--green-dark);margin-bottom:3px;}
+.modal-sub{font-size:13px;color:var(--muted);margin-bottom:16px;}
+
+/* HOME */
+.hero{background:linear-gradient(135deg,#085041,#1D9E75 60%,#5DCAA5);padding:48px 28px;color:white;text-align:center;}
+.hero h1{font-family:'Playfair Display',serif;font-size:34px;margin-bottom:8px;}
+.hero p{font-size:15px;opacity:.85;max-width:500px;margin:0 auto 22px;}
+.hero-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.hbw{background:white;color:var(--green-dark);padding:11px 24px;border-radius:10px;font-size:14px;font-weight:800;border:none;cursor:pointer;font-family:'Nunito',sans-serif;transition:transform .15s;}
+.hbw:hover{transform:translateY(-2px);}
+.hbg{background:transparent;color:white;border:2px solid rgba(255,255,255,0.5);padding:11px 24px;border-radius:10px;font-size:14px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .15s;}
+.hbg:hover{border-color:white;background:rgba(255,255,255,0.1);}
+.qgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:14px;margin-bottom:20px;}
+.qcard{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);padding:20px 16px;text-align:center;cursor:pointer;transition:transform .2s,box-shadow .2s;}
+.qcard:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(0,0,0,0.1);}
+.qi{font-size:30px;margin-bottom:10px;}
+.qt{font-size:14px;font-weight:800;color:var(--green-dark);margin-bottom:3px;}
+.qd{font-size:12px;color:var(--muted);}
+
+/* STATS */
+.sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px;}
+.scard{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);padding:16px;text-align:center;}
+.snum{font-size:28px;font-weight:900;color:var(--green);}
+.slbl{font-size:11px;color:var(--muted);margin-top:2px;}
+
+/* RESULTS / REPORT */
+.price-tag{display:inline-block;background:var(--amber-light);border:2px solid var(--amber);border-radius:10px;padding:8px 22px;font-size:19px;font-weight:900;color:#633806;margin-bottom:18px;}
+.momo-box{background:var(--green-light);border-left:4px solid var(--green);border-radius:9px;padding:13px 15px;font-size:13px;color:var(--green-dark);margin-bottom:14px;}
+.momo-box strong{display:block;font-size:14px;margin-bottom:3px;}
+.credit-warn{background:var(--red-light);border:2px solid var(--red);border-radius:10px;padding:14px;text-align:center;display:none;}
+.credit-warn.show{display:block;}
+.credit-warn h4{color:var(--red);font-size:14px;font-weight:800;margin-bottom:3px;}
+.rwrap{border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);}
+.rhead{background:var(--green-dark);color:white;padding:20px 22px;display:flex;align-items:center;gap:16px;}
+.ravatar{width:50px;height:50px;border-radius:50%;background:rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.35);display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:900;flex-shrink:0;}
+.rname{font-size:17px;font-weight:900;}
+.rmeta{font-size:12px;opacity:.75;margin-top:1px;}
+.rbody{background:white;}
+.rs-title{background:#f5fdf9;padding:8px 18px;font-size:11px;font-weight:800;color:var(--green-dark);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);border-top:1px solid var(--border);}
+.tstrip{background:var(--green-dark);color:white;padding:12px 18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+.tb .tl{font-size:10px;opacity:.7;}
+.tb .tv{font-size:18px;font-weight:900;}
+.gpills{display:flex;gap:8px;padding:12px 18px;flex-wrap:wrap;}
+.gp{flex:1;min-width:80px;border-radius:8px;padding:8px 12px;text-align:center;}
+.gp .gn{font-size:18px;font-weight:900;}
+.gp .gl{font-size:10px;font-weight:700;opacity:.8;margin-top:1px;}
+.disc-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;padding:12px 18px;}
+.di{background:var(--bg);border-radius:8px;padding:9px 12px;border:1px solid var(--border);}
+.di .dl{font-size:10px;color:var(--muted);font-weight:700;margin-bottom:2px;}
+.di .dv{font-size:16px;font-weight:900;color:var(--green-dark);}
+.rmk{padding:12px 18px;}
+.rmk h4{font-size:12px;font-weight:800;color:var(--green-dark);margin-bottom:4px;}
+.rmk p{font-size:13px;color:var(--muted);font-style:italic;line-height:1.6;}
+.rfooter{padding:12px 18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;border-top:1px solid var(--border);}
+
+/* FEES */
+.pay-methods{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:16px;}
+.pm{border:2px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center;cursor:pointer;transition:all .2s;}
+.pm:hover,.pm.sel{border-color:var(--green);background:var(--green-light);}
+.pm-icon{font-size:28px;margin-bottom:8px;}
+.pm-name{font-size:13px;font-weight:800;color:var(--green-dark);}
+.pm-desc{font-size:11px;color:var(--muted);margin-top:2px;}
+.fee-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);font-size:14px;}
+.fee-row:last-child{border:none;font-weight:800;color:var(--green-dark);font-size:15px;}
+.bank-box{background:#f0f5fb;border:1.5px solid var(--blue);border-radius:9px;padding:13px 15px;font-size:13px;color:#042C53;}
+.bank-box strong{display:block;font-size:14px;margin-bottom:3px;}
+
+/* NEWS */
+.nfilters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px;}
+.nfbtn{padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);background:white;font-size:12px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s;}
+.nfbtn.active,.nfbtn:hover{background:var(--green);color:white;border-color:var(--green);}
+.ngrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
+.ncard{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;cursor:pointer;transition:transform .2s,box-shadow .2s;}
+.ncard:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.1);}
+.nthumb{height:110px;display:flex;align-items:center;justify-content:center;font-size:42px;position:relative;}
+.ncbadge{position:absolute;top:8px;left:8px;font-size:10px;font-weight:700;padding:2px 9px;border-radius:20px;}
+.nbody{padding:13px 15px;}
+.ndate{font-size:11px;color:var(--muted);margin-bottom:3px;}
+.ntitle{font-size:13px;font-weight:800;line-height:1.4;margin-bottom:4px;}
+.nprev{font-size:12px;color:var(--muted);line-height:1.5;}
+.ggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;}
+.gtile{border-radius:10px;aspect-ratio:1;cursor:pointer;position:relative;overflow:hidden;transition:transform .2s;}
+.gtile:hover{transform:scale(1.04);}
+.ginner{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:38px;}
+.glabel{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.5);color:white;font-size:10px;font-weight:700;padding:5px 7px;text-align:center;}
+
+/* LOGIN / REGISTER */
+.auth-tabs{display:flex;border-bottom:2px solid var(--border);margin-bottom:20px;}
+.atab{flex:1;padding:10px;text-align:center;font-weight:800;font-size:14px;cursor:pointer;border:none;background:none;font-family:'Nunito',sans-serif;color:var(--muted);transition:all .2s;border-bottom:3px solid transparent;margin-bottom:-2px;}
+.atab.active{color:var(--green);border-bottom-color:var(--green);}
+.auth-form{display:none;}.auth-form.active{display:block;}
+.phone-row{display:flex;gap:8px;align-items:flex-start;}
+.phone-cc{width:100px;flex-shrink:0;}
+.role-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px;}
+.rbtn{padding:11px;border-radius:10px;border:2px solid var(--border);background:white;text-align:center;cursor:pointer;transition:all .2s;font-family:'Nunito',sans-serif;}
+.rbtn:hover,.rbtn.sel{border-color:var(--green);background:var(--green-light);}
+.rbtn .ri{font-size:20px;margin-bottom:3px;}
+.rbtn .rl{font-size:12px;font-weight:800;color:var(--green-dark);}
+.pass-wrap{position:relative;}
+.pass-wrap input{padding-right:40px;}
+.eye-btn{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;color:var(--muted);}
+.lang-pick{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px;}
+.lp{padding:9px;border-radius:9px;border:2px solid var(--border);background:white;text-align:center;cursor:pointer;transition:all .2s;font-size:13px;font-weight:700;font-family:'Nunito',sans-serif;}
+.lp:hover,.lp.sel{border-color:var(--green);background:var(--green-light);color:var(--green-dark);}
+
+/* COMMENTS */
+.comment-card{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);padding:16px;margin-bottom:12px;}
+.comment-header{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.comment-avatar{width:36px;height:36px;border-radius:50%;background:var(--green-light);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:var(--green-dark);flex-shrink:0;}
+.comment-name{font-size:13px;font-weight:800;}
+.comment-time{font-size:11px;color:var(--muted);}
+.comment-text{font-size:13px;color:var(--text);line-height:1.6;}
+.comment-role{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:700;}
+
+/* CONTACT */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.cinfo-item{display:flex;gap:12px;align-items:flex-start;margin-bottom:16px;}
+.cicon{width:38px;height:38px;border-radius:9px;background:var(--green-light);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.clabel{font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em;}
+.cval{font-size:14px;color:var(--text);font-weight:600;}
+
+/* ADMIN TABS */
+.atabs-bar{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:20px;border-bottom:2px solid var(--border);padding-bottom:10px;}
+.atab-btn{padding:7px 15px;border-radius:8px;border:none;background:none;font-size:13px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;color:var(--muted);transition:all .2s;}
+.atab-btn.active{background:var(--green-light);color:var(--green-dark);}
+.atab-btn:hover{background:var(--green-light);color:var(--green-dark);}
+.asub{display:none;}.asub.active{display:block;animation:fadeIn .25s ease;}
+
+/* MARKS TABLE INPUT */
+.marks-input-table th{background:#f0f8f4;color:var(--green-dark);padding:8px 12px;font-size:12px;}
+.marks-input-table td{padding:7px 12px;border-bottom:1px solid var(--border);}
+.marks-input-table input{width:70px;padding:5px 8px;border-radius:6px;border:1.5px solid var(--border);font-family:'Nunito',sans-serif;font-size:13px;text-align:center;}
+.marks-input-table input:focus{border-color:var(--green);outline:none;}
+
+/* SCHOOL SETTINGS */
+.settings-section{border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:16px;}
+.settings-section h4{font-size:15px;font-weight:800;color:var(--green-dark);margin-bottom:4px;display:flex;align-items:center;gap:8px;}
+.settings-section p{font-size:13px;color:var(--muted);margin-bottom:14px;}
+
+/* ===== SPLASH / WELCOME SCREEN ===== */
+#splashScreen{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;overflow-y:auto;background:linear-gradient(160deg,#04342C 0%,#085041 40%,#1D9E75 100%);}
+.splash-inner{max-width:460px;width:100%;margin:auto;padding:32px 20px;}
+.splash-logo{text-align:center;margin-bottom:28px;}
+.splash-logo .logo-icon{font-size:52px;margin-bottom:10px;}
+.splash-logo h1{font-family:'Playfair Display',serif;font-size:26px;color:white;margin-bottom:4px;}
+.splash-logo p{font-size:13px;color:rgba(255,255,255,0.65);}
+.splash-card{background:white;border-radius:18px;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,0.3);}
+.splash-lang{margin-bottom:20px;}
+.splash-lang p{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;text-align:center;}
+.splash-lang-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.slang-btn{padding:9px 10px;border-radius:9px;border:2px solid var(--border);background:white;font-size:13px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s;text-align:center;}
+.slang-btn:hover,.slang-btn.active{border-color:var(--green);background:var(--green-light);color:var(--green-dark);}
+.splash-tabs{display:flex;border-bottom:2px solid var(--border);margin-bottom:20px;}
+.stab{flex:1;padding:10px;text-align:center;font-weight:800;font-size:14px;cursor:pointer;border:none;background:none;font-family:'Nunito',sans-serif;color:var(--muted);transition:all .2s;border-bottom:3px solid transparent;margin-bottom:-2px;}
+.stab.active{color:var(--green);border-bottom-color:var(--green);}
+.splash-form{display:none;}.splash-form.active{display:block;}
+.guest-btn{width:100%;margin-top:10px;padding:11px;border-radius:9px;border:2px solid var(--border);background:transparent;font-size:13px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;color:var(--muted);transition:all .2s;}
+.guest-btn:hover{border-color:var(--green);color:var(--green);}
+
+@media(max-width:640px){
+  nav{padding:10px 14px 0;}
+  .hero{padding:36px 16px;}
+  .hero h1{font-size:24px;}
+  .container{padding:18px 12px;}
+  .frow,.contact-grid,.fees-layout{grid-template-columns:1fr!important;}
+  .rhead{flex-direction:column;text-align:center;}
+  .tstrip{flex-direction:column;gap:5px;}
+}
+@media print{
+  #splashScreen,.lang-bar,nav,.tabs-wrap,.btn:not(.print-btn),#page-home,#page-fees,#page-news,#page-login,#page-contact,#page-dashboard{display:none!important;}
+  .rwrap{box-shadow:none;}
+}
+</style>
+</head>
+<body>
+<script src="api.js"></script>
+
+<!-- ===== SPLASH / WELCOME SCREEN (shown first) ===== -->
+<div id="splashScreen">
+  <div class="splash-inner">
+
+    <div class="splash-logo">
+      <div class="logo-icon">🌱</div>
+      <h1>God's Plan Academy</h1>
+      <p id="splashTagline">School Management Portal · Musanze, Rwanda</p>
+    </div>
+
+    <div class="splash-card">
+
+      <!-- LANGUAGE SELECTION -->
+      <div class="splash-lang">
+        <p id="splashLangLabel">🌍 Choose Your Language / Hitamo Ururimi</p>
+        <div class="splash-lang-btns">
+          <button class="slang-btn active" id="sl-en" onclick="splashLang('en')">🇬🇧 English</button>
+          <button class="slang-btn" id="sl-rw" onclick="splashLang('rw')">🇷🇼 Kinyarwanda</button>
+          <button class="slang-btn" id="sl-fr" onclick="splashLang('fr')">🇫🇷 Français</button>
+          <button class="slang-btn" id="sl-sw" onclick="splashLang('sw')">🇰🇪 Kiswahili</button>
+        </div>
+      </div>
+
+      <!-- LOGIN / REGISTER TABS -->
+      <div class="splash-tabs">
+        <button class="stab active" id="stab-login" onclick="switchSplashTab('login')" data-i18n="auth_login_tab">Login</button>
+        <button class="stab" id="stab-register" onclick="switchSplashTab('register')" data-i18n="auth_register_tab">Create Account</button>
+        <button class="stab" id="stab-forgot" onclick="switchSplashTab('forgot')" data-i18n="auth_forgot_tab">Forgot Password</button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <div class="splash-form active" id="sform-login">
+        <div class="fg">
+          <label data-i18n="login_email_lbl">Email or Username</label>
+          <input type="text" id="sLoginId" placeholder="email or username" onkeydown="if(event.key==='Enter')splashLogin()"/>
+        </div>
+        <div class="fg">
+          <label data-i18n="login_pass_lbl">Password</label>
+          <div class="pass-wrap">
+            <input type="password" id="sLoginPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')splashLogin()"/>
+            <button class="eye-btn" onclick="togglePass('sLoginPass',this)">👁️</button>
+          </div>
+        </div>
+        <div id="sLoginErr" class="alert a-error"></div>
+        <button class="btn btn-green btn-block" onclick="splashLogin()" data-i18n="login_btn">Login →</button>
+        <div style="margin-top:10px;font-size:11px;color:var(--muted);text-align:center;" data-i18n="login_demo">Demo — admin/gpa2026 · director/gpa999 · teacher/gpa123</div>
+        <button class="guest-btn" onclick="enterAsGuest()" data-i18n="guest_btn">👁️ Continue as Guest (View Only)</button>
+      </div>
+
+      <!-- REGISTER FORM -->
+      <div class="splash-form" id="sform-register">
+        <div class="fg">
+          <label data-i18n="reg_role_lbl">I am a</label>
+          <div class="role-grid">
+            <div class="rbtn sel" id="sr-parent" onclick="pickRegRole('parent')"><div class="ri">👨‍👩‍👧</div><div class="rl" data-i18n="role_parent">Parent</div></div>
+            <div class="rbtn" id="sr-student" onclick="pickRegRole('student')"><div class="ri">🎒</div><div class="rl" data-i18n="role_student">Student</div></div>
+            <div class="rbtn" id="sr-teacher" onclick="pickRegRole('teacher')"><div class="ri">👩‍🏫</div><div class="rl" data-i18n="role_teacher">Teacher</div></div>
+            <div class="rbtn" id="sr-staff" onclick="pickRegRole('staff')"><div class="ri">🏫</div><div class="rl" data-i18n="role_staff">Other Staff</div></div>
+          </div>
+        </div>
+        <div class="frow">
+          <div class="fg"><label data-i18n="reg_fname_lbl">First Name</label><input type="text" id="sRegFirst" placeholder="First name"/></div>
+          <div class="fg"><label data-i18n="reg_lname_lbl">Last Name</label><input type="text" id="sRegLast" placeholder="Last name"/></div>
+        </div>
+        <div class="fg"><label data-i18n="reg_email_lbl">Email Address</label><input type="email" id="sRegEmail" placeholder="your@email.com"/></div>
+        <div class="fg">
+          <label data-i18n="reg_phone_lbl">Phone Number</label>
+          <div class="phone-row">
+            <select class="phone-cc" id="sRegCC">
+              <option value="+250">🇷🇼 +250</option>
+              <option value="+254">🇰🇪 +254</option>
+              <option value="+255">🇹🇿 +255</option>
+              <option value="+256">🇺🇬 +256</option>
+              <option value="+243">🇨🇩 +243</option>
+              <option value="+33">🇫🇷 +33</option>
+              <option value="+44">🇬🇧 +44</option>
+              <option value="+1">🇺🇸 +1</option>
+              <option value="+27">🇿🇦 +27</option>
+              <option value="+234">🇳🇬 +234</option>
+            </select>
+            <div class="fg" style="flex:1;margin-bottom:0;"><input type="tel" id="sRegPhone" placeholder="7XX XXX XXX"/></div>
+          </div>
+        </div>
+        <div class="fg"><label data-i18n="reg_username_lbl">Username</label><input type="text" id="sRegUser" placeholder="Choose a username"/></div>
+        <div class="fg">
+          <label data-i18n="reg_pass_lbl">Password</label>
+          <div class="pass-wrap"><input type="password" id="sRegPass" placeholder="Min 6 characters"/><button class="eye-btn" onclick="togglePass('sRegPass',this)">👁️</button></div>
+        </div>
+        <div class="fg">
+          <label data-i18n="reg_pass2_lbl">Confirm Password</label>
+          <div class="pass-wrap"><input type="password" id="sRegPass2" placeholder="Repeat password"/><button class="eye-btn" onclick="togglePass('sRegPass2',this)">👁️</button></div>
+        </div>
+        <div id="sRegErr" class="alert a-error"></div>
+        <div id="sRegSuc" class="alert a-success"></div>
+        <button class="btn btn-green btn-block" onclick="splashRegister()" data-i18n="reg_btn">✅ Create Account</button>
+        <button class="guest-btn" onclick="enterAsGuest()" data-i18n="guest_btn">👁️ Continue as Guest (View Only)</button>
+      </div>
+
+      <!-- FORGOT PASSWORD -->
+      <div class="splash-form" id="sform-forgot">
+        <div style="text-align:center;font-size:34px;margin-bottom:10px;">🔑</div>
+        <div style="text-align:center;color:var(--muted);font-size:13px;margin-bottom:14px;" data-i18n="forgot_desc">Enter your email or phone. We will send you a reset code.</div>
+        <div class="fg"><label data-i18n="forgot_email_lbl">Email or Phone Number</label><input type="text" id="sForgotId" placeholder="email or phone"/></div>
+        <div id="sForgotErr" class="alert a-error"></div>
+        <div id="sForgotSuc" class="alert a-success"></div>
+        <button class="btn btn-amber btn-block" onclick="splashForgot()" data-i18n="forgot_btn">📧 Send Reset Code</button>
+        <div style="margin-top:12px;font-size:11px;color:var(--muted);text-align:center;line-height:1.7;" data-i18n="forgot_contact_hint">Contact info@godsplanacademy.rw if no code is received.</div>
+        <button class="guest-btn" onclick="enterAsGuest()" data-i18n="guest_btn">👁️ Continue as Guest (View Only)</button>
+      </div>
+
+    </div><!-- end splash-card -->
+  </div><!-- end splash-inner -->
+</div><!-- end splashScreen -->
+
+<!-- LANG BAR -->
+<div class="lang-bar">
+  <span>🌍</span>
+  <button class="lang-btn active" onclick="setLang('en')" id="lb-en">🇬🇧 English</button>
+  <button class="lang-btn" onclick="setLang('rw')" id="lb-rw">🇷🇼 Kinyarwanda</button>
+  <button class="lang-btn" onclick="setLang('fr')" id="lb-fr">🇫🇷 Français</button>
+  <button class="lang-btn" onclick="setLang('sw')" id="lb-sw">🇰🇪 Kiswahili</button>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-top">
+    <a class="nav-logo" href="#" onclick="showPage('home')">🌱 God's Plan Academy</a>
+    <div class="nav-user-info" id="navUserInfo" style="display:none;">
+      <span class="nav-user-badge" id="navUserBadge">👤 User</span>
+      <button class="btn btn-sm btn-outline" style="color:white;border-color:rgba(255,255,255,0.4);" onclick="logout()">Logout</button>
+    </div>
+  </div>
+  <div class="nav-links">
+    <button onclick="showPage('home')" id="nav-home" class="active" data-i18n="nav_home">🏠 Home</button>
+    <a href="school_website.html" style="color:rgba(255,255,255,0.8);font-size:13px;font-weight:700;padding:6px 12px;border-radius:8px;text-decoration:none;transition:all .2s;" onmouseover="this.style.background='rgba(255,255,255,0.18)'" onmouseout="this.style.background='none'">🌐 School Website</a>
+    <button onclick="showPage('results')" id="nav-results" data-i18n="nav_results">📊 Results</button>
+    <button onclick="showPage('fees')" id="nav-fees" data-i18n="nav_fees">💳 Fees</button>
+    <button onclick="showPage('news')" id="nav-news" data-i18n="nav_news">📰 News</button>
+    <button onclick="showPage('comments')" id="nav-comments" data-i18n="nav_comments">💬 Comments</button>
+    <button onclick="showPage('contact')" id="nav-contact" data-i18n="nav_contact">📞 Contact Us</button>
+    <button onclick="showPage('login')" id="nav-login" class="nav-cta" data-i18n="nav_login">🔐 Login</button>
+  </div>
+</nav>
+
+<!-- ===== HOME PAGE ===== -->
+<div class="page" id="page-home">
+  <div class="hero">
+    <h1 data-i18n="home_title">God's Plan Academy Portal</h1>
+    <p data-i18n="home_sub">Your complete school portal — results, fees, news, staff and more.</p>
+    <div class="hero-btns">
+      <button class="hbw" onclick="showPage('results')" data-i18n="home_btn1">📊 Check Results</button>
+      <button class="hbg" onclick="showPage('fees')" data-i18n="home_btn2">💳 Pay School Fees</button>
+    </div>
+  </div>
+  <div class="container">
+    <div class="alert a-warn show" style="text-align:center;" data-i18n="home_notice">📢 Term 2 2026 — School fees are due by April 28, 2026. Pay online now to avoid delays.</div>
+    <div class="qgrid">
+      <div class="qcard" onclick="showPage('results')"><div class="qi">📊</div><div class="qt" data-i18n="q1t">Student Results</div><div class="qd" data-i18n="q1d">CAT & Exam marks, report cards. 100 RWF access fee.</div></div>
+      <div class="qcard" onclick="showPage('fees')"><div class="qi">💳</div><div class="qt" data-i18n="q2t">Pay School Fees</div><div class="qd" data-i18n="q2d">Pay via MoMo, Airtel Money or Bank Transfer.</div></div>
+      <div class="qcard" onclick="showPage('news')"><div class="qi">📰</div><div class="qt" data-i18n="q3t">News & Gallery</div><div class="qd" data-i18n="q3d">Trips, games, debates, visitors & funny moments.</div></div>
+      <div class="qcard" onclick="showPage('comments')"><div class="qi">💬</div><div class="qt" data-i18n="q4t">Messages to Director</div><div class="qd" data-i18n="q4d">Parents can send messages to the school director.</div></div>
+      <div class="qcard" onclick="showPage('contact')"><div class="qi">📞</div><div class="qt" data-i18n="q5t">Contact Us</div><div class="qd" data-i18n="q5d">Call, email or WhatsApp the school directly.</div></div>
+      <div class="qcard" onclick="showPage('login')"><div class="qi">🔐</div><div class="qt" data-i18n="q6t">Staff & Admin Login</div><div class="qd" data-i18n="q6d">Post marks, manage students, staff and settings.</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">📰 Latest News</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;" id="homeNewsPreview"></div>
+      <div style="text-align:center;margin-top:14px;"><button class="btn btn-outline" onclick="showPage('news')" data-i18n="view_all_news">View All News →</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== RESULTS PAGE ===== -->
+<div class="page" id="page-results">
+  <div class="container">
+    <div class="section-hdr"><h2 data-i18n="res_title">📊 Student Results</h2><p data-i18n="res_sub">CAT marks, exam marks, discipline & full report cards.</p><div class="section-line"></div></div>
+    <div id="resGate" class="card" style="max-width:480px;margin:0 auto;">
+      <div style="text-align:center;">
+        <div style="font-size:48px;margin-bottom:12px;">🎓</div>
+        <div style="font-family:'Playfair Display',serif;font-size:22px;color:var(--green-dark);margin-bottom:6px;" data-i18n="res_gate_title">Access Results</div>
+        <div style="color:var(--muted);font-size:13px;margin-bottom:16px;" data-i18n="res_gate_desc">Enter your child's registration number. Students with outstanding fees cannot access results.</div>
+        <div class="price-tag" data-i18n="res_price">100 RWF to view marks & report</div>
+        <div class="momo-box" style="text-align:left;">
+          <strong data-i18n="res_pay_how">📱 How to pay 100 RWF</strong>
+          <span data-i18n="res_pay_steps">Dial <strong>*182*8*1*0788000000*100#</strong> on your MTN<br/>OR MTN MoMo App → Send → <strong>+250 788 000 000</strong><br/><em>Save your transaction code to enter below.</em></span>
+        </div>
+        <div class="fg"><label data-i18n="res_reg_lbl">Student Registration Number</label><input type="text" id="resReg" placeholder="GPA-2026-001" oninput="checkCredit()"/></div>
+        <div class="credit-warn" id="creditWarn"><h4 data-i18n="credit_title">🚫 Results Locked — Outstanding Fees</h4><p data-i18n="credit_desc">Fees not paid. <button onclick="showPage('fees')" style="background:none;border:none;color:var(--red);font-weight:800;cursor:pointer;text-decoration:underline;" data-i18n="credit_link">Pay fees online →</button></p></div>
+        <div id="resPayFields">
+          <div class="fg"><label data-i18n="res_parent_lbl">Your Name (Parent/Guardian)</label><input type="text" id="resParent" placeholder="Full name"/></div>
+          <div class="fg"><label data-i18n="res_txn_lbl">MoMo Transaction Code</label><input type="text" id="resTxn" placeholder="TXN123456789" oninput="this.value=this.value.toUpperCase()"/><small data-i18n="res_txn_hint">Received by SMS after paying 100 RWF.</small></div>
+          <div id="resErr" class="alert a-error"></div>
+          <button class="btn btn-green btn-block" onclick="accessResults()" data-i18n="res_btn">✅ Verify & View Results</button>
+        </div>
+      </div>
+    </div>
+    <div id="resReport" style="display:none;" class="fade-in">
+      <button class="btn btn-outline btn-sm" style="margin-bottom:14px;" onclick="resetRes()">← Back</button>
+      <div class="rwrap">
+        <div class="rhead"><div class="ravatar" id="rpAv">MK</div><div><div class="rname" id="rpNm">—</div><div class="rmeta" id="rpMt">—</div><div style="font-size:11px;opacity:.6;margin-top:2px;">God's Plan Academy · Musanze, Rwanda</div></div></div>
+        <div class="rbody">
+          <div class="rs-title" data-i18n="rep_academic">📚 Academic Performance</div>
+          <div style="overflow-x:auto;"><table class="marks-input-table"><thead><tr><th data-i18n="rep_subject">Subject</th><th>CAT (/40)</th><th data-i18n="rep_exam">Exam (/60)</th><th data-i18n="rep_total">Total (/100)</th><th data-i18n="rep_grade">Grade</th><th data-i18n="rep_remark">Remark</th></tr></thead><tbody id="rpSubs"></tbody></table></div>
+          <div class="tstrip"><div class="tb"><div class="tl" data-i18n="rep_overall">Overall Total</div><div class="tv" id="rpTot">—</div></div><div class="tb"><div class="tl" data-i18n="rep_pct">Percentage</div><div class="tv" id="rpPct">—</div></div><div class="tb"><div class="tl" data-i18n="rep_pos">Position</div><div class="tv" id="rpPos">—</div></div><div class="tb"><div class="tl" data-i18n="rep_final_grade">Final Grade</div><div class="tv" id="rpGr">—</div></div></div>
+          <div class="gpills" id="rpPills"></div>
+          <div class="rs-title" data-i18n="rep_discipline">🎖️ Discipline & Conduct</div>
+          <div class="disc-g" id="rpDisc"></div>
+          <div class="rmk"><h4 data-i18n="rep_teacher_rmk">👩‍🏫 Class Teacher's Remarks</h4><p id="rpTrk">—</p></div>
+          <div class="rmk" style="border-top:1px solid var(--border);"><h4 data-i18n="rep_head_rmk">🏫 Head Teacher's Remarks</h4><p id="rpHrk">—</p></div>
+          <div class="rfooter"><div style="font-size:11px;color:var(--muted);" data-i18n="rep_footer">Next Term: May 5, 2026 · Fees Due: April 28, 2026</div><button class="btn btn-green btn-sm" onclick="window.print()" data-i18n="rep_print">🖨️ Print Report</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FEES PAGE ===== -->
+<div class="page" id="page-fees">
+  <div class="container">
+    <div class="section-hdr"><h2 data-i18n="fees_title">💳 Pay School Fees Online</h2><p data-i18n="fees_sub">Pay securely from anywhere via Mobile Money or Bank Transfer.</p><div class="section-line"></div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;" class="fees-layout">
+      <div>
+        <div class="card">
+          <div class="card-title" data-i18n="fees_student_info">Student Details</div>
+          <div class="card-sub" data-i18n="fees_student_sub">Enter your child's registration number first.</div>
+          <div class="fg"><label data-i18n="fees_reg_lbl">Student Registration Number</label><input type="text" id="feeReg" placeholder="GPA-2026-001" oninput="loadFeeStudent()"/></div>
+          <div id="feeStuInfo" style="display:none;background:var(--green-light);border-radius:9px;padding:11px 14px;margin-bottom:12px;font-size:13px;"><strong id="feeStuName">—</strong><br/><span id="feeStuClass" style="color:var(--muted);">—</span></div>
+          <div class="fg"><label data-i18n="fees_category_lbl">Fee Category</label>
+            <select id="feeCat" onchange="updateFeeBreakdown()">
+              <option value="" data-i18n="fees_cat_select">Select what to pay...</option>
+              <option value="tuition" data-i18n="fees_cat_tuition">Tuition Fees (Per Term)</option>
+              <option value="registration" data-i18n="fees_cat_reg">Registration / Enrollment Fee</option>
+              <option value="activity" data-i18n="fees_cat_activity">Activity & Sports Fee</option>
+              <option value="uniform" data-i18n="fees_cat_uniform">School Uniform</option>
+              <option value="transport" data-i18n="fees_cat_transport">Transport Fee (Per Term)</option>
+              <option value="lunch" data-i18n="fees_cat_lunch">Lunch Program (Per Term)</option>
+              <option value="all" data-i18n="fees_cat_all">All Fees (Full Balance)</option>
+            </select>
+          </div>
+          <div class="fg"><label data-i18n="fees_term_lbl">Term</label><select id="feeTerm"><option>Term 1 – 2026</option><option selected>Term 2 – 2026</option><option>Term 3 – 2026</option></select></div>
+          <div id="feeBreakdown" style="display:none;background:var(--bg);border-radius:9px;padding:14px;margin-bottom:12px;">
+            <div class="fee-row" id="feeLn1"><span>—</span><span>—</span></div>
+            <div class="fee-row" id="feeLn2" style="display:none;"><span>—</span><span>—</span></div>
+            <div class="fee-row"><span data-i18n="fees_total">Total to Pay</span><span id="feeTotalAmt" style="color:var(--green);font-weight:900;">—</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title" data-i18n="fees_method_title">Payment Method</div>
+          <div class="card-sub" data-i18n="fees_method_sub">Choose how you want to pay.</div>
+          <div class="pay-methods">
+            <div class="pm sel" id="pm-mtn" onclick="selPay('mtn')"><div class="pm-icon">📱</div><div class="pm-name">MTN MoMo</div><div class="pm-desc">Instant</div></div>
+            <div class="pm" id="pm-airtel" onclick="selPay('airtel')"><div class="pm-icon">📲</div><div class="pm-name">Airtel Money</div><div class="pm-desc">Instant</div></div>
+            <div class="pm" id="pm-bank" onclick="selPay('bank')"><div class="pm-icon">🏦</div><div class="pm-name">Bank Transfer</div><div class="pm-desc">1–2 days</div></div>
+          </div>
+          <!-- MTN -->
+          <div id="pi-mtn" class="momo-box">
+            <strong>📱 MTN Mobile Money</strong>
+            Dial: <strong>*182*8*1*0788000000*[AMOUNT]#</strong><br/>
+            Or App → Pay → <strong>+250 788 000 000</strong><br/>
+            Account: <strong>God's Plan Academy</strong>
+          </div>
+          <!-- AIRTEL -->
+          <div id="pi-airtel" class="momo-box" style="display:none;">
+            <strong>📲 Airtel Money</strong>
+            Dial: <strong>*185*8*1*0722000000*[AMOUNT]#</strong><br/>
+            Or App → Transfer → <strong>+250 722 000 000</strong><br/>
+            Account: <strong>God's Plan Academy</strong>
+          </div>
+          <!-- BANK -->
+          <div id="pi-bank" class="bank-box" style="display:none;">
+            <strong>🏦 Bank of Kigali – Bank Transfer</strong>
+            Account Name: <strong>God's Plan Academy Ltd</strong><br/>
+            Account No: <strong>00012-345678-01</strong><br/>
+            Branch: <strong>Musanze Branch</strong><br/>
+            Reference: <em>Student Reg. Number</em>
+          </div>
+          <div class="fg" style="margin-top:12px;"><label data-i18n="fees_phone_lbl">Your Phone Number</label><input type="tel" id="feePhone" placeholder="078X XXX XXX"/></div>
+          <div class="fg"><label data-i18n="fees_txn_lbl">Transaction Code (from SMS)</label><input type="text" id="feeTxn" placeholder="TXN987654321"/></div>
+          <div id="feeErr" class="alert a-error"></div>
+          <div id="feeSuc" class="alert a-success"></div>
+          <button class="btn btn-green btn-block" onclick="submitFee()" data-i18n="fees_submit_btn">✅ Submit Payment</button>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="card-title" data-i18n="fees_schedule_title">📋 Fee Schedule 2025–2026</div>
+          <div class="tw"><table><thead><tr><th data-i18n="fees_sch_class">Class</th><th data-i18n="fees_sch_tuition">Tuition (RWF)</th><th data-i18n="fees_sch_reg">Registration</th></tr></thead>
+          <tbody><tr><td>Baby Nursery</td><td>45,000</td><td>10,000</td></tr><tr><td>Pre-School</td><td>50,000</td><td>10,000</td></tr><tr><td>Primary 1–3</td><td>60,000</td><td>12,000</td></tr><tr><td>Primary 4–6</td><td>70,000</td><td>12,000</td></tr></tbody></table></div>
+          <div style="margin-top:12px;font-size:12px;color:var(--muted);line-height:1.8;">Activity: 5,000 · Uniform: 15,000 · Transport: 20,000 · Lunch: 18,000 RWF/term</div>
+        </div>
+        <div class="card">
+          <div class="card-title" data-i18n="fees_balance_title">💰 Check Fee Balance</div>
+          <div class="fg"><input type="text" id="balReg" placeholder="Enter registration number..." oninput="checkBal()"/></div>
+          <div id="balResult" style="display:none;margin-top:6px;"></div>
+        </div>
+        <div class="card" id="bankDetailsCard">
+          <div class="card-title">🏦 Bank Account Details</div>
+          <div class="bank-box">
+            <strong>Bank of Kigali</strong>
+            Account Name: <strong id="settBankName">God's Plan Academy Ltd</strong><br/>
+            Account No: <strong id="settBankAcc">00012-345678-01</strong><br/>
+            Branch: <strong id="settBankBranch">Musanze Branch</strong><br/>
+            Swift/BIC: <strong id="settBankSwift">BKIGRWRW</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== NEWS PAGE ===== -->
+<div class="page" id="page-news">
+  <div class="container">
+    <div class="section-hdr"><h2 data-i18n="news_title">📰 News & School Gallery</h2><p data-i18n="news_sub">Trips, sports, debates, visitors, funny moments and all school life!</p><div class="section-line"></div></div>
+    <div class="nfilters" id="newsFilters">
+      <button class="nfbtn active" onclick="filterNews('all',this)" data-i18n="nf_all">All</button>
+      <button class="nfbtn" onclick="filterNews('trip',this)" data-i18n="nf_trip">✈️ Trips</button>
+      <button class="nfbtn" onclick="filterNews('sports',this)" data-i18n="nf_sports">⚽ Sports</button>
+      <button class="nfbtn" onclick="filterNews('debate',this)" data-i18n="nf_debate">🎤 Debates</button>
+      <button class="nfbtn" onclick="filterNews('visitor',this)" data-i18n="nf_visitor">🤝 Visitors</button>
+      <button class="nfbtn" onclick="filterNews('funny',this)" data-i18n="nf_funny">😂 Funny</button>
+      <button class="nfbtn" onclick="filterNews('achievement',this)" data-i18n="nf_achievement">🏆 Achievements</button>
+      <button class="nfbtn" onclick="filterNews('event',this)" data-i18n="nf_event">🎉 Events</button>
+    </div>
+    <div class="ngrid" id="newsGrid"></div>
+    <div style="margin-top:28px;"><div class="section-hdr"><h2 data-i18n="gallery_title">📸 Photo Gallery</h2><div class="section-line"></div></div><div class="ggrid" id="galleryGrid"></div></div>
+  </div>
+</div>
+
+<!-- ===== COMMENTS / MESSAGES TO DIRECTOR ===== -->
+<div class="page" id="page-comments">
+  <div class="container">
+    <div class="section-hdr"><h2 data-i18n="comments_title">💬 Messages to Director</h2><p data-i18n="comments_sub">Parents can send messages, suggestions or complaints to the school director.</p><div class="section-line"></div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;" class="comments-layout">
+      <div>
+        <div class="card">
+          <div class="card-title" data-i18n="comments_send_title">✉️ Send a Message</div>
+          <div class="card-sub" data-i18n="comments_send_sub">Your message goes directly to the school director.</div>
+          <div class="fg"><label data-i18n="comments_name_lbl">Your Name</label><input type="text" id="cmtName" placeholder="Full name"/></div>
+          <div class="fg"><label data-i18n="comments_role_lbl">You Are</label>
+            <select id="cmtRole">
+              <option value="parent" data-i18n="cmt_role_parent">Parent / Guardian</option>
+              <option value="student" data-i18n="cmt_role_student">Student</option>
+              <option value="community" data-i18n="cmt_role_community">Community Member</option>
+            </select>
+          </div>
+          <div class="fg"><label data-i18n="comments_subject_lbl">Subject</label><input type="text" id="cmtSubject" placeholder="e.g. My child's progress"/></div>
+          <div class="fg"><label data-i18n="comments_msg_lbl">Your Message</label><textarea id="cmtMsg" placeholder="Write your message to the director..."></textarea></div>
+          <div id="cmtErr" class="alert a-error"></div>
+          <div id="cmtSuc" class="alert a-success"></div>
+          <button class="btn btn-green btn-block" onclick="sendComment()" data-i18n="comments_send_btn">📤 Send Message to Director</button>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="card-title" data-i18n="comments_recent_title">📬 Recent Messages</div>
+          <div class="card-sub" data-i18n="comments_recent_sub">Community messages shared with the school.</div>
+          <div id="commentsList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CONTACT US PAGE ===== -->
+<div class="page" id="page-contact">
+  <div class="container">
+    <div class="section-hdr"><h2 data-i18n="contact_title">📞 Contact Us</h2><p data-i18n="contact_sub">Reach us by phone, email, WhatsApp or visit us at school.</p><div class="section-line"></div></div>
+    <div class="contact-grid">
+      <div>
+        <div class="card">
+          <div class="card-title" data-i18n="contact_info_title">School Contact Information</div>
+          <div class="cinfo-item"><div class="cicon">📍</div><div><div class="clabel" data-i18n="contact_address_lbl">Address</div><div class="cval" id="settAddress">14 School Lane, Musanze, Northern Province, Rwanda</div></div></div>
+          <div class="cinfo-item"><div class="cicon">📞</div><div><div class="clabel" data-i18n="contact_phone_lbl">Phone</div><div class="cval" id="settPhone">+250 788 000 000</div></div></div>
+          <div class="cinfo-item"><div class="cicon">💬</div><div><div class="clabel">WhatsApp</div><div class="cval" id="settWhatsapp">+250 788 000 001</div></div></div>
+          <div class="cinfo-item"><div class="cicon">✉️</div><div><div class="clabel" data-i18n="contact_email_lbl">Email</div><div class="cval" id="settEmail">info@godsplanacademy.rw</div></div></div>
+          <div class="cinfo-item"><div class="cicon">✉️</div><div><div class="clabel" data-i18n="contact_admin_email_lbl">Admin Email</div><div class="cval" id="settAdminEmail">info@godsplanacademy.rw</div></div></div>
+          <div class="cinfo-item"><div class="cicon">🕐</div><div><div class="clabel" data-i18n="contact_hours_lbl">Office Hours</div><div class="cval" id="settHours">Monday – Friday: 7:00am – 5:00pm</div></div></div>
+        </div>
+        <div class="card">
+          <div class="card-title" data-i18n="contact_director_title">🏫 School Leadership</div>
+          <div class="cinfo-item"><div class="cicon">👔</div><div><div class="clabel" data-i18n="contact_director_lbl">Director</div><div class="cval" id="settDirector">Sr. Josephine Uwera</div></div></div>
+          <div class="cinfo-item"><div class="cicon">👩‍🏫</div><div><div class="clabel" data-i18n="contact_headteacher_lbl">Head Teacher</div><div class="cval" id="settHeadTeacher">Mr. Patrick Habimana</div></div></div>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="card-title" data-i18n="contact_form_title">📧 Send Email</div>
+          <div class="card-sub" data-i18n="contact_form_sub">We'll reply within 24 hours.</div>
+          <div class="fg"><label data-i18n="contact_form_name">Your Name</label><input type="text" id="ctcName" placeholder="Full name"/></div>
+          <div class="fg"><label data-i18n="contact_form_email">Your Email</label><input type="email" id="ctcEmail" placeholder="your@email.com"/></div>
+          <div class="fg"><label data-i18n="contact_form_phone">Your Phone</label><input type="tel" id="ctcPhone" placeholder="+250 7XX XXX XXX"/></div>
+          <div class="fg"><label data-i18n="contact_form_subject">Subject</label>
+            <select id="ctcSubject">
+              <option data-i18n="ctc_sub1">General Enquiry</option>
+              <option data-i18n="ctc_sub2">Admissions / Enrollment</option>
+              <option data-i18n="ctc_sub3">Fees & Payments</option>
+              <option data-i18n="ctc_sub4">Student Progress</option>
+              <option data-i18n="ctc_sub5">Complaint / Suggestion</option>
+              <option data-i18n="ctc_sub6">Other</option>
+            </select>
+          </div>
+          <div class="fg"><label data-i18n="contact_form_msg">Message</label><textarea id="ctcMsg" placeholder="Write your message..."></textarea></div>
+          <div id="ctcSuc" class="alert a-success"></div>
+          <div id="ctcErr" class="alert a-error"></div>
+          <button class="btn btn-green btn-block" onclick="sendContact()" data-i18n="contact_form_btn">📧 Send Message</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LOGIN / REGISTER PAGE ===== -->
+<div class="page" id="page-login">
+  <div class="container">
+    <div style="max-width:440px;margin:0 auto;">
+      <div style="text-align:center;margin-bottom:20px;">
+        <div style="font-size:48px;">🔐</div>
+        <div style="font-family:'Playfair Display',serif;font-size:24px;color:var(--green-dark);" data-i18n="login_title">Welcome to GPA Portal</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:4px;" data-i18n="login_sub">Login or create your account below.</div>
+      </div>
+      <div class="card">
+        <div class="auth-tabs">
+          <button class="atab active" onclick="switchAuthTab('login')" id="tab-login" data-i18n="auth_login_tab">Login</button>
+          <button class="atab" onclick="switchAuthTab('register')" id="tab-register" data-i18n="auth_register_tab">Create Account</button>
+          <button class="atab" onclick="switchAuthTab('forgot')" id="tab-forgot" data-i18n="auth_forgot_tab">Forgot Password</button>
+        </div>
+
+        <!-- LOGIN FORM -->
+        <div class="auth-form active" id="authLogin">
+          <div class="fg"><label data-i18n="login_email_lbl">Email or Username</label><input type="text" id="loginId" placeholder="email or username" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+          <div class="fg"><label data-i18n="login_pass_lbl">Password</label>
+            <div class="pass-wrap"><input type="password" id="loginPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/><button class="eye-btn" onclick="togglePass('loginPass',this)">👁️</button></div>
+          </div>
+          <div id="loginErr" class="alert a-error"></div>
+          <button class="btn btn-green btn-block" onclick="doLogin()" data-i18n="login_btn">Login →</button>
+          <div style="margin-top:12px;font-size:12px;color:var(--muted);text-align:center;" data-i18n="login_demo">Demo — admin/gpa2026 · director/gpa999 · teacher/gpa123</div>
+        </div>
+
+        <!-- REGISTER FORM -->
+        <div class="auth-form" id="authRegister">
+          <div class="fg"><label data-i18n="reg_choose_lang">Choose Your Language</label>
+            <div class="lang-pick">
+              <div class="lp sel" id="rl-en" onclick="pickRegLang('en')">🇬🇧 English</div>
+              <div class="lp" id="rl-rw" onclick="pickRegLang('rw')">🇷🇼 Kinyarwanda</div>
+              <div class="lp" id="rl-fr" onclick="pickRegLang('fr')">🇫🇷 Français</div>
+              <div class="lp" id="rl-sw" onclick="pickRegLang('sw')">🇰🇪 Kiswahili</div>
+            </div>
+          </div>
+          <div class="fg"><label data-i18n="reg_role_lbl">I am a</label>
+            <div class="role-grid">
+              <div class="rbtn sel" id="rr-parent" onclick="pickRegRole('parent')"><div class="ri">👨‍👩‍👧</div><div class="rl" data-i18n="role_parent">Parent</div></div>
+              <div class="rbtn" id="rr-student" onclick="pickRegRole('student')"><div class="ri">🎒</div><div class="rl" data-i18n="role_student">Student</div></div>
+              <div class="rbtn" id="rr-teacher" onclick="pickRegRole('teacher')"><div class="ri">👩‍🏫</div><div class="rl" data-i18n="role_teacher">Teacher</div></div>
+              <div class="rbtn" id="rr-staff" onclick="pickRegRole('staff')"><div class="ri">🏫</div><div class="rl" data-i18n="role_staff">Other Staff</div></div>
+            </div>
+          </div>
+          <div class="frow">
+            <div class="fg"><label data-i18n="reg_fname_lbl">First Name</label><input type="text" id="regFirst" placeholder="First name"/></div>
+            <div class="fg"><label data-i18n="reg_lname_lbl">Last Name</label><input type="text" id="regLast" placeholder="Last name"/></div>
+          </div>
+          <div class="fg"><label data-i18n="reg_email_lbl">Email Address</label><input type="email" id="regEmail" placeholder="your@email.com"/></div>
+          <div class="fg"><label data-i18n="reg_phone_lbl">Phone Number</label>
+            <div class="phone-row">
+              <select class="phone-cc" id="regCountryCode">
+                <option value="+250">🇷🇼 +250</option>
+                <option value="+254">🇰🇪 +254</option>
+                <option value="+255">🇹🇿 +255</option>
+                <option value="+256">🇺🇬 +256</option>
+                <option value="+243">🇨🇩 +243</option>
+                <option value="+33">🇫🇷 +33</option>
+                <option value="+44">🇬🇧 +44</option>
+                <option value="+1">🇺🇸 +1</option>
+                <option value="+27">🇿🇦 +27</option>
+                <option value="+234">🇳🇬 +234</option>
+              </select>
+              <div class="fg" style="flex:1;margin-bottom:0;"><input type="tel" id="regPhone" placeholder="7XX XXX XXX"/></div>
+            </div>
+          </div>
+          <div class="fg"><label data-i18n="reg_username_lbl">Username</label><input type="text" id="regUser" placeholder="Choose a username"/></div>
+          <div class="fg"><label data-i18n="reg_pass_lbl">Password</label>
+            <div class="pass-wrap"><input type="password" id="regPass" placeholder="Min 6 characters"/><button class="eye-btn" onclick="togglePass('regPass',this)">👁️</button></div>
+          </div>
+          <div class="fg"><label data-i18n="reg_pass2_lbl">Confirm Password</label>
+            <div class="pass-wrap"><input type="password" id="regPass2" placeholder="Repeat password"/><button class="eye-btn" onclick="togglePass('regPass2',this)">👁️</button></div>
+          </div>
+          <div id="regErr" class="alert a-error"></div>
+          <div id="regSuc" class="alert a-success"></div>
+          <button class="btn btn-green btn-block" onclick="doRegister()" data-i18n="reg_btn">✅ Create Account</button>
+        </div>
+
+        <!-- FORGOT PASSWORD -->
+        <div class="auth-form" id="authForgot">
+          <div style="text-align:center;font-size:36px;margin-bottom:12px;">🔑</div>
+          <div style="text-align:center;color:var(--muted);font-size:13px;margin-bottom:16px;" data-i18n="forgot_desc">Enter your email or phone number. We will send you a reset code.</div>
+          <div class="fg"><label data-i18n="forgot_email_lbl">Email or Phone Number</label><input type="text" id="forgotId" placeholder="email or phone"/></div>
+          <div id="forgotErr" class="alert a-error"></div>
+          <div id="forgotSuc" class="alert a-success"></div>
+          <button class="btn btn-amber btn-block" onclick="doForgot()" data-i18n="forgot_btn">📧 Send Reset Code</button>
+          <div style="margin-top:14px;font-size:12px;color:var(--muted);text-align:center;line-height:1.7;" data-i18n="forgot_contact_hint">If you don't receive a reset code, contact the school at <strong>info@godsplanacademy.rw</strong> or call <strong>+250 788 000 000</strong>.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DASHBOARD ===== -->
+<div class="page" id="page-dashboard">
+  <div class="container">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:18px;">
+      <div><h2 style="font-family:'Playfair Display',serif;font-size:24px;color:var(--green-dark);" id="dashTitle">Dashboard</h2><p style="color:var(--muted);font-size:13px;" id="dashSub">Welcome back</p></div>
+      <div style="display:flex;gap:8px;align-items:center;"><span style="background:var(--green-light);border:1px solid var(--green-mid);color:var(--green-dark);font-size:12px;padding:4px 12px;border-radius:20px;font-weight:700;" id="dashBadge">👤 User</span><button class="btn btn-sm btn-outline" onclick="logout()" data-i18n="logout_btn">Logout</button></div>
+    </div>
+    <div class="sgrid" id="dashStats"></div>
+    <div class="atabs-bar" id="dashTabs"></div>
+
+    <!-- POST MARKS -->
+    <div class="asub" id="sub-marks">
+      <div class="card">
+        <div class="card-title">📝 Post / Update Student Marks</div>
+        <div class="card-sub">Enter CAT and Exam marks. Students on credit are blocked.</div>
+        <div class="frow">
+          <div class="fg"><label>Registration No.</label><input type="text" id="mReg" placeholder="GPA-2026-001" oninput="loadStuMarks()"/></div>
+          <div class="fg"><label>Class</label><select id="mCls"><option>Baby Nursery</option><option>Pre-School</option><option>Primary 1</option><option>Primary 2</option><option>Primary 3</option><option>Primary 4</option><option>Primary 5</option><option>Primary 6</option></select></div>
+        </div>
+        <div class="frow">
+          <div class="fg"><label>Student Name</label><input type="text" id="mName" placeholder="Full name"/></div>
+          <div class="fg"><label>Term</label><select id="mTerm"><option>Term 1</option><option selected>Term 2</option><option>Term 3</option></select></div>
+        </div>
+        <div id="mCreditFlag" class="alert a-error" style="display:none;">🚫 Student is on CREDIT. Marks cannot be posted until fees are cleared.</div>
+        <div id="mInputArea">
+          <p style="font-size:13px;font-weight:800;color:var(--green-dark);margin-bottom:8px;">Subject Marks</p>
+          <div style="overflow-x:auto;margin-bottom:14px;"><table class="marks-input-table"><thead><tr><th>Subject</th><th>CAT (/40)</th><th>Exam (/60)</th></tr></thead><tbody id="mRows"></tbody></table></div>
+          <p style="font-size:13px;font-weight:800;color:var(--green-dark);margin-bottom:8px;">🎖️ Discipline (out of 10 each)</p>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:14px;" id="mDisc"></div>
+          <div class="frow">
+            <div class="fg"><label>Class Teacher's Remarks</label><input type="text" id="mTrk" placeholder="e.g. Excellent student!"/></div>
+            <div class="fg"><label>Head Teacher's Remarks</label><input type="text" id="mHrk" placeholder="e.g. Promoted."/></div>
+          </div>
+          <div class="fg"><label>Position in Class</label><input type="text" id="mPos" placeholder="e.g. 3rd out of 30"/></div>
+          <div id="mSuc" class="alert a-success"></div>
+          <div id="mErr" class="alert a-error"></div>
+          <button class="btn btn-green" onclick="saveMarks()">💾 Save Marks</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STUDENTS LIST -->
+    <div class="asub" id="sub-students">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
+          <div><div class="card-title">👨‍🎓 Students List</div><div class="card-sub" style="margin-bottom:0;">All enrolled students.</div></div>
+          <button class="btn btn-green btn-sm" onclick="openMod('addStuMod')">+ Add Student</button>
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+          <input type="text" id="stuSearch" placeholder="Search name or reg..." oninput="renderStu()" style="flex:1;min-width:140px;padding:9px 12px;border-radius:8px;border:1.5px solid var(--border);font-family:'Nunito',sans-serif;font-size:13px;"/>
+          <select id="stuCls" onchange="renderStu()" style="padding:9px 12px;border-radius:8px;border:1.5px solid var(--border);font-family:'Nunito',sans-serif;font-size:13px;"><option value="">All Classes</option><option>Baby Nursery</option><option>Pre-School</option><option>Primary 1</option><option>Primary 2</option><option>Primary 3</option><option>Primary 4</option><option>Primary 5</option><option>Primary 6</option></select>
+          <select id="stuStatus" onchange="renderStu()" style="padding:9px 12px;border-radius:8px;border:1.5px solid var(--border);font-family:'Nunito',sans-serif;font-size:13px;"><option value="">All Status</option><option value="ok">Fees OK</option><option value="credit">On Credit</option></select>
+        </div>
+        <div class="tw"><table><thead><tr><th>Reg No</th><th>Name</th><th>Class</th><th>Gender</th><th>Parent Phone</th><th>Fee Status</th><th>Actions</th></tr></thead><tbody id="stuTBody"></tbody></table></div>
+      </div>
+    </div>
+
+    <!-- STAFF & EMPLOYEES -->
+    <div class="asub" id="sub-staff">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
+          <div><div class="card-title">👩‍🏫 Staff & Employees</div><div class="card-sub" style="margin-bottom:0;">Teachers, admin, cooks, cleaners and all school employees.</div></div>
+          <button class="btn btn-green btn-sm" onclick="openMod('addStaffMod')">+ Add Staff</button>
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+          <input type="text" id="staffSearch" placeholder="Search name or ID..." oninput="renderStaff()" style="flex:1;min-width:140px;padding:9px 12px;border-radius:8px;border:1.5px solid var(--border);font-family:'Nunito',sans-serif;font-size:13px;"/>
+          <select id="staffDept" onchange="renderStaff()" style="padding:9px 12px;border-radius:8px;border:1.5px solid var(--border);font-family:'Nunito',sans-serif;font-size:13px;"><option value="">All Departments</option><option>Teaching</option><option>Admin</option><option>Support</option><option>Leadership</option></select>
+        </div>
+        <div class="tw"><table><thead><tr><th>ID</th><th>Name</th><th>Role</th><th>Dept</th><th>Phone</th><th>Email</th><th>Status</th><th>Actions</th></tr></thead><tbody id="staffTBody"></tbody></table></div>
+      </div>
+    </div>
+
+    <!-- PAYMENTS LOG -->
+    <div class="asub" id="sub-payments">
+      <div class="card">
+        <div class="card-title">💳 Payments Log</div>
+        <div class="card-sub">All submitted fee payments — verify and record here.</div>
+        <div class="tw"><table><thead><tr><th>Date</th><th>Reg No</th><th>Student</th><th>Category</th><th>Amount</th><th>Method</th><th>Txn Code</th><th>Status</th><th>Action</th></tr></thead><tbody id="payTBody"></tbody></table></div>
+      </div>
+    </div>
+
+    <!-- POST NEWS -->
+    <div class="asub" id="sub-news">
+      <div class="card">
+        <div class="card-title">📰 Post News / Gallery</div>
+        <div class="card-sub">Share school trips, games, debates, visitors, funny moments and events.</div>
+        <div class="frow">
+          <div class="fg"><label>Title</label><input type="text" id="nTitle" placeholder="e.g. Science trip to Kigali"/></div>
+          <div class="fg"><label>Category</label><select id="nCat"><option value="trip">✈️ Trip</option><option value="sports">⚽ Sports</option><option value="debate">🎤 Debate</option><option value="visitor">🤝 Visitor</option><option value="funny">😂 Funny Moment</option><option value="achievement">🏆 Achievement</option><option value="event">🎉 Event</option></select></div>
+        </div>
+        <div class="fg"><label>Description</label><textarea id="nBody" placeholder="Describe what happened..."></textarea></div>
+        <div class="fg"><label>Emoji / Icon</label><input type="text" id="nEmoji" placeholder="e.g. 🚌 or 🏆" maxlength="4"/></div>
+        <div id="nSuc" class="alert a-success"></div>
+        <button class="btn btn-green" onclick="postNews()">📤 Publish</button>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="asub" id="sub-settings">
+      <div class="card">
+        <div class="card-title">⚙️ School Settings</div>
+        <div class="card-sub">Update school contact info, bank details, directors and more. Changes reflect everywhere on the portal.</div>
+        <div class="settings-section">
+          <h4>📍 Contact Information</h4>
+          <p>Update the school's address, phone, and email displayed on the portal.</p>
+          <div class="frow"><div class="fg"><label>School Phone</label><input type="text" id="sPhone" value="+250 788 000 000"/></div><div class="fg"><label>WhatsApp</label><input type="text" id="sWhatsapp" value="+250 788 000 001"/></div></div>
+          <div class="frow"><div class="fg"><label>School Email</label><input type="email" id="sEmail" value="info@godsplanacademy.rw"/></div><div class="fg"><label>Admin Email</label><input type="email" id="sAdminEmail" value="admin@godsplanacademy.rw"/></div></div>
+          <div class="fg"><label>School Address</label><input type="text" id="sAddress" value="14 School Lane, Musanze, Northern Province, Rwanda"/></div>
+          <div class="fg"><label>Office Hours</label><input type="text" id="sHours" value="Monday – Friday: 7:00am – 5:00pm"/></div>
+        </div>
+        <div class="settings-section">
+          <h4>👔 Leadership</h4>
+          <p>Update director and head teacher names.</p>
+          <div class="frow"><div class="fg"><label>Director Name</label><input type="text" id="sDirector" value="Sr. Josephine Uwera"/></div><div class="fg"><label>Head Teacher</label><input type="text" id="sHeadTeacher" value="Mr. Patrick Habimana"/></div></div>
+        </div>
+        <div class="settings-section">
+          <h4>🏦 Bank Account Details</h4>
+          <p>Update the school bank account shown on the fees page.</p>
+          <div class="frow"><div class="fg"><label>Account Name</label><input type="text" id="sBankName" value="God's Plan Academy Ltd"/></div><div class="fg"><label>Account Number</label><input type="text" id="sBankAcc" value="00012-345678-01"/></div></div>
+          <div class="frow"><div class="fg"><label>Bank Branch</label><input type="text" id="sBankBranch" value="Musanze Branch"/></div><div class="fg"><label>SWIFT/BIC</label><input type="text" id="sBankSwift" value="BKIGRWRW"/></div></div>
+        </div>
+        <div class="settings-section">
+          <h4>📢 Notice Bar Message</h4>
+          <p>Update the yellow notice that appears on the homepage.</p>
+          <div class="fg"><input type="text" id="sNotice" value="📢 Term 2 2026 — School fees are due by April 28, 2026. Pay online now to avoid delays."/></div>
+        </div>
+        <div id="settSuc" class="alert a-success"></div>
+        <button class="btn btn-green" onclick="saveSettings()">💾 Save All Settings</button>
+      </div>
+
+      <!-- MESSAGES TO DIRECTOR (admin/director can read here) -->
+      <div class="card">
+        <div class="card-title">💬 Messages from Parents / Community</div>
+        <div class="card-sub">All messages sent via the Comments page.</div>
+        <div id="adminCommentsList"></div>
+      </div>
+
+      <!-- ACCOUNTS MANAGEMENT -->
+      <div class="card">
+        <div class="card-title">👥 Registered Accounts</div>
+        <div class="card-sub">All users who created accounts on the portal.</div>
+        <div class="tw"><table><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Role</th><th>Language</th><th>Joined</th><th>Actions</th></tr></thead><tbody id="accountsTBody"></tbody></table></div>
+      </div>
+    </div>
+
+    <!-- DIRECTOR COMMENTS VIEW -->
+    <div class="asub" id="sub-comments-admin">
+      <div class="card">
+        <div class="card-title">💬 All Messages to Director</div>
+        <div class="card-sub">Messages sent by parents and community.</div>
+        <div id="directorComments"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== MODALS ===== -->
+<div class="mbg" id="addStuMod">
+  <div class="modal">
+    <button class="modal-close" onclick="closeMod('addStuMod')">✕</button>
+    <h3>Add New Student</h3><div class="modal-sub">Enroll a new student into the system.</div>
+    <div class="frow"><div class="fg"><label>Registration No.</label><input type="text" id="nsFull" placeholder="GPA-2026-XXX"/></div><div class="fg"><label>Full Name</label><input type="text" id="nsName" placeholder="Full name"/></div></div>
+    <div class="frow"><div class="fg"><label>Class</label><select id="nsCls"><option>Baby Nursery</option><option>Pre-School</option><option>Primary 1</option><option>Primary 2</option><option>Primary 3</option><option>Primary 4</option><option>Primary 5</option><option>Primary 6</option></select></div><div class="fg"><label>Gender</label><select id="nsGender"><option>Female</option><option>Male</option></select></div></div>
+    <div class="frow"><div class="fg"><label>Parent/Guardian Name</label><input type="text" id="nsParent" placeholder="Parent name"/></div><div class="fg"><label>Parent Phone</label><input type="tel" id="nsPhone" placeholder="078X XXX XXX"/></div></div>
+    <div class="fg"><label>Fee Status</label><select id="nsStatus"><option value="ok">✅ Fees Paid</option><option value="credit">⚠️ On Credit</option></select></div>
+    <div id="nsErr" class="alert a-error"></div>
+    <button class="btn btn-green btn-block" onclick="addStudent()">✅ Add Student</button>
+  </div>
+</div>
+
+<div class="mbg" id="addStaffMod">
+  <div class="modal">
+    <button class="modal-close" onclick="closeMod('addStaffMod')">✕</button>
+    <h3>Add Staff / Employee</h3><div class="modal-sub">Add a teacher, admin, cook, cleaner or any school employee.</div>
+    <div class="frow"><div class="fg"><label>Staff ID</label><input type="text" id="sfId" placeholder="GPA-STAFF-001"/></div><div class="fg"><label>Full Name</label><input type="text" id="sfName" placeholder="Full name"/></div></div>
+    <div class="frow">
+      <div class="fg"><label>Role</label><select id="sfRole"><option>Class Teacher</option><option>Subject Teacher</option><option>Head Teacher</option><option>Director</option><option>Deputy Director</option><option>Accountant</option><option>Secretary</option><option>Librarian</option><option>Counselor</option><option>Cook</option><option>Cleaner</option><option>Guard / Security</option><option>Driver</option><option>Other</option></select></div>
+      <div class="fg"><label>Department</label><select id="sfDept"><option>Teaching</option><option>Admin</option><option>Support</option><option>Leadership</option></select></div>
+    </div>
+    <div class="frow"><div class="fg"><label>Phone</label><input type="tel" id="sfPhone" placeholder="078X XXX XXX"/></div><div class="fg"><label>Email</label><input type="email" id="sfEmail" placeholder="staff@email.com"/></div></div>
+    <div id="sfErr" class="alert a-error"></div>
+    <button class="btn btn-green btn-block" onclick="addStaff()">✅ Add Staff Member</button>
+  </div>
+</div>
+<script>
+// ============================================================
+// DATA
+// ============================================================
+const SUBS_N=['English','Kinyarwanda','Mathematics','Science','Creative Arts'];
+const SUBS_P=['English','Kinyarwanda','Mathematics','Science','Social Studies','Religious Education','Creative Arts','Physical Education'];
+const DISC=['Attendance','Punctuality','Behaviour','Neatness','Teamwork'];
+
+let students=[
+  {reg:'GPA-2026-001',name:'Amina Uwimana',cls:'Primary 3',gender:'Female',parent:'Jean Uwimana',phone:'0788111111',status:'ok',marks:{English:[32,52],Kinyarwanda:[35,55],Mathematics:[28,45],'Social Studies':[30,50],'Religious Education':[38,58],'Creative Arts':[36,54],'Physical Education':[34,52],Science:[31,48]},disc:{Attendance:9,Punctuality:8,Behaviour:10,Neatness:9,Teamwork:9},teacherRmk:'Amina is brilliant with excellent focus.',headRmk:'Promoted. Outstanding!',pos:'1st / 30'},
+  {reg:'GPA-2026-002',name:'Jean Paul Nkurunziza',cls:'Primary 3',gender:'Male',parent:'Paul Nkurunziza',phone:'0788222222',status:'credit',marks:{English:[25,40],Kinyarwanda:[28,44],Mathematics:[22,36],'Social Studies':[24,38],'Religious Education':[30,46],'Creative Arts':[28,42],'Physical Education':[26,40],Science:[23,35]},disc:{Attendance:7,Punctuality:6,Behaviour:8,Neatness:7,Teamwork:8},teacherRmk:'Needs improvement in Maths.',headRmk:'Good effort.',pos:'15th / 30'},
+  {reg:'GPA-2026-003',name:'Grace Mukamana',cls:'Primary 1',gender:'Female',parent:'Alice Mukamana',phone:'0788333333',status:'ok',marks:{English:[36,56],Kinyarwanda:[34,54],Mathematics:[33,52],'Social Studies':[35,55],'Religious Education':[38,58],'Creative Arts':[37,57],'Physical Education':[35,55],Science:[34,52]},disc:{Attendance:10,Punctuality:10,Behaviour:10,Neatness:9,Teamwork:10},teacherRmk:'Grace is exceptional in every subject!',headRmk:'Top of class. Promoted with distinction.',pos:'1st / 25'},
+  {reg:'GPA-2026-004',name:'David Habimana',cls:'Pre-School',gender:'Male',parent:'Samuel Habimana',phone:'0788444444',status:'ok',marks:{English:[28,44],Kinyarwanda:[30,47],Mathematics:[26,40],Science:[24,38],'Creative Arts':[32,50]},disc:{Attendance:8,Punctuality:7,Behaviour:9,Neatness:8,Teamwork:9},teacherRmk:'David loves learning.',headRmk:'Ready for Primary 1!',pos:'5th / 20'},
+  {reg:'GPA-2026-005',name:'Clarisse Iradukunda',cls:'Primary 5',gender:'Female',parent:'Pierre Iradukunda',phone:'0788555555',status:'ok',marks:{English:[38,57],Kinyarwanda:[36,55],Mathematics:[35,54],'Social Studies':[37,56],'Religious Education':[39,58],'Creative Arts':[38,57],'Physical Education':[36,55],Science:[37,56]},disc:{Attendance:9,Punctuality:9,Behaviour:10,Neatness:10,Teamwork:9},teacherRmk:'Clarisse is a role model student.',headRmk:'Highly commended.',pos:'2nd / 28'},
+  {reg:'GPA-2026-006',name:'Eric Nshimiyimana',cls:'Baby Nursery',gender:'Male',parent:'Marie Nshimiyimana',phone:'0788666666',status:'credit',marks:{English:[20,32],Kinyarwanda:[22,35],Mathematics:[18,28],Science:[19,30],'Creative Arts':[25,38]},disc:{Attendance:9,Punctuality:8,Behaviour:7,Neatness:8,Teamwork:9},teacherRmk:'Eric loves art activities.',headRmk:'Good start!',pos:'8th / 18'},
+];
+
+let staff=[
+  {id:'GPA-STAFF-001',name:'Sr. Josephine Uwera',role:'Director',dept:'Leadership',phone:'0788100001',email:'director@godsplanacademy.rw',status:'Active'},
+  {id:'GPA-STAFF-002',name:'Mr. Patrick Habimana',role:'Head Teacher',dept:'Leadership',phone:'0788100002',email:'headteacher@godsplanacademy.rw',status:'Active'},
+  {id:'GPA-STAFF-003',name:'Ms. Denyse Mukagasana',role:'Class Teacher',dept:'Teaching',phone:'0788100003',email:'denyse@godsplanacademy.rw',status:'Active'},
+  {id:'GPA-STAFF-004',name:'Mr. Emmanuel Ntirenganya',role:'Subject Teacher',dept:'Teaching',phone:'0788100004',email:'emmanuel@godsplanacademy.rw',status:'Active'},
+  {id:'GPA-STAFF-005',name:'Ms. Claudine Uwimana',role:'Accountant',dept:'Admin',phone:'0788100005',email:'accounts@godsplanacademy.rw',status:'Active'},
+  {id:'GPA-STAFF-006',name:'Marie-Claire Mukamurenzi',role:'Cook',dept:'Support',phone:'0788100006',email:'',status:'Active'},
+  {id:'GPA-STAFF-007',name:'Joseph Hakizimana',role:'Cleaner',dept:'Support',phone:'0788100007',email:'',status:'Active'},
+  {id:'GPA-STAFF-008',name:'Samuel Nzabonimpa',role:'Guard / Security',dept:'Support',phone:'0788100008',email:'',status:'Active'},
+];
+
+let payments=[
+  {date:'2026-02-10',reg:'GPA-2026-001',name:'Amina Uwimana',cat:'Tuition Fees',amount:60000,method:'MTN MoMo',txn:'TXN111222333',status:'Verified'},
+  {date:'2026-02-12',reg:'GPA-2026-003',name:'Grace Mukamana',cat:'Tuition Fees',amount:60000,method:'MTN MoMo',txn:'TXN444555666',status:'Verified'},
+  {date:'2026-02-14',reg:'GPA-2026-005',name:'Clarisse Iradukunda',cat:'Tuition Fees',amount:70000,method:'Airtel Money',txn:'TXN777888999',status:'Verified'},
+];
+
+let newsItems=[
+  {id:1,cat:'trip',title:'Primary 5 & 6 Trip to Kigali',date:'2026-03-01',body:'Our upper primary pupils visited the Kigali Genocide Memorial and Rwanda Convention Centre.',emoji:'🚌'},
+  {id:2,cat:'sports',title:'Inter-Class Football Tournament',date:'2026-02-20',body:'Primary 4 defeated Primary 5 in an exciting final match 3-1!',emoji:'⚽'},
+  {id:3,cat:'debate',title:'Debate: Technology in Schools',date:'2026-02-15',body:'Primary 6 students delivered outstanding arguments. The judges were very impressed!',emoji:'🎤'},
+  {id:4,cat:'visitor',title:'Mayor of Musanze Visits GPA',date:'2026-02-10',body:'The Mayor honored us with a visit to inspect facilities and motivate students.',emoji:'🤝'},
+  {id:5,cat:'funny',title:"Teacher's Surprise Dance!",date:'2026-01-30',body:"Mr. Emmanuel surprised everyone with his famous dance moves at the mid-term celebration! 😂",emoji:'😂'},
+  {id:6,cat:'achievement',title:'Science Fair Champions!',date:'2026-03-05',body:'Our P5 pupils won the regional science fair with their water purification project.',emoji:'🏆'},
+];
+
+let galleryItems=[
+  {emoji:'🚌',label:'Kigali Trip',bg:'#E1F5EE'},{emoji:'⚽',label:'Football',bg:'#EAF3DE'},
+  {emoji:'🏆',label:'Science Fair',bg:'#FAEEDA'},{emoji:'🎤',label:'Debate Day',bg:'#E6F1FB'},
+  {emoji:'😂',label:'Fun Moments',bg:'#FBEAF0'},{emoji:'🎉',label:'End of Year',bg:'#EEEDFE'},
+  {emoji:'📚',label:'Library Day',bg:'#E1F5EE'},{emoji:'🎨',label:'Art Exhibition',bg:'#FAEEDA'},
+  {emoji:'🤝',label:"Mayor's Visit",bg:'#EAF3DE'},{emoji:'🏃',label:'Sports Day',bg:'#E6F1FB'},
+  {emoji:'🌱',label:'Tree Planting',bg:'#EAF3DE'},{emoji:'🎭',label:'Drama Night',bg:'#FBEAF0'},
+];
+
+let comments=[];
+let accounts=[];
+let settings={phone:'+250 788 000 000',whatsapp:'+250 788 000 001',email:'info@godsplanacademy.rw',adminEmail:'admin@godsplanacademy.rw',address:'14 School Lane, Musanze, Northern Province, Rwanda',hours:'Monday – Friday: 7:00am – 5:00pm',director:'Sr. Josephine Uwera',headTeacher:'Mr. Patrick Habimana',bankName:"God's Plan Academy Ltd",bankAcc:'00012-345678-01',bankBranch:'Musanze Branch',bankSwift:'BKIGRWRW',notice:'📢 Term 2 2026 — School fees are due by April 28, 2026. Pay online now to avoid delays.'};
+
+const LOGINS={admin:{pass:'gpa2026',role:'admin'},director:{pass:'gpa999',role:'director'},teacher:{pass:'gpa123',role:'teacher'},parent:{pass:'mypwd',role:'parent'}};
+let currentUser=null;
+let currentRole=null;
+let regLang='en';
+let regRole='parent';
+let payMethod='mtn';
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-links button[id^="nav-"]').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  const nb=document.getElementById('nav-'+id);
+  if(nb)nb.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ============================================================
+// AUTH
+// ============================================================
+function switchAuthTab(t){
+  document.querySelectorAll('.atab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.auth-form').forEach(f=>f.classList.remove('active'));
+  document.getElementById('tab-'+t).classList.add('active');
+  document.getElementById('auth'+t.charAt(0).toUpperCase()+t.slice(1)).classList.add('active');
+}
+
+function togglePass(id,btn){
+  const inp=document.getElementById(id);
+  if(inp.type==='password'){inp.type='text';btn.textContent='🙈';}
+  else{inp.type='password';btn.textContent='👁️';}
+}
+
+function pickRegLang(l){
+  regLang=l;
+  document.querySelectorAll('.lp').forEach(b=>b.classList.remove('sel'));
+  document.getElementById('rl-'+l).classList.add('sel');
+}
+
+function pickRegRole(r){
+  regRole=r;
+  document.querySelectorAll('.rbtn').forEach(b=>b.classList.remove('sel'));
+  document.getElementById('rr-'+r).classList.add('sel');
+}
+
+function doLogin(){
+  const id=document.getElementById('loginId').value.trim();
+  const pass=document.getElementById('loginPass').value;
+  hideAlert('loginErr');
+  const found=LOGINS[id];
+  // Check built-in accounts
+  if(found&&found.pass===pass){
+    currentUser=id; currentRole=found.role;
+    setupDash(currentRole); showPage('dashboard');
+    document.getElementById('navUserInfo').style.display='flex';
+    document.getElementById('navUserBadge').textContent={admin:'🏫 Admin',director:'👔 Director',teacher:'👩‍🏫 Teacher',parent:'👨‍👩‍👧 Parent'}[currentRole]||'👤 '+id;
+    document.getElementById('nav-login').style.display='none';
+    return;
+  }
+  // Check registered accounts
+  const acc=accounts.find(a=>a.username===id||a.email===id);
+  if(acc&&acc.password===pass){
+    currentUser=acc.username; currentRole=acc.role;
+    setLang(acc.lang||'en');
+    setupDash(currentRole); showPage('dashboard');
+    document.getElementById('navUserInfo').style.display='flex';
+    document.getElementById('navUserBadge').textContent='👤 '+acc.firstName;
+    document.getElementById('nav-login').style.display='none';
+    return;
+  }
+  showAlert('loginErr','❌ Incorrect username or password. Please try again.');
+}
+
+function doRegister(){
+  const first=document.getElementById('regFirst').value.trim();
+  const last=document.getElementById('regLast').value.trim();
+  const email=document.getElementById('regEmail').value.trim();
+  const cc=document.getElementById('regCountryCode').value;
+  const phone=document.getElementById('regPhone').value.trim();
+  const username=document.getElementById('regUser').value.trim();
+  const pass=document.getElementById('regPass').value;
+  const pass2=document.getElementById('regPass2').value;
+  hideAlert('regErr');hideAlert('regSuc');
+  if(!first||!last||!email||!phone||!username||!pass){showAlert('regErr','⚠️ Please fill in all fields.');return;}
+  if(pass.length<6){showAlert('regErr','⚠️ Password must be at least 6 characters.');return;}
+  if(pass!==pass2){showAlert('regErr','⚠️ Passwords do not match.');return;}
+  if(accounts.find(a=>a.username===username)){showAlert('regErr','❌ Username already taken. Choose another.');return;}
+  if(accounts.find(a=>a.email===email)){showAlert('regErr','❌ Email already registered.');return;}
+  accounts.push({firstName:first,lastName:last,email,phone:cc+phone,username,password:pass,role:regRole,lang:regLang,joined:new Date().toISOString().slice(0,10)});
+  setLang(regLang);
+  showAlert('regSuc','✅ Account created successfully! You can now login.');
+  setTimeout(()=>switchAuthTab('login'),2000);
+}
+
+function doForgot(){
+  const id=document.getElementById('forgotId').value.trim();
+  hideAlert('forgotErr');hideAlert('forgotSuc');
+  if(!id){showAlert('forgotErr','⚠️ Please enter your email or phone number.');return;}
+  const acc=accounts.find(a=>a.email===id||a.phone.includes(id.replace(/\s/g,'')));
+  if(!acc){showAlert('forgotErr','❌ No account found with this email or phone. Contact school office.');return;}
+  showAlert('forgotSuc',`✅ Password reset code sent to ${acc.email}. Check your email.\n(Demo: your password is "${acc.password}")`);
+}
+
+function logout(){
+  currentUser=null;currentRole=null;
+  document.getElementById('navUserInfo').style.display='none';
+  document.getElementById('nav-login').style.display='inline-block';
+  showPage('home');
+}
+
+// ============================================================
+// RESULTS
+// ============================================================
+function getSubs(cls){return['Baby Nursery','Pre-School'].includes(cls)?SUBS_N:SUBS_P;}
+function getMax(cls){return getSubs(cls).length*100;}
+function calcTot(marks,cls){return getSubs(cls).reduce((a,s)=>a+(marks[s]?marks[s][0]+marks[s][1]:0),0);}
+function grade(p){return p>=80?'A':p>=70?'B':p>=60?'C':p>=50?'D':'F';}
+function gradeRmk(t){if(t>=80)return{g:'A',r:'Excellent'};if(t>=70)return{g:'B',r:'Very Good'};if(t>=60)return{g:'C',r:'Good'};if(t>=50)return{g:'D',r:'Average'};return{g:'F',r:'Needs Improvement'};}
+function gbadge(g){return g==='A'||g==='B'?'bg-green':g==='C'||g==='D'?'bg-amber':'bg-red';}
+
+function checkCredit(){
+  const reg=document.getElementById('resReg').value.trim().toUpperCase();
+  const s=students.find(x=>x.reg===reg);
+  const cw=document.getElementById('creditWarn');
+  const pf=document.getElementById('resPayFields');
+  if(s&&s.status==='credit'){cw.classList.add('show');pf.style.display='none';}
+  else{cw.classList.remove('show');pf.style.display='block';}
+}
+
+function accessResults(){
+  const reg=document.getElementById('resReg').value.trim().toUpperCase();
+  const parent=document.getElementById('resParent').value.trim();
+  const txn=document.getElementById('resTxn').value.trim();
+  hideAlert('resErr');
+  if(!reg){showAlert('resErr','⚠️ Enter registration number.');return;}
+  if(!parent){showAlert('resErr','⚠️ Enter your name.');return;}
+  if(!txn){showAlert('resErr','⚠️ Enter the MoMo transaction code after paying 100 RWF.');return;}
+  const s=students.find(x=>x.reg===reg);
+  if(!s){showAlert('resErr',`❌ No student found with reg. "${reg}". Contact school office.`);return;}
+  if(s.status==='credit'){showAlert('resErr','🚫 Results locked — outstanding fees.');return;}
+  document.getElementById('resGate').style.display='none';
+  document.getElementById('resReport').style.display='block';
+  renderReport(s);
+}
+
+function resetRes(){
+  document.getElementById('resGate').style.display='block';
+  document.getElementById('resReport').style.display='none';
+  ['resReg','resParent','resTxn'].forEach(id=>document.getElementById(id).value='');
+  hideAlert('resErr');document.getElementById('creditWarn').classList.remove('show');
+}
+
+function renderReport(s){
+  const ini=s.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  document.getElementById('rpAv').textContent=ini;
+  document.getElementById('rpNm').textContent=s.name;
+  document.getElementById('rpMt').textContent=`${s.cls} · Term 2 · 2025–2026`;
+  const subs=getSubs(s.cls);let tot=0;
+  document.getElementById('rpSubs').innerHTML=subs.map(sub=>{
+    const m=s.marks[sub]||[0,0];const t=m[0]+m[1];tot+=t;
+    const{g,r}=gradeRmk(t);
+    return`<tr><td><strong>${sub}</strong></td><td style="text-align:center;">${m[0]}<small style="color:var(--muted)">/40</small></td><td style="text-align:center;">${m[1]}<small style="color:var(--muted)">/60</small></td><td style="text-align:center;"><strong>${t}</strong><small style="color:var(--muted)">/100</small></td><td><span class="badge ${gbadge(g)}">${g}</span></td><td style="color:var(--muted);font-size:12px;">${r}</td></tr>`;
+  }).join('');
+  const mx=getMax(s.cls);const pct=Math.round(tot/mx*100);const g=grade(pct);
+  document.getElementById('rpTot').textContent=`${tot}/${mx}`;
+  document.getElementById('rpPct').textContent=`${pct}%`;
+  document.getElementById('rpPos').textContent=s.pos||'—';
+  document.getElementById('rpGr').textContent=g;
+  const catT=subs.reduce((a,sub)=>a+(s.marks[sub]?s.marks[sub][0]:0),0);
+  const exT=subs.reduce((a,sub)=>a+(s.marks[sub]?s.marks[sub][1]:0),0);
+  document.getElementById('rpPills').innerHTML=[
+    {l:'CAT',v:`${catT}/${subs.length*40}`,bg:'#E6F1FB',c:'#042C53'},
+    {l:'Exam',v:`${exT}/${subs.length*60}`,bg:'#EAF3DE',c:'#173404'},
+    {l:'%',v:`${pct}%`,bg:'#FAEEDA',c:'#412402'},
+    {l:'Grade',v:g,bg:g==='A'||g==='B'?'#E1F5EE':'#FCEBEB',c:g==='A'||g==='B'?'#085041':'#501313'},
+  ].map(p=>`<div class="gp" style="background:${p.bg};"><div class="gn" style="color:${p.c};">${p.v}</div><div class="gl" style="color:${p.c};">${p.l}</div></div>`).join('');
+  document.getElementById('rpDisc').innerHTML=DISC.map(d=>`<div class="di"><div class="dl">${d}</div><div class="dv">${s.disc[d]||'—'}<small style="font-size:10px;color:var(--muted)">/10</small></div></div>`).join('');
+  document.getElementById('rpTrk').textContent=s.teacherRmk||'—';
+  document.getElementById('rpHrk').textContent=s.headRmk||'—';
+}
+
+// ============================================================
+// FEES
+// ============================================================
+const FA={tuition:{nursery:45000,preschool:50000,lower:60000,upper:70000},reg:12000,activity:5000,uniform:15000,transport:20000,lunch:18000};
+function tier(cls){if(cls==='Baby Nursery')return'nursery';if(cls==='Pre-School')return'preschool';if(['Primary 1','Primary 2','Primary 3'].includes(cls))return'lower';return'upper';}
+
+function loadFeeStudent(){
+  const reg=document.getElementById('feeReg').value.trim().toUpperCase();
+  const s=students.find(x=>x.reg===reg);
+  const info=document.getElementById('feeStuInfo');
+  if(s){info.style.display='block';document.getElementById('feeStuName').textContent=s.name;document.getElementById('feeStuClass').textContent=s.cls+' · '+(s.status==='credit'?'⚠️ Outstanding fees':'✅ Fees OK');}
+  else{info.style.display='none';}
+  updateFeeBreakdown();
+}
+
+function updateFeeBreakdown(){
+  const cat=document.getElementById('feeCat').value;
+  const reg=document.getElementById('feeReg').value.trim().toUpperCase();
+  const s=students.find(x=>x.reg===reg);
+  const bd=document.getElementById('feeBreakdown');
+  if(!cat){bd.style.display='none';return;}
+  bd.style.display='block';
+  const t=s?tier(s.cls):'lower';
+  let tot=0;const l1=document.getElementById('feeLn1');const l2=document.getElementById('feeLn2');l2.style.display='none';
+  const cats={tuition:[FA.tuition[t],'Tuition Fee'],reg:[FA.reg,'Registration Fee'],activity:[FA.activity,'Activity Fee'],uniform:[FA.uniform,'Uniform'],transport:[FA.transport,'Transport'],lunch:[FA.lunch,'Lunch Program']};
+  if(cats[cat]){tot=cats[cat][0];l1.innerHTML=`<span>${cats[cat][1]}</span><span>${tot.toLocaleString()} RWF</span>`;}
+  else if(cat==='all'){const tt=FA.tuition[t];const ot=FA.activity+FA.reg;tot=tt+ot;l1.innerHTML=`<span>Tuition</span><span>${tt.toLocaleString()} RWF</span>`;l2.style.display='flex';l2.innerHTML=`<span>Other Fees</span><span>${ot.toLocaleString()} RWF</span>`;}
+  document.getElementById('feeTotalAmt').textContent=tot.toLocaleString()+' RWF';
+}
+
+function selPay(m){
+  payMethod=m;
+  ['mtn','airtel','bank'].forEach(x=>{document.getElementById('pm-'+x).classList.toggle('sel',x===m);document.getElementById('pi-'+x).style.display=x===m?'block':'none';});
+}
+
+function submitFee(){
+  const reg=document.getElementById('feeReg').value.trim().toUpperCase();
+  const cat=document.getElementById('feeCat').value;
+  const phone=document.getElementById('feePhone').value.trim();
+  const txn=document.getElementById('feeTxn').value.trim();
+  hideAlert('feeErr');hideAlert('feeSuc');
+  if(!reg||!cat||!phone||!txn){showAlert('feeErr','⚠️ Please fill in all fields.');return;}
+  const s=students.find(x=>x.reg===reg);
+  if(!s){showAlert('feeErr',`❌ Student "${reg}" not found.`);return;}
+  const t=tier(s.cls);const amts={tuition:FA.tuition[t],reg:FA.reg,activity:FA.activity,uniform:FA.uniform,transport:FA.transport,lunch:FA.lunch,all:FA.tuition[t]+FA.activity+FA.reg};
+  const labels={tuition:'Tuition Fees',reg:'Registration',activity:'Activity',uniform:'Uniform',transport:'Transport',lunch:'Lunch',all:'All Fees'};
+  payments.push({date:new Date().toISOString().slice(0,10),reg,name:s.name,cat:labels[cat]||cat,amount:amts[cat]||0,method:payMethod==='mtn'?'MTN MoMo':payMethod==='airtel'?'Airtel Money':'Bank Transfer',txn:txn.toUpperCase(),status:'Pending Verification'});
+  if(cat==='all'||cat==='tuition')s.status='ok';
+  showAlert('feeSuc',`✅ Payment submitted! ${(amts[cat]||0).toLocaleString()} RWF for ${s.name}. Txn: ${txn.toUpperCase()}. School will verify within 24h.`);
+  ['feeReg','feePhone','feeTxn'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('feeStuInfo').style.display='none';document.getElementById('feeBreakdown').style.display='none';
+}
+
+function checkBal(){
+  const reg=document.getElementById('balReg').value.trim().toUpperCase();
+  const el=document.getElementById('balResult');
+  const s=students.find(x=>x.reg===reg);
+  if(!s){el.style.display='none';return;}
+  el.style.display='block';
+  const ok=s.status==='ok';
+  el.innerHTML=`<div style="background:${ok?'var(--green-light)':'var(--red-light)'};border:1.5px solid ${ok?'var(--green-mid)':'#F09595'};border-radius:9px;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;"><div><strong>${s.name}</strong><br/><span style="font-size:12px;color:var(--muted);">${s.cls}</span></div><div style="text-align:right;"><span style="font-size:13px;font-weight:800;color:${ok?'var(--green-dark)':'var(--red)'};">${ok?'✅ Fees OK':'⚠️ Outstanding Fees'}</span><br/><button class="btn btn-sm btn-amber" style="margin-top:4px;" onclick="showPage('fees')">Pay Now</button></div></div>`;
+}
+
+// ============================================================
+// NEWS
+// ============================================================
+const catBg={trip:'#E1F5EE',sports:'#EAF3DE',debate:'#E6F1FB',visitor:'#FAEEDA',funny:'#FBEAF0',achievement:'#EEEDFE',event:'#FCEBEB'};
+const catBadge={trip:'bg-green',sports:'bg-green',debate:'bg-blue',visitor:'bg-amber',funny:'bg-purple',achievement:'bg-amber',event:'bg-red'};
+
+function renderNews(filter){
+  const items=filter==='all'?newsItems:newsItems.filter(n=>n.cat===filter);
+  document.getElementById('newsGrid').innerHTML=items.length?items.map(n=>`
+    <div class="ncard"><div class="nthumb" style="background:${catBg[n.cat]||'#f5f5f5'};"><span style="font-size:42px;">${n.emoji}</span><span class="ncbadge badge ${catBadge[n.cat]||'bg-blue'}">${n.cat}</span></div>
+    <div class="nbody"><div class="ndate">${n.date}</div><div class="ntitle">${n.title}</div><div class="nprev">${n.body.slice(0,90)}…</div></div></div>`).join(''):'<div style="grid-column:1/-1;text-align:center;padding:36px;color:var(--muted);">No posts in this category.</div>';
+}
+
+function filterNews(cat,btn){
+  document.querySelectorAll('.nfbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');renderNews(cat);
+}
+
+function renderGallery(){
+  document.getElementById('galleryGrid').innerHTML=galleryItems.map(g=>`<div class="gtile"><div class="ginner" style="background:${g.bg};">${g.emoji}</div><div class="glabel">${g.label}</div></div>`).join('');
+}
+
+function renderHomeNews(){
+  const el=document.getElementById('homeNewsPreview');if(!el)return;
+  el.innerHTML=newsItems.slice(0,4).map(n=>`<div style="background:var(--bg);border-radius:9px;border:1px solid var(--border);overflow:hidden;cursor:pointer;" onclick="showPage('news')"><div style="height:55px;display:flex;align-items:center;justify-content:center;font-size:28px;background:${catBg[n.cat]||'#f5f5f5'};">${n.emoji}</div><div style="padding:9px 11px;"><div style="font-size:10px;color:var(--muted);">${n.date}</div><div style="font-size:12px;font-weight:800;line-height:1.4;">${n.title}</div></div></div>`).join('');
+}
+
+// ============================================================
+// COMMENTS
+// ============================================================
+async function sendComment(){
+  const name=document.getElementById('cmtName').value.trim();
+  const role=document.getElementById('cmtRole').value;
+  const subject=document.getElementById('cmtSubject').value.trim();
+  const msg=document.getElementById('cmtMsg').value.trim();
+  hideAlert('cmtErr');hideAlert('cmtSuc');
+  if(!name||!msg){showAlert('cmtErr','⚠️ Please enter your name and message.');return;}
+  
+  try {
+    if(window.GPA){
+      await window.GPA.Comments.send(name, role, subject, msg);
+    }
+    comments.unshift({name,role,subject,msg,date:new Date().toLocaleDateString(),time:new Date().toLocaleTimeString()});
+    showAlert('cmtSuc','✅ Your message was sent to the director successfully!');
+    ['cmtName','cmtSubject','cmtMsg'].forEach(id=>document.getElementById(id).value='');
+    renderComments();
+  } catch(err) {
+    showAlert('cmtErr','❌ ' + err.message);
+  }
+}
+
+function renderComments(){
+  const list=document.getElementById('commentsList');
+  if(!comments.length){list.innerHTML='<p style="color:var(--muted);font-size:13px;text-align:center;padding:20px;">No messages yet. Be the first!</p>';return;}
+  list.innerHTML=comments.slice(0,8).map(c=>`
+    <div class="comment-card"><div class="comment-header"><div class="comment-avatar">${c.name.slice(0,2).toUpperCase()}</div><div><div class="comment-name">${c.name} <span class="comment-role badge ${c.role==='parent'?'bg-green':c.role==='student'?'bg-blue':'bg-amber'}">${c.role}</span></div><div class="comment-time">${c.date} ${c.time}</div></div></div>${c.subject?`<div style="font-size:12px;font-weight:800;color:var(--green-dark);margin-bottom:4px;">Re: ${c.subject}</div>`:''}<div class="comment-text">${c.msg}</div></div>`).join('');
+  // Also update director view
+  const dl=document.getElementById('directorComments');
+  if(dl)dl.innerHTML=comments.map(c=>`<div class="comment-card"><div class="comment-header"><div class="comment-avatar">${c.name.slice(0,2).toUpperCase()}</div><div><div class="comment-name">${c.name} <span class="comment-role badge bg-amber">${c.role}</span></div><div class="comment-time">${c.date}</div></div></div>${c.subject?`<strong style="font-size:12px;">Re: ${c.subject}</strong><br/>`:''}<div class="comment-text">${c.msg}</div></div>`).join('')||'<p style="color:var(--muted);font-size:13px;padding:16px;">No messages yet.</p>';
+}
+
+// ============================================================
+// CONTACT
+// ============================================================
+function sendContact(){
+  const name=document.getElementById('ctcName').value.trim();
+  const email=document.getElementById('ctcEmail').value.trim();
+  const msg=document.getElementById('ctcMsg').value.trim();
+  hideAlert('ctcErr');hideAlert('ctcSuc');
+  if(!name||!email||!msg){showAlert('ctcErr','⚠️ Please fill in name, email and message.');return;}
+  showAlert('ctcSuc',`✅ Message sent! We'll reply to ${email} within 24 hours. Thank you, ${name}!`);
+  ['ctcName','ctcEmail','ctcPhone','ctcMsg'].forEach(id=>document.getElementById(id).value='');
+}
+
+// ============================================================
+// DASHBOARD SETUP
+// ============================================================
+function setupDash(role){
+  const titles={admin:'Admin Dashboard',director:"Director's Office",teacher:'Teacher Dashboard',parent:'Parent Dashboard'};
+  document.getElementById('dashTitle').textContent=titles[role]||'Dashboard';
+  document.getElementById('dashSub').textContent='Welcome back, '+currentUser;
+  document.getElementById('dashBadge').textContent={admin:'🏫 Admin',director:'👔 Director',teacher:'👩‍🏫 Teacher',parent:'👨‍👩‍👧 Parent'}[role];
+
+  const cred=students.filter(s=>s.status==='credit').length;
+  const statsMap={
+    admin:[{n:students.length,l:'Students'},{n:cred,l:'On Credit'},{n:staff.length,l:'Staff'},{n:payments.length,l:'Payments'}],
+    director:[{n:students.length,l:'Students'},{n:staff.length,l:'Staff'},{n:payments.reduce((a,p)=>a+p.amount,0).toLocaleString()+' RWF',l:'Collected'},{n:cred,l:'On Credit'},{n:accounts.length,l:'Accounts'}],
+    teacher:[{n:students.length,l:'Students'},{n:students.filter(s=>s.status==='ok').length,l:'Fees OK'},{n:cred,l:'On Credit'}],
+    parent:[{n:'Term 2',l:'Current Term'},{n:2026,l:'Year'}],
+  };
+  document.getElementById('dashStats').innerHTML=(statsMap[role]||[]).map(s=>`<div class="scard"><div class="snum">${s.n}</div><div class="slbl">${s.l}</div></div>`).join('');
+
+  const tabsMap={
+    teacher:[{id:'marks',label:'📝 Post Marks'}],
+    admin:[{id:'marks',label:'📝 Marks'},{id:'students',label:'👨‍🎓 Students'},{id:'staff',label:'👩‍🏫 Staff'},{id:'payments',label:'💳 Payments'},{id:'news',label:'📰 News'},{id:'settings',label:'⚙️ Settings'}],
+    director:[{id:'marks',label:'📝 Marks'},{id:'students',label:'👨‍🎓 Students'},{id:'staff',label:'👩‍🏫 Staff'},{id:'payments',label:'💳 Payments'},{id:'news',label:'📰 News'},{id:'comments-admin',label:'💬 Messages'},{id:'settings',label:'⚙️ Settings'}],
+    parent:[{id:'marks',label:'📊 Check Results'}],
+  };
+  const tabs=tabsMap[role]||[];
+  document.getElementById('dashTabs').innerHTML=tabs.map((t,i)=>`<button class="atab-btn${i===0?' active':''}" onclick="showDashTab('${t.id}',this)">${t.label}</button>`).join('');
+  document.querySelectorAll('.asub').forEach(s=>s.classList.remove('active'));
+  if(tabs.length)document.getElementById('sub-'+tabs[0].id).classList.add('active');
+
+  buildMarkInputs();
+  if(['admin','director'].includes(role)){renderStu();renderPayments();renderStaff();}
+  if(role==='director'){renderDirComments();renderAccounts();}
+}
+
+function showDashTab(id,btn){
+  document.querySelectorAll('.atab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.asub').forEach(s=>s.classList.remove('active'));
+  document.getElementById('sub-'+id).classList.add('active');
+}
+
+// ============================================================
+// MARKS
+// ============================================================
+function buildMarkInputs(){
+  const allSubs=[...new Set([...SUBS_N,...SUBS_P])];
+  document.getElementById('mRows').innerHTML=allSubs.map(s=>`<tr><td>${s}</td><td><input type="number" min="0" max="40" id="cat_${s.replace(/\s/g,'_')}" placeholder="0-40"/></td><td><input type="number" min="0" max="60" id="ex_${s.replace(/\s/g,'_')}" placeholder="0-60"/></td></tr>`).join('');
+  document.getElementById('mDisc').innerHTML=DISC.map(d=>`<div><label style="display:block;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:3px;">${d} (0-10)</label><input type="number" min="0" max="10" id="disc_${d}" placeholder="0-10" style="width:100%;padding:8px 10px;border-radius:7px;border:1.5px solid var(--border);font-family:'Nunito',sans-serif;font-size:13px;"/></div>`).join('');
+}
+
+function loadStuMarks(){
+  const reg=document.getElementById('mReg').value.trim().toUpperCase();
+  const s=students.find(x=>x.reg===reg);
+  const cf=document.getElementById('mCreditFlag');
+  const ma=document.getElementById('mInputArea');
+  if(s){
+    document.getElementById('mName').value=s.name;
+    const opts=document.getElementById('mCls').options;
+    for(let o of opts)if(o.value===s.cls){o.selected=true;break;}
+    if(s.status==='credit'){cf.classList.add('show');ma.style.opacity='.35';ma.style.pointerEvents='none';}
+    else{cf.classList.remove('show');ma.style.opacity='1';ma.style.pointerEvents='auto';}
+  }
+}
+
+function saveMarks(){
+  const reg=document.getElementById('mReg').value.trim().toUpperCase();
+  const name=document.getElementById('mName').value.trim();
+  const cls=document.getElementById('mCls').value;
+  hideAlert('mSuc');hideAlert('mErr');
+  if(!reg||!name){showAlert('mErr','⚠️ Enter reg number and name.');return;}
+  const s=students.find(x=>x.reg===reg);
+  if(s&&s.status==='credit'){showAlert('mErr','🚫 Cannot post marks. Student is on credit.');return;}
+  const subs=getSubs(cls);const marks={};
+  subs.forEach(sub=>{const k=sub.replace(/\s/g,'_');marks[sub]=[parseInt(document.getElementById('cat_'+k)?.value)||0,parseInt(document.getElementById('ex_'+k)?.value)||0];});
+  const disc={};DISC.forEach(d=>{disc[d]=parseInt(document.getElementById('disc_'+d)?.value)||0;});
+  const entry={reg,name,cls,gender:s?.gender||'',parent:s?.parent||'',phone:s?.phone||'',status:s?.status||'ok',marks,disc,teacherRmk:document.getElementById('mTrk').value||'Good effort.',headRmk:document.getElementById('mHrk').value||'Well done.',pos:document.getElementById('mPos').value||'—'};
+  const idx=students.findIndex(x=>x.reg===reg);
+  if(idx>=0)students[idx]={...students[idx],...entry};else students.push(entry);
+  showAlert('mSuc','✅ Marks saved! Results are now live.');
+  if(['admin','director'].includes(currentRole))renderStu();
+}
+
+// ============================================================
+// STUDENTS TABLE
+// ============================================================
+function renderStu(){
+  const q=(document.getElementById('stuSearch')?.value||'').toLowerCase();
+  const cls=document.getElementById('stuCls')?.value||'';
+  const st=document.getElementById('stuStatus')?.value||'';
+  const list=students.filter(s=>(s.name.toLowerCase().includes(q)||s.reg.toLowerCase().includes(q))&&(!cls||s.cls===cls)&&(!st||s.status===st));
+  document.getElementById('stuTBody').innerHTML=list.map(s=>`
+    <tr><td><strong>${s.reg}</strong></td><td>${s.name}</td><td>${s.cls}</td><td>${s.gender||'—'}</td><td>${s.phone||'—'}</td>
+    <td><span class="badge ${s.status==='ok'?'bg-green':'bg-red'}">${s.status==='ok'?'✅ Paid':'⚠️ Credit'}</span></td>
+    <td style="white-space:nowrap;">
+      <button class="btn btn-sm btn-blue" onclick="toggleCredit('${s.reg}')" style="margin-right:4px;">${s.status==='credit'?'Mark Paid':'Mark Credit'}</button>
+      <button class="btn btn-sm btn-red" onclick="delStudent('${s.reg}')">🗑️ Delete</button>
+    </td></tr>`).join('')||'<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:18px;">No students found.</td></tr>';
+}
+
+function toggleCredit(reg){const s=students.find(x=>x.reg===reg);if(s){s.status=s.status==='credit'?'ok':'credit';renderStu();}}
+function delStudent(reg){if(!confirm('Delete this student permanently?'))return;students=students.filter(s=>s.reg!==reg);renderStu();setupDash(currentRole);}
+
+function addStudent(){
+  const reg=document.getElementById('nsFull').value.trim().toUpperCase();
+  const name=document.getElementById('nsName').value.trim();
+  const cls=document.getElementById('nsCls').value;
+  const gender=document.getElementById('nsGender').value;
+  const parent=document.getElementById('nsParent').value.trim();
+  const phone=document.getElementById('nsPhone').value.trim();
+  const status=document.getElementById('nsStatus').value;
+  hideAlert('nsErr');
+  if(!reg||!name){showAlert('nsErr','⚠️ Registration number and name are required.');return;}
+  if(students.find(s=>s.reg===reg)){showAlert('nsErr','❌ Student with this reg. already exists.');return;}
+  students.push({reg,name,cls,gender,parent,phone,status,marks:{},disc:{},teacherRmk:'',headRmk:'',pos:'—'});
+  closeMod('addStuMod');renderStu();
+  document.getElementById('nsFull').value='';document.getElementById('nsName').value='';
+}
+
+// ============================================================
+// STAFF TABLE
+// ============================================================
+function renderStaff(){
+  const q=(document.getElementById('staffSearch')?.value||'').toLowerCase();
+  const dept=document.getElementById('staffDept')?.value||'';
+  const list=staff.filter(s=>(s.name.toLowerCase().includes(q)||s.id.toLowerCase().includes(q))&&(!dept||s.dept===dept));
+  document.getElementById('staffTBody').innerHTML=list.map(s=>`
+    <tr><td><strong>${s.id}</strong></td><td>${s.name}</td>
+    <td><span class="badge bg-purple">${s.role}</span></td><td>${s.dept}</td><td>${s.phone}</td><td style="font-size:12px;">${s.email||'—'}</td>
+    <td><span class="badge bg-green">${s.status}</span></td>
+    <td><button class="btn btn-sm btn-red" onclick="delStaff('${s.id}')">🗑️ Remove</button></td></tr>`).join('')||'<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:18px;">No staff found.</td></tr>';
+}
+
+function delStaff(id){if(!confirm('Remove this staff member?'))return;staff=staff.filter(s=>s.id!==id);renderStaff();}
+
+function addStaff(){
+  const id=document.getElementById('sfId').value.trim().toUpperCase();
+  const name=document.getElementById('sfName').value.trim();
+  const role=document.getElementById('sfRole').value;
+  const dept=document.getElementById('sfDept').value;
+  const phone=document.getElementById('sfPhone').value.trim();
+  const email=document.getElementById('sfEmail').value.trim();
+  hideAlert('sfErr');
+  if(!id||!name){showAlert('sfErr','⚠️ Staff ID and name are required.');return;}
+  if(staff.find(s=>s.id===id)){showAlert('sfErr','❌ Staff ID already exists.');return;}
+  staff.push({id,name,role,dept,phone,email,status:'Active'});
+  closeMod('addStaffMod');renderStaff();
+  ['sfId','sfName','sfPhone','sfEmail'].forEach(el=>document.getElementById(el).value='');
+}
+
+// ============================================================
+// PAYMENTS
+// ============================================================
+function renderPayments(){
+  document.getElementById('payTBody').innerHTML=payments.map(p=>`
+    <tr><td>${p.date}</td><td>${p.reg}</td><td>${p.name}</td><td>${p.cat}</td>
+    <td><strong>${p.amount.toLocaleString()} RWF</strong></td><td>${p.method}</td>
+    <td style="font-size:11px;">${p.txn}</td>
+    <td><span class="badge ${p.status==='Verified'?'bg-green':'bg-amber'}">${p.status}</span></td>
+    <td><button class="btn btn-sm btn-green" onclick="verifyPay('${p.txn}')">Verify</button></td></tr>`).join('');
+}
+
+function verifyPay(txn){const p=payments.find(x=>x.txn===txn);if(p){p.status='Verified';renderPayments();}}
+
+// ============================================================
+// POST NEWS
+// ============================================================
+function postNews(){
+  const title=document.getElementById('nTitle').value.trim();
+  const cat=document.getElementById('nCat').value;
+  const body=document.getElementById('nBody').value.trim();
+  const emoji=document.getElementById('nEmoji').value.trim()||'📌';
+  if(!title||!body){showAlert('nSuc','⚠️ Title and description are required.');document.getElementById('nSuc').className='alert a-error show';return;}
+  newsItems.unshift({id:Date.now(),cat,title,date:new Date().toISOString().slice(0,10),body,emoji});
+  ['nTitle','nBody','nEmoji'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('nSuc').className='alert a-success show';
+  document.getElementById('nSuc').textContent='✅ News published successfully!';
+  setTimeout(()=>hideAlert('nSuc'),3000);
+  renderHomeNews();
+}
+
+// ============================================================
+// SETTINGS
+// ============================================================
+function saveSettings(){
+  settings.phone=document.getElementById('sPhone').value;
+  settings.whatsapp=document.getElementById('sWhatsapp').value;
+  settings.email=document.getElementById('sEmail').value;
+  settings.adminEmail=document.getElementById('sAdminEmail').value;
+  settings.address=document.getElementById('sAddress').value;
+  settings.hours=document.getElementById('sHours').value;
+  settings.director=document.getElementById('sDirector').value;
+  settings.headTeacher=document.getElementById('sHeadTeacher').value;
+  settings.bankName=document.getElementById('sBankName').value;
+  settings.bankAcc=document.getElementById('sBankAcc').value;
+  settings.bankBranch=document.getElementById('sBankBranch').value;
+  settings.bankSwift=document.getElementById('sBankSwift').value;
+  settings.notice=document.getElementById('sNotice').value;
+  // Apply to contact page
+  document.getElementById('settPhone').textContent=settings.phone;
+  document.getElementById('settWhatsapp').textContent=settings.whatsapp;
+  document.getElementById('settEmail').textContent=settings.email;
+  document.getElementById('settAdminEmail').textContent=settings.adminEmail;
+  document.getElementById('settAddress').textContent=settings.address;
+  document.getElementById('settHours').textContent=settings.hours;
+  document.getElementById('settDirector').textContent=settings.director;
+  document.getElementById('settHeadTeacher').textContent=settings.headTeacher;
+  document.getElementById('settBankName').textContent=settings.bankName;
+  document.getElementById('settBankAcc').textContent=settings.bankAcc;
+  document.getElementById('settBankBranch').textContent=settings.bankBranch;
+  document.getElementById('settBankSwift').textContent=settings.bankSwift;
+  document.querySelector('[data-i18n="home_notice"]').textContent=settings.notice;
+  showAlert('settSuc','✅ Settings saved! All changes are live across the portal.');
+}
+
+// ============================================================
+// ACCOUNTS
+// ============================================================
+function renderAccounts(){
+  const el=document.getElementById('accountsTBody');if(!el)return;
+  el.innerHTML=accounts.length?accounts.map(a=>`
+    <tr><td>${a.firstName} ${a.lastName}</td><td>${a.email}</td><td>${a.phone}</td>
+    <td><span class="badge bg-purple">${a.role}</span></td>
+    <td>${{en:'🇬🇧 English',rw:'🇷🇼 Kinyarwanda',fr:'🇫🇷 Français',sw:'🇰🇪 Kiswahili'}[a.lang]||a.lang}</td>
+    <td>${a.joined}</td>
+    <td><button class="btn btn-sm btn-red" onclick="delAccount('${a.username}')">🗑️</button></td></tr>`).join(''):'<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:16px;">No registered accounts yet.</td></tr>';
+}
+
+function delAccount(username){if(!confirm('Delete this account?'))return;accounts=accounts.filter(a=>a.username!==username);renderAccounts();}
+
+function renderDirComments(){
+  const el=document.getElementById('directorComments');if(!el)return;
+  el.innerHTML=comments.length?comments.map(c=>`<div class="comment-card"><div class="comment-header"><div class="comment-avatar">${c.name.slice(0,2).toUpperCase()}</div><div><div class="comment-name">${c.name} <span class="badge bg-amber">${c.role}</span></div><div class="comment-time">${c.date}</div></div></div>${c.subject?`<strong style="font-size:12px;display:block;margin-bottom:3px;">Re: ${c.subject}</strong>`:''}<div class="comment-text">${c.msg}</div></div>`).join(''):'<p style="color:var(--muted);font-size:13px;padding:16px;">No messages yet.</p>';
+}
+
+// ============================================================
+// HELPERS
+// ============================================================
+function showAlert(id,msg){const el=document.getElementById(id);if(!el)return;el.textContent=msg;el.classList.add('show');}
+function hideAlert(id){const el=document.getElementById(id);if(!el)return;el.classList.remove('show');}
+function openMod(id){document.getElementById(id).classList.add('open');}
+function closeMod(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.mbg').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
+
+// ============================================================
+// TRANSLATIONS
+// ============================================================
+const T={
+  en:{nav_home:'🏠 Home',nav_results:'📊 Results',nav_fees:'💳 Fees',nav_news:'📰 News',nav_comments:'💬 Messages',nav_contact:'📞 Contact',nav_login:'🔐 Login',home_title:"God's Plan Academy Portal",home_sub:'Your complete school portal — results, fees, news, staff and more.',home_btn1:'📊 Check Results',home_btn2:'💳 Pay School Fees',home_notice:'📢 Term 2 2026 — School fees due April 28, 2026.',q1t:'Student Results',q1d:'CAT & Exam marks, report cards. 100 RWF access.',q2t:'Pay School Fees',q2d:'Pay via MoMo, Airtel or Bank Transfer.',q3t:'News & Gallery',q3d:'Trips, games, debates, visitors & funny moments.',q4t:'Messages to Director',q4d:'Parents send messages to the school director.',q5t:'Contact Us',q5d:'Call, email or WhatsApp the school.',q6t:'Staff & Admin Login',q6d:'Post marks, manage students and settings.',res_title:'📊 Student Results',res_sub:'CAT marks, exam marks & full report cards.',res_gate_title:'Access Results',res_gate_desc:"Enter your child's registration number. Students with outstanding fees cannot access results.",res_price:'100 RWF to view marks & report',res_pay_how:'📱 How to pay 100 RWF',res_pay_steps:'Dial <strong>*182*8*1*0788000000*100#</strong> on your MTN<br/>OR MTN MoMo App → Send → <strong>+250 788 000 000</strong>',res_reg_lbl:'Student Registration Number',credit_title:'🚫 Results Locked — Outstanding Fees',credit_desc:'Fees not paid.',credit_link:'Pay fees online →',res_parent_lbl:'Your Name',res_txn_lbl:'MoMo Transaction Code',res_txn_hint:'Received by SMS after paying 100 RWF.',res_btn:'✅ Verify & View Results',rep_academic:'📚 Academic Performance',rep_subject:'Subject',rep_exam:'Exam',rep_total:'Total',rep_grade:'Grade',rep_remark:'Remark',rep_overall:'Total',rep_pct:'Percentage',rep_pos:'Position',rep_final_grade:'Grade',rep_discipline:'🎖️ Discipline',rep_teacher_rmk:"👩‍🏫 Teacher's Remarks",rep_head_rmk:"🏫 Head Teacher's Remarks",rep_footer:'Next Term: May 5, 2026 · Fees Due: April 28, 2026',rep_print:'🖨️ Print',fees_title:'💳 Pay School Fees Online',fees_sub:'Pay securely via Mobile Money or Bank Transfer.',fees_student_info:'Student Details',fees_student_sub:"Enter your child's registration number.",fees_reg_lbl:'Registration Number',fees_category_lbl:'Fee Category',fees_cat_select:'Select fee...',fees_cat_tuition:'Tuition Fees',fees_cat_reg:'Registration Fee',fees_cat_activity:'Activity & Sports',fees_cat_uniform:'School Uniform',fees_cat_transport:'Transport',fees_cat_lunch:'Lunch Program',fees_cat_all:'All Fees',fees_term_lbl:'Term',fees_total:'Total to Pay',fees_method_title:'Payment Method',fees_method_sub:'Choose how you want to pay.',fees_phone_lbl:'Your Phone Number',fees_txn_lbl:'Transaction Code',fees_submit_btn:'✅ Submit Payment',fees_schedule_title:'📋 Fee Schedule',fees_sch_class:'Class',fees_sch_tuition:'Tuition (RWF)',fees_sch_reg:'Registration',fees_balance_title:'💰 Check Fee Balance',news_title:'📰 News & School Gallery',news_sub:'Trips, sports, debates, visitors, funny moments and all school life!',gallery_title:'📸 Photo Gallery',nf_all:'All',nf_trip:'✈️ Trips',nf_sports:'⚽ Sports',nf_debate:'🎤 Debates',nf_visitor:'🤝 Visitors',nf_funny:'😂 Funny',nf_achievement:'🏆 Achievements',nf_event:'🎉 Events',comments_title:'💬 Messages to Director',comments_sub:'Parents can send messages, suggestions or complaints.',comments_send_title:'✉️ Send a Message',comments_send_sub:'Goes directly to the director.',comments_name_lbl:'Your Name',comments_role_lbl:'You Are',cmt_role_parent:'Parent / Guardian',cmt_role_student:'Student',cmt_role_community:'Community Member',comments_subject_lbl:'Subject',comments_msg_lbl:'Your Message',comments_send_btn:'📤 Send to Director',comments_recent_title:'📬 Recent Messages',comments_recent_sub:'Community messages.',contact_title:'📞 Contact Us',contact_sub:'Reach us by phone, email, WhatsApp or visit us.',contact_info_title:'School Contact Information',contact_address_lbl:'Address',contact_phone_lbl:'Phone',contact_email_lbl:'Email',contact_admin_email_lbl:'Admin Email',contact_hours_lbl:'Office Hours',contact_director_title:'🏫 School Leadership',contact_director_lbl:'Director',contact_headteacher_lbl:'Head Teacher',contact_form_title:'📧 Send Email',contact_form_sub:"We'll reply within 24 hours.",contact_form_name:'Your Name',contact_form_email:'Your Email',contact_form_phone:'Your Phone',contact_form_subject:'Subject',contact_form_msg:'Message',ctc_sub1:'General Enquiry',ctc_sub2:'Admissions',ctc_sub3:'Fees & Payments',ctc_sub4:'Student Progress',ctc_sub5:'Complaint / Suggestion',ctc_sub6:'Other',contact_form_btn:'📧 Send Message',login_title:"Welcome to GPA Portal",login_sub:'Login or create your account.',auth_login_tab:'Login',auth_register_tab:'Create Account',auth_forgot_tab:'Forgot Password',login_email_lbl:'Email or Username',login_pass_lbl:'Password',login_btn:'Login →',login_demo:'Demo — admin/gpa2026 · director/gpa999 · teacher/gpa123',reg_choose_lang:'Choose Your Language',reg_role_lbl:'I am a',role_parent:'Parent',role_student:'Student',role_teacher:'Teacher',role_staff:'Other Staff',reg_fname_lbl:'First Name',reg_lname_lbl:'Last Name',reg_email_lbl:'Email Address',reg_phone_lbl:'Phone Number',reg_username_lbl:'Username',reg_pass_lbl:'Password',reg_pass2_lbl:'Confirm Password',reg_btn:'✅ Create Account',forgot_desc:'Enter your email or phone. We will send a reset code.',forgot_email_lbl:'Email or Phone',forgot_btn:'📧 Send Reset Code',forgot_contact_hint:'If no code received, contact admin@godsplanacademy.rw',view_all_news:'View All News →',logout_btn:'Logout'},
+
+  rw:{nav_home:'🏠 Ahabanza',nav_results:'📊 Amanota',nav_fees:'💳 Ishura',nav_news:'📰 Amakuru',nav_comments:'💬 Ubutumwa',nav_contact:'📞 Twandikire',nav_login:'🔐 Injira',home_title:"Iposita ya God's Plan Academy",home_sub:'Sisitemu yuzuye — amanota, amafaranga, amakuru, abakozi n\'ibindi.',home_btn1:'📊 Reba Amanota',home_btn2:'💳 Ishura Amafaranga',home_notice:'📢 Igihembwe cya 2 2026 — Amafaranga y\'ishuri ashyurwa kabla ya Mata 28, 2026.',q1t:'Amanota y\'Umunyeshuri',q1d:'Amanota ya CAT, ikizamini n\'iripoti. RWF 100 kwinjira.',q2t:'Ishura Amafaranga',q2d:'Ishyura ukoresheje MTN MoMo, Airtel cyangwa Banki.',q3t:'Amakuru & Amafoto',q3d:'Ingendo, imikino, ibiganiro, inzitizi n\'ibiturumbuka.',q4t:'Ubutumwa kuri Umuyobozi',q4d:'Ababyeyi bohereza ubutumwa kuri umuyobozi.',q5t:'Twandikire',q5d:'Duhamagare, dushyire imeyili cyangwa WhatsApp.',q6t:'Injira – Abakozi',q6d:'Andika amanota, gucunga abanyeshuri n\'abakozi.',res_title:'📊 Amanota y\'Abanyeshuri',res_sub:'Amanota ya CAT, ikizamini, imyitwarire n\'iripoti.',res_gate_title:'Injira Kureba Amanota',res_gate_desc:"Injiza nomero y'uburejewe. Umunyeshuri wafite imyenda afunzwe.",res_price:'RWF 100 kureba amanota n\'iripoti',res_pay_how:'📱 Uburyo bwo kwishyura RWF 100',res_pay_steps:'Kora <strong>*182*8*1*0788000000*100#</strong><br/>Cyangwa MTN MoMo App → Ohereza → <strong>+250 788 000 000</strong>',res_reg_lbl:"Nomero y'Uburejewe",credit_title:'🚫 Amanota Afunzwe',credit_desc:'Amafaranga adashyuwe.',credit_link:'Ishyura →',res_parent_lbl:'Izina rya Mubyeyi',res_txn_lbl:'Kode ya MTN MoMo',res_txn_hint:"Kode ihabwa kuri SMS nyuma yo kwishyura RWF 100.",res_btn:'✅ Emeza no Kureba',fees_title:"💳 Ishura Amafaranga y'Ishuri",fees_sub:'Ishura mu buryo bwizewe ukoresheje Mobile Money cyangwa Banki.',news_title:"📰 Amakuru n'Amafoto",news_sub:'Ingendo, imikino, ibiganiro, inzitizi n\'ibiturumbuka!',gallery_title:'📸 Amafoto',nf_all:'Byose',nf_trip:'✈️ Ingendo',nf_sports:'⚽ Imikino',nf_debate:'🎤 Ibiganiro',nf_visitor:'🤝 Inzitizi',nf_funny:'😂 Ibiturumbuka',nf_achievement:'🏆 Ibyagezweho',nf_event:'🎉 Ibirori',comments_title:'💬 Ubutumwa kuri Umuyobozi',comments_sub:'Ababyeyi bohereza ibibazo, inama cyangwa amakuru.',comments_send_title:'✉️ Ohereza Ubutumwa',comments_send_sub:'Bugera ku muyobozi.',comments_name_lbl:'Izina ryawe',comments_role_lbl:'Uri nde',cmt_role_parent:'Mubyeyi / Umurezi',cmt_role_student:'Umunyeshuri',cmt_role_community:'Utuye hafi',comments_subject_lbl:'Ingingo',comments_msg_lbl:'Ubutumwa bwawe',comments_send_btn:'📤 Ohereza kuri Umuyobozi',contact_title:'📞 Twandikire',login_title:"Ikaze kuri Iposita ya GPA",auth_login_tab:'Injira',auth_register_tab:'Fungura konti',auth_forgot_tab:'Wibagiwe ijambo ryibanga',reg_choose_lang:'Hitamo ururimi rwawe',reg_role_lbl:'Uri nde',role_parent:'Mubyeyi',role_student:'Umunyeshuri',role_teacher:'Umwarimu',role_staff:'Akandi kazi',reg_fname_lbl:'Izina',reg_lname_lbl:'Irindi zina',reg_email_lbl:'Imeyili',reg_phone_lbl:'Nomero ya telefoni',reg_username_lbl:'Izina ryo gukoresha',reg_pass_lbl:'Ijambo ryibanga',reg_pass2_lbl:'Subiramo ijambo ryibanga',reg_btn:'✅ Fungura konti',forgot_desc:'Shyira imeyili cyangwa telefoni. Tuzakoherereza kode.',forgot_btn:'📧 Ohereza Kode',logout_btn:'Sohoka'},
+
+  fr:{nav_home:'🏠 Accueil',nav_results:'📊 Résultats',nav_fees:'💳 Frais',nav_news:'📰 Actualités',nav_comments:'💬 Messages',nav_contact:'📞 Nous Contacter',nav_login:'🔐 Connexion',home_title:"Portail de God's Plan Academy",home_sub:'Votre portail scolaire complet — résultats, frais, actualités et plus.',home_btn1:'📊 Voir les Résultats',home_btn2:'💳 Payer les Frais',home_notice:"📢 Trimestre 2 2026 — Frais scolaires dus avant le 28 avril 2026.",q1t:'Résultats des Élèves',q1d:'Notes CAT, examen et bulletins. Accès 100 RWF.',q2t:'Payer les Frais',q2d:'Payer via MoMo, Airtel ou virement bancaire.',q3t:'Actualités & Galerie',q3d:'Sorties, sports, débats, visites & moments drôles.',q4t:'Messages au Directeur',q4d:'Les parents envoient des messages au directeur.',q5t:'Nous Contacter',q5d:'Appelez, envoyez un email ou WhatsApp.',q6t:'Connexion Personnel',q6d:'Publier les notes, gérer élèves et personnel.',res_title:'📊 Résultats des Élèves',res_sub:"Notes CAT, d'examen et bulletins complets.",res_gate_title:'Accéder aux Résultats',res_gate_desc:"Entrez le numéro d'immatriculation. Les élèves avec des impayés sont bloqués.",res_price:'100 RWF pour voir les notes et le bulletin',res_pay_how:'📱 Comment payer 100 RWF',res_pay_steps:'Composez <strong>*182*8*1*0788000000*100#</strong><br/>Ou App MTN MoMo → Envoyer → <strong>+250 788 000 000</strong>',res_reg_lbl:"Numéro d'immatriculation",credit_title:'🚫 Résultats Bloqués — Frais Impayés',credit_desc:'Frais scolaires non réglés.',credit_link:'Payer les frais →',res_parent_lbl:'Votre Nom',res_txn_lbl:'Code de Transaction MoMo',res_txn_hint:'Reçu par SMS après paiement de 100 RWF.',res_btn:'✅ Vérifier et Voir',fees_title:'💳 Payer les Frais en Ligne',fees_sub:'Paiement sécurisé via Mobile Money ou virement bancaire.',news_title:'📰 Actualités & Galerie',news_sub:'Sorties, sports, débats, visites et toute la vie scolaire!',gallery_title:'📸 Galerie Photos',nf_all:'Tout',nf_trip:'✈️ Sorties',nf_sports:'⚽ Sports',nf_debate:'🎤 Débats',nf_visitor:'🤝 Visiteurs',nf_funny:'😂 Moments Drôles',nf_achievement:'🏆 Réussites',nf_event:'🎉 Événements',comments_title:'💬 Messages au Directeur',comments_sub:'Les parents envoient des messages, suggestions ou plaintes.',comments_send_title:'✉️ Envoyer un Message',comments_send_sub:'Va directement au directeur.',comments_name_lbl:'Votre Nom',comments_role_lbl:'Vous êtes',cmt_role_parent:'Parent / Tuteur',cmt_role_student:'Élève',cmt_role_community:'Membre de la Communauté',comments_subject_lbl:'Sujet',comments_msg_lbl:'Votre Message',comments_send_btn:'📤 Envoyer au Directeur',contact_title:'📞 Nous Contacter',login_title:'Bienvenue sur le Portail GPA',auth_login_tab:'Connexion',auth_register_tab:'Créer un Compte',auth_forgot_tab:'Mot de Passe Oublié',reg_choose_lang:'Choisissez votre Langue',reg_role_lbl:'Je suis',role_parent:'Parent',role_student:'Élève',role_teacher:'Enseignant',role_staff:'Autre Personnel',reg_fname_lbl:'Prénom',reg_lname_lbl:'Nom de Famille',reg_email_lbl:'Adresse Email',reg_phone_lbl:'Numéro de Téléphone',reg_username_lbl:"Nom d'Utilisateur",reg_pass_lbl:'Mot de Passe',reg_pass2_lbl:'Confirmer le Mot de Passe',reg_btn:'✅ Créer un Compte',forgot_desc:'Entrez votre email ou téléphone. Nous vous enverrons un code.',forgot_btn:'📧 Envoyer le Code',logout_btn:'Déconnexion'},
+
+  sw:{nav_home:'🏠 Nyumbani',nav_results:'📊 Matokeo',nav_fees:'💳 Ada',nav_news:'📰 Habari',nav_comments:'💬 Ujumbe',nav_contact:'📞 Wasiliana',nav_login:'🔐 Ingia',home_title:"Tovuti ya God's Plan Academy",home_sub:'Mfumo wako kamili wa shule — matokeo, ada, habari na zaidi.',home_btn1:'📊 Angalia Matokeo',home_btn2:'💳 Lipa Ada',home_notice:'📢 Muhula 2 2026 — Ada za shule zinalipwa kabla ya Aprili 28, 2026.',q1t:'Matokeo ya Mwanafunzi',q1d:'Alama za CAT, mtihani na ripoti. Upatikanaji RWF 100.',q2t:'Lipa Ada ya Shule',q2d:'Lipa kupitia MTN MoMo, Airtel au Benki.',q3t:'Habari & Picha',q3d:'Safari, michezo, midahalo, wageni & nyakati za kuchekesha.',q4t:'Ujumbe kwa Mkurugenzi',q4d:'Wazazi wanatuma ujumbe kwa mkurugenzi wa shule.',q5t:'Wasiliana Nasi',q5d:'Piga simu, tuma barua pepe au WhatsApp.',q6t:'Ingia – Wafanyakazi',q6d:'Weka alama, simamia wanafunzi na mipangilio.',res_title:'📊 Matokeo ya Wanafunzi',res_sub:'Alama za CAT, mtihani na ripoti kamili.',res_gate_title:'Pata Matokeo',res_gate_desc:"Weka nambari ya usajili. Wanafunzi wenye ada zinazodaiwa wamezuiwa.",res_price:'RWF 100 kuona alama na ripoti',res_pay_how:'📱 Jinsi ya Kulipa RWF 100',res_pay_steps:'Piga <strong>*182*8*1*0788000000*100#</strong><br/>Au MTN MoMo App → Tuma → <strong>+250 788 000 000</strong>',res_reg_lbl:'Nambari ya Usajili',credit_title:'🚫 Matokeo Yamefungwa',credit_desc:'Ada hazijalipwa.',credit_link:'Lipa ada →',res_parent_lbl:'Jina Lako',res_txn_lbl:'Msimbo wa Muamala',res_txn_hint:'Unapokelewa kwa SMS baada ya kulipa.',res_btn:'✅ Thibitisha na Angalia',fees_title:'💳 Lipa Ada ya Shule Mtandaoni',fees_sub:'Lipa kwa usalama kupitia Mobile Money au Benki.',news_title:'📰 Habari & Picha',news_sub:'Safari, michezo, midahalo, wageni na maisha ya shule!',gallery_title:'📸 Matunzio ya Picha',nf_all:'Zote',nf_trip:'✈️ Safari',nf_sports:'⚽ Michezo',nf_debate:'🎤 Midahalo',nf_visitor:'🤝 Wageni',nf_funny:'😂 Kuchekesha',nf_achievement:'🏆 Mafanikio',nf_event:'🎉 Matukio',comments_title:'💬 Ujumbe kwa Mkurugenzi',comments_sub:'Wazazi wanatuma ujumbe, maoni au malalamiko.',comments_send_title:'✉️ Tuma Ujumbe',comments_send_sub:'Unaenda moja kwa moja kwa mkurugenzi.',comments_name_lbl:'Jina Lako',comments_role_lbl:'Wewe ni nani',cmt_role_parent:'Mzazi / Mlezi',cmt_role_student:'Mwanafunzi',cmt_role_community:'Mwanajamii',comments_subject_lbl:'Mada',comments_msg_lbl:'Ujumbe Wako',comments_send_btn:'📤 Tuma kwa Mkurugenzi',contact_title:'📞 Wasiliana Nasi',login_title:'Karibu kwenye Tovuti ya GPA',auth_login_tab:'Ingia',auth_register_tab:'Fungua Akaunti',auth_forgot_tab:'Umesahau Nenosiri',reg_choose_lang:'Chagua Lugha Yako',reg_role_lbl:'Mimi ni',role_parent:'Mzazi',role_student:'Mwanafunzi',role_teacher:'Mwalimu',role_staff:'Wafanyakazi Wengine',reg_fname_lbl:'Jina la Kwanza',reg_lname_lbl:'Jina la Ukoo',reg_email_lbl:'Barua Pepe',reg_phone_lbl:'Nambari ya Simu',reg_username_lbl:'Jina la Mtumiaji',reg_pass_lbl:'Nenosiri',reg_pass2_lbl:'Rudia Nenosiri',reg_btn:'✅ Fungua Akaunti',forgot_desc:'Weka barua pepe au simu. Tutatuma msimbo wa kuweka upya.',forgot_btn:'📧 Tuma Msimbo',logout_btn:'Toka'},
+};
+
+let currentLang='en';
+function setLang(l){
+  currentLang=l;
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('lb-'+l)?.classList.add('active');
+  const t=T[l]||T.en;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k=el.getAttribute('data-i18n');
+    if(t[k]!==undefined){if(t[k].includes('<'))el.innerHTML=t[k];else el.textContent=t[k];}
+  });
+}
+
+// ============================================================
+// INIT
+// =================================================
+// ============================================================
+
+// ===== SPLASH SCREEN =====
+let splashLangChoice='en';
+
+function splashLang(l){
+  splashLangChoice=l;
+  document.querySelectorAll('.slang-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sl-'+l).classList.add('active');
+  setLang(l);
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('lb-'+l)?.classList.add('active');
+}
+
+function switchSplashTab(t){
+  document.querySelectorAll('.stab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.splash-form').forEach(f=>f.classList.remove('active'));
+  document.getElementById('stab-'+t).classList.add('active');
+  document.getElementById('sform-'+t).classList.add('active');
+}
+
+function dismissSplash(){
+  const s=document.getElementById('splashScreen');
+  s.style.transition='opacity .45s ease';s.style.opacity='0';
+  setTimeout(()=>{s.style.display='none';},450);
+}
+
+function enterPortal(role,username,displayName){
+  currentUser=username;currentRole=role;
+  setLang(splashLangChoice);
+  dismissSplash();
+  if(role==='guest'){showPage('home');}
+  else{
+    setupDash(role);showPage('dashboard');
+    document.getElementById('navUserInfo').style.display='flex';
+    document.getElementById('navUserBadge').textContent={admin:'🏫 Admin',director:'👔 Director',teacher:'👩‍🏫 Teacher',parent:'👨‍👩‍👧 Parent',staff:'🏫 Staff',student:'🎒 Student'}[role]||'👤 '+displayName;
+    document.getElementById('nav-login').style.display='none';
+  }
+}
+
+function enterAsGuest(){currentRole='guest';setLang(splashLangChoice);dismissSplash();showPage('home');}
+
+async function splashLogin(){
+  const id=document.getElementById('sLoginId').value.trim();
+  const pass=document.getElementById('sLoginPass').value;
+  hideAlert('sLoginErr');
+  if(!id||!pass){showAlert('sLoginErr','⚠️ Please enter username and password.');return;}
+  
+  const btn=document.querySelector('#sform-login .btn-green');
+  btn.textContent='Logging in...';btn.disabled=true;
+  
+  try {
+    // Try real API first
+    if(window.GPA){
+      const result = await window.GPA.Auth.login(id, pass);
+      if(result.success){
+        splashLangChoice = result.user.language || splashLangChoice;
+        enterPortal(result.user.role, result.user.username || id, result.user.first_name);
+        return;
+      }
+    }
+  } catch(err) {
+    // Fall back to demo accounts if API fails
+    const found=LOGINS[id];
+    if(found&&found.pass===pass){enterPortal(found.role,id,id);return;}
+    const acc=accounts.find(a=>a.username===id||a.email===id);
+    if(acc&&acc.password===pass){splashLangChoice=acc.lang||splashLangChoice;enterPortal(acc.role,acc.username,acc.firstName);return;}
+    showAlert('sLoginErr','❌ ' + err.message);
+  } finally {
+    btn.textContent='Login →';btn.disabled=false;
+  }
+  showAlert('sLoginErr','❌ Incorrect username or password.');
+}
+
+function splashRegister(){
+  const first=document.getElementById('sRegFirst').value.trim();
+  const last=document.getElementById('sRegLast').value.trim();
+  const email=document.getElementById('sRegEmail').value.trim();
+  const cc=document.getElementById('sRegCC').value;
+  const phone=document.getElementById('sRegPhone').value.trim();
+  const username=document.getElementById('sRegUser').value.trim();
+  const pass=document.getElementById('sRegPass').value;
+  const pass2=document.getElementById('sRegPass2').value;
+  hideAlert('sRegErr');hideAlert('sRegSuc');
+  if(!first||!last||!email||!phone||!username||!pass){showAlert('sRegErr','⚠️ Please fill in all fields.');return;}
+  if(pass.length<6){showAlert('sRegErr','⚠️ Password must be at least 6 characters.');return;}
+  if(pass!==pass2){showAlert('sRegErr','⚠️ Passwords do not match.');return;}
+  if(accounts.find(a=>a.username===username)){showAlert('sRegErr','❌ Username already taken. Choose another.');return;}
+  if(accounts.find(a=>a.email===email)){showAlert('sRegErr','❌ Email already registered.');return;}
+  accounts.push({firstName:first,lastName:last,email,phone:cc+phone,username,password:pass,role:regRole,lang:splashLangChoice,joined:new Date().toISOString().slice(0,10)});
+  showAlert('sRegSuc','✅ Account created! Logging you in...');
+  setTimeout(()=>enterPortal(regRole,username,first),1500);
+}
+
+function splashForgot(){
+  const id=document.getElementById('sForgotId').value.trim();
+  hideAlert('sForgotErr');hideAlert('sForgotSuc');
+  if(!id){showAlert('sForgotErr','⚠️ Please enter your email or phone.');return;}
+  const acc=accounts.find(a=>a.email===id||a.phone.includes(id.replace(/\s/g,'')));
+  if(!acc){showAlert('sForgotErr','❌ No account found. Contact school office.');return;}
+  showAlert('sForgotSuc',`✅ Reset code sent to ${acc.email}. (Demo: your password is "${acc.password}")`);
+}
+
+function pickRegRole(r){
+  regRole=r;
+  ['parent','student','teacher','staff'].forEach(x=>{
+    document.getElementById('sr-'+x)?.classList.toggle('sel',x===r);
+    document.getElementById('rr-'+x)?.classList.toggle('sel',x===r);
+  });
+}
+
+function logout(){
+  currentUser=null;currentRole=null;
+  document.getElementById('navUserInfo').style.display='none';
+  document.getElementById('nav-login').style.display='inline-block';
+  const splash=document.getElementById('splashScreen');
+  splash.style.display='flex';splash.style.opacity='0';
+  setTimeout(()=>{splash.style.transition='opacity .4s ease';splash.style.opacity='1';},10);
+  document.getElementById('sLoginId').value='';
+  document.getElementById('sLoginPass').value='';
+  hideAlert('sLoginErr');switchSplashTab('login');
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+}
+
+// Add guest_btn translations
+const guestLabels={en:'👁️ Continue as Guest (View Only)',rw:'👁️ Injira nk\'inshuti (Reba gusa)',fr:'👁️ Continuer en Visiteur',sw:'👁️ Endelea kama Mgeni'};
+Object.keys(T).forEach(l=>{T[l].guest_btn=guestLabels[l]||guestLabels.en;});
+
+// ===== RUN ON PAGE LOAD =====
+renderHomeNews();
+renderNews('all');
+renderGallery();
+renderComments();
+selPay('mtn');
+// Splash is shown by default (fixed position covers everything)
+// No page is active until user logs in or enters as guest
+
+if(window.innerWidth<700){
+  document.querySelector('.fees-layout')?.style.setProperty('grid-template')
+  }
+</script>
+</body>
+</html>

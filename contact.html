@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us – God's Plan Academy</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --green: #1D9E75;
+      --green-dark: #085041;
+      --green-deeper: #04342C;
+      --green-light: #E1F5EE;
+      --green-mid: #9FE1CB;
+      --blue: #1a56db;
+      --gold: #C9A84C;
+      --text: #1a1a1a;
+      --muted: #555;
+      --white: #fff;
+      --bg: #f4f6f8;
+      --border: rgba(0, 0, 0, 0.08);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      color: var(--text);
+      background: var(--white);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .6s, transform .6s;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      background: white;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+      position: sticky;
+      top: 0;
+      z-index: 500;
+      height: 72px;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .brand-logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #085041, #1D9E75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .brand-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #085041;
+      line-height: 1.1;
+    }
+
+    .brand-sub {
+      font-size: 10px;
+      color: #555;
+      font-weight: 500;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      flex: 1;
+      justify-content: center;
+    }
+
+    .nl {
+      color: #1a1a1a;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-family: 'Outfit', sans-serif;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+
+    .nl:hover,
+    .nl.active {
+      color: #1a56db;
+      background: rgba(26, 86, 219, 0.07);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .nav-portal {
+      background: #1a56db;
+      color: white;
+      padding: 9px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+      font-family: 'Outfit', sans-serif;
+      transition: all .2s;
+    }
+
+    .nav-portal:hover {
+      background: #1140a6;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      width: 24px;
+      height: 2.5px;
+      background: #1a1a1a;
+      border-radius: 2px;
+    }
+
+    .mob-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: white;
+      z-index: 490;
+      padding: 76px 24px 24px;
+      flex-direction: column;
+      gap: 4px;
+      overflow-y: auto;
+    }
+
+    .mob-menu.open {
+      display: flex;
+    }
+
+    .mob-close {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      background: none;
+      border: none;
+      font-size: 26px;
+      cursor: pointer;
+    }
+
+    .mob-link {
+      font-size: 16px;
+      font-weight: 600;
+      padding: 13px 16px;
+      border-radius: 10px;
+      text-decoration: none;
+      color: #1a1a1a;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .mob-link:hover {
+      background: rgba(26, 86, 219, 0.07);
+      color: #1a56db;
+    }
+
+    @media(max-width:900px) {
+      .navbar {
+        padding: 0 18px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+    }
+
+    .page-hero {
+      background: linear-gradient(135deg, var(--green-dark), var(--green));
+      padding: 70px 40px;
+      text-align: center;
+      color: white;
+    }
+
+    .ph-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--green-mid);
+      margin-bottom: 10px;
+    }
+
+    .ph-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .ph-desc {
+      font-size: 15px;
+      opacity: .75;
+      font-weight: 300;
+    }
+
+    .section {
+      padding: 80px 40px;
+    }
+
+    .section-alt {
+      background: var(--bg);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .sec-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sec-label::before {
+      content: '';
+      width: 26px;
+      height: 2px;
+      background: var(--blue);
+      display: block;
+    }
+
+    .sec-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 40px;
+      font-weight: 700;
+      color: var(--green-dark);
+      line-height: 1.2;
+      margin-bottom: 14px;
+    }
+
+    .sec-desc {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.8;
+      font-weight: 300;
+    }
+
+    footer {
+      background: var(--green-deeper);
+      color: rgba(255, 255, 255, 0.7);
+      padding: 48px 40px 18px;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.3fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    .info-card {
+      background: var(--green-dark);
+      border-radius: 20px;
+      padding: 34px;
+      color: white;
+    }
+
+    .info-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      color: var(--green-mid);
+      margin-bottom: 6px;
+    }
+
+    .info-card>p {
+      font-size: 13px;
+      opacity: .65;
+      margin-bottom: 24px;
+      font-weight: 300;
+    }
+
+    .ci {
+      display: flex;
+      gap: 13px;
+      align-items: flex-start;
+      margin-bottom: 18px;
+    }
+
+    .ci-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      flex-shrink: 0;
+    }
+
+    .ci-label {
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.5);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-bottom: 2px;
+    }
+
+    .ci-val {
+      font-size: 14px;
+      color: white;
+      font-weight: 500;
+    }
+
+    .form-card {
+      background: white;
+      border-radius: 20px;
+      padding: 34px;
+      border: 1px solid var(--border);
+      box-shadow: 0 6px 28px rgba(0, 0, 0, 0.06);
+    }
+
+    .form-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      color: var(--green-dark);
+      margin-bottom: 6px;
+    }
+
+    .form-card>p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 20px;
+      font-weight: 300;
+    }
+
+    .fg {
+      margin-bottom: 13px;
+    }
+
+    .fg label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .fg input,
+    .fg select,
+    .fg textarea {
+      width: 100%;
+      padding: 10px 13px;
+      border-radius: 9px;
+      border: 1.5px solid var(--border);
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px;
+      color: var(--text);
+      outline: none;
+      transition: border-color .2s;
+    }
+
+    .fg input:focus,
+    .fg select:focus,
+    .fg textarea:focus {
+      border-color: var(--blue);
+    }
+
+    .fg textarea {
+      height: 95px;
+      resize: vertical;
+    }
+
+    .frow {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 11px;
+    }
+
+    .sub-btn {
+      width: 100%;
+      background: var(--blue);
+      color: white;
+      padding: 13px;
+      border-radius: 9px;
+      font-size: 14px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      font-family: 'Outfit', sans-serif;
+      transition: all .2s;
+    }
+
+    .sub-btn:hover {
+      background: #1140a6;
+    }
+
+    .suc {
+      background: #EAF3DE;
+      border: 1px solid #C0DD97;
+      border-radius: 9px;
+      padding: 11px 14px;
+      font-size: 13px;
+      color: #173404;
+      font-weight: 600;
+      display: none;
+      margin-bottom: 12px;
+    }
+
+    .suc.show {
+      display: block;
+    }
+
+    @media(max-width:768px) {
+
+      .contact-grid,
+      .frow {
+        grid-template-columns: 1fr !important;
+      }
+
+      .section {
+        padding: 52px 16px;
+      }
+
+      .page-hero {
+        padding: 52px 16px;
+      }
+
+      .ph-title {
+        font-size: 32px;
+      }
+    }
+
+    /* ===== NAVBAR ===== */
+    .navbar {
+      background: white;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08), 0 2px 12px rgba(0, 0, 0, 0.06);
+      position: sticky;
+      top: 0;
+      z-index: 500;
+      height: 72px;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .brand-logo {
+      width: 46px;
+      height: 46px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #085041, #1D9E75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .brand-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #085041;
+      line-height: 1.15;
+    }
+
+    .brand-sub {
+      font-size: 10px;
+      color: #888;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex: 1;
+      justify-content: center;
+    }
+
+    .nl {
+      color: #1a1a1a;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-family: 'Outfit', sans-serif;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+
+    .nl:hover {
+      color: #1a56db;
+      background: rgba(26, 86, 219, 0.07);
+    }
+
+    .nl.active {
+      color: #1a56db;
+      background: rgba(26, 86, 219, 0.09);
+      font-weight: 700;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .nav-portal {
+      background: #1a56db;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+      font-family: 'Outfit', sans-serif;
+      transition: all .2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-portal:hover {
+      background: #1140a6;
+      transform: translateY(-1px);
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 5px;
+    }
+
+    .hamburger span {
+      width: 24px;
+      height: 2.5px;
+      background: #333;
+      border-radius: 2px;
+      transition: all .3s;
+    }
+
+    .mob-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: white;
+      z-index: 490;
+      padding: 80px 24px 24px;
+      flex-direction: column;
+      gap: 4px;
+      overflow-y: auto;
+      box-shadow: none;
+    }
+
+    .mob-menu.open {
+      display: flex;
+    }
+
+    .mob-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      font-size: 28px;
+      cursor: pointer;
+      color: #333;
+    }
+
+    .mob-link {
+      font-size: 15px;
+      font-weight: 600;
+      padding: 13px 16px;
+      border-radius: 10px;
+      text-decoration: none;
+      color: #1a1a1a;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+      font-family: 'Outfit', sans-serif;
+      transition: all .2s;
+    }
+
+    .mob-link:hover {
+      background: rgba(26, 86, 219, 0.07);
+      color: #1a56db;
+    }
+
+    @media(max-width:960px) {
+      .navbar {
+        padding: 0 20px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+    }
+
+    @media(max-width:600px) {
+      .brand-name {
+        font-size: 15px;
+      }
+
+      .brand-sub {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar" id="navbar">
+    <a class="nav-brand" href="school_website.html" title="Go to Home Page">
+      <div class="brand-logo">🌱</div>
+      <div>
+        <div class="brand-name">God's Plan Academy</div>
+        <div class="brand-sub">Nursery &amp; Primary School</div>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a class="nl" href="school_website.html">🏠 Home</a>
+      <a class="nl" href="about.html">About</a>
+      <a class="nl" href="academics.html">Academics</a>
+      <a class="nl" href="student-life.html">Student Life</a>
+      <a class="nl active" href="contact.html">Contact Us</a>
+    </div>
+    <div class="nav-right">
+      <a class="nav-portal" href="gods_plan_academy_portal.html">📊 Student Portal</a>
+      <div class="hamburger" onclick="toggleMob()"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+  <div class="mob-menu" id="mobMenu">
+    <button class="mob-close" onclick="toggleMob()">✕</button>
+    <a class="mob-link" href="school_website.html">🏠 Home</a>
+    <a class="mob-link" href="about.html">🏫 About</a>
+    <a class="mob-link" href="academics.html">📚 Academics</a>
+    <a class="mob-link" href="student-life.html">🎒 Student Life</a>
+    <a class="mob-link" href="contact.html">📞 Contact Us</a>
+    <a class="mob-link" href="gods_plan_academy_portal.html" style="color:#1a56db;font-weight:800;">📊 Student Portal
+      →</a>
+  </div>
+
+  <!-- BREADCRUMB -->
+  <div
+    style="background:#f8faf9;border-bottom:1px solid rgba(0,0,0,0.07);padding:8px 40px;display:flex;align-items:center;gap:6px;font-size:13px;color:#555;">
+    <a href="school_website.html"
+      style="color:#1a56db;font-weight:700;text-decoration:none;display:flex;align-items:center;gap:4px;">🏠 Home</a>
+    <span style="color:#bbb;">›</span>
+    <span style="color:#555;font-weight:600;">Contact</span>
+  </div>
+  <div class="page-hero">
+    <div class="ph-label">Get in Touch</div>
+    <h1 class="ph-title">Contact Us</h1>
+    <p class="ph-desc">We'd love to hear from you. Reach us by phone, email, WhatsApp or visit us at school.</p>
+  </div>
+  <section class="section">
+    <div class="container">
+      <div class="contact-grid">
+        <div class="reveal">
+          <div class="info-card">
+            <h3>School Information</h3>
+            <p>Our team is available Monday to Friday during school hours.</p>
+            <div class="ci">
+              <div class="ci-icon">📍</div>
+              <div>
+                <div class="ci-label">Address</div>
+                <div class="ci-val">14 School Lane, Musanze, Northern Province, Rwanda</div>
+              </div>
+            </div>
+            <div class="ci">
+              <div class="ci-icon">📞</div>
+              <div>
+                <div class="ci-label">Phone</div>
+                <div class="ci-val">+250 788 000 000</div>
+              </div>
+            </div>
+            <div class="ci">
+              <div class="ci-icon">💬</div>
+              <div>
+                <div class="ci-label">WhatsApp</div>
+                <div class="ci-val">+250 788 000 001</div>
+              </div>
+            </div>
+            <div class="ci">
+              <div class="ci-icon">✉️</div>
+              <div>
+                <div class="ci-label">Email</div>
+                <div class="ci-val"><a href="/cdn-cgi/l/email-protection" class="__cf_email__"
+                    data-cfemail="177e7971785770787364677b767976747673727a6e396560">[email&#160;protected]</a></div>
+              </div>
+            </div>
+            <div class="ci">
+              <div class="ci-icon">✉️</div>
+              <div>
+                <div class="ci-label">Admin Email</div>
+                <div class="ci-val"><a href="/cdn-cgi/l/email-protection" class="__cf_email__"
+                    data-cfemail="95f4f1f8fcfbd5f2faf1e6e5f9f4fbf4f6f4f1f0f8ecbbe7e2">[email&#160;protected]</a></div>
+              </div>
+            </div>
+            <div class="ci">
+              <div class="ci-icon">🕐</div>
+              <div>
+                <div class="ci-label">Office Hours</div>
+                <div class="ci-val">Monday – Friday: 7:00am – 5:00pm</div>
+              </div>
+            </div>
+            <div style="border-top:1px solid rgba(255,255,255,0.1);margin-top:16px;padding-top:16px;">
+              <div class="ci">
+                <div class="ci-icon">👔</div>
+                <div>
+                  <div class="ci-label">Director</div>
+                  <div class="ci-val">Sr. Josephine Uwera</div>
+                </div>
+              </div>
+              <div class="ci">
+                <div class="ci-icon">👩‍🏫</div>
+                <div>
+                  <div class="ci-label">Head Teacher</div>
+                  <div class="ci-val">Mr. Patrick Habimana</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="reveal">
+          <div class="form-card">
+            <h3>Send Us a Message</h3>
+            <p>We reply within 24 hours on working days.</p>
+            <div class="suc" id="suc">✅ Message sent! We will reply within 24 hours. Thank you!</div>
+            <div class="frow">
+              <div class="fg"><label>Your Name</label><input type="text" id="n" placeholder="Full name" /></div>
+              <div class="fg"><label>Your Phone</label><input type="tel" id="p" placeholder="+250 7XX XXX XXX" /></div>
+            </div>
+            <div class="fg"><label>Email Address</label><input type="email" id="e" placeholder="your@email.com" /></div>
+            <div class="fg"><label>Subject</label>
+              <select id="s">
+                <option>General Enquiry</option>
+                <option>Admissions / Enrollment</option>
+                <option>Fees &amp; Payments</option>
+                <option>Student Progress</option>
+                <option>Complaint / Suggestion</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="fg"><label>Message</label><textarea id="m" placeholder="Write your message here..."></textarea>
+            </div>
+            <button class="sub-btn" onclick="send()">📧 Send Message</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script>
+    function send() {
+      const n = document.getElementById('n').value.trim();
+      const e = document.getElementById('e').value.trim();
+      const m = document.getElementById('m').value.trim();
+      if (!n || !e || !m) { alert('Please fill in your name, email and message.'); return; }
+      document.getElementById('suc').classList.add('show');
+      ['n', 'p', 'e', 'm'].forEach(id => document.getElementById(id).value = '');
+      setTimeout(() => document.getElementById('suc').classList.remove('show'), 5000);
+    }
+  </script>
+  <script>
+    function toggleMob() {
+      const m = document.getElementById('mobMenu');
+      m.classList.toggle('open');
+    }
+    window.addEventListener('scroll', () => {
+      document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => {
+        if (el.getBoundingClientRect().top < window.innerHeight - 50) {
+          el.classList.add('visible');
+        }
+      });
+    });
+    setTimeout(() => window.dispatchEvent(new Event('scroll')), 120);
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us – God's Plan Academy</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --green: #1D9E75;
+      --green-dark: #085041;
+      --green-deeper: #04342C;
+      --green-light: #E1F5EE;
+      --green-mid: #9FE1CB;
+      --blue: #1a56db;
+      --gold: #C9A84C;
+      --text: #1a1a1a;
+      --muted: #555;
+      --white: #fff;
+      --bg: #f4f6f8;
+      --border: rgba(0, 0, 0, 0.08);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      color: var(--text);
+      background: var(--white);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .6s, transform .6s;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      background: white;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+      position: sticky;
+      top: 0;
+      z-index: 500;
+      height: 72px;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .brand-logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #085041, #1D9E75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .brand-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #085041;
+      line-height: 1.1;
+    }
+
+    .brand-sub {
+      font-size: 10px;
+      color: #555;
+      font-weight: 500;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      flex: 1;
+      justify-content: center;
+    }
+
+    .nl {
+      color: #1a1a1a;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-family: 'Outfit', sans-serif;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+
+    .nl:hover,
+    .nl.active {
+      color: #1a56db;
+      background: rgba(26, 86, 219, 0.07);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .nav-portal {
+      background: #1a56db;
+      color: white;
+      padding: 9px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+      font-family: 'Outfit', sans-serif;
+      transition: all .2s;
+    }
+
+    .nav-portal:hover {
+      background: #1140a6;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      width: 24px;
+      height: 2.5px;
+      background: #1a1a1a;
+      border-radius: 2px;
+    }
+
+    .mob-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: white;
+      z-index: 490;
+      padding: 76px 24px 24px;
+      flex-direction: column;
+      gap: 4px;
+      overflow-y: auto;
+    }
+
+    .mob-menu.open {
+      display: flex;
+    }
+
+    .mob-close {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      background: none;
+      border: none;
+      font-size: 26px;
+      cursor: pointer;
+    }
+
+    .mob-link {
+      font-size: 16px;
+      font-weight: 600;
+      padding: 13px 16px;
+      border-radius: 10px;
+      text-decoration: none;
+      color: #1a1a1a;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .mob-link:hover {
+      background: rgba(26, 86, 219, 0.07);
+      color: #1a56db;
+    }
+
+    @media(max-width:900px) {
+      .navbar {
+        padding: 0 18px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+    }
+
+    .page-hero {
+      background: linear-gradient(135deg, var(--green-dark), var(--green));
+      padding: 70px 40px;
+      text-align: center;
+      color: white;
+    }
+
+    .ph-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--green-mid);
+      margin-bottom: 10px;
+    }
+
+    .ph-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .ph-desc {
+      font-size: 15px;
+      opacity: .75;
+      font-weight: 300;
+    }
+
+    .section {
+      padding: 80px 40px;
+    }
+
+    .section-alt {
+      background: var(--bg);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .sec-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sec-label::before {
+      content: '';
+      width: 26px;
+      height: 2px;
+      background: var(--blue);
+      display: block;
+    }
+
+    .sec-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 40px;
+      font-weight: 700;
+      color: var(--green-dark);
+      line-height: 1.2;
+      margin-bottom: 14px;
+    }
+
+    .sec-desc {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.8;
+      font-weight: 300;
+    }
+
+    footer {
+      background: var(--green-deeper);
+      color: rgba(255, 255, 255, 0.7);
+      padding: 48px 40px 18px;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 56px;
+      align-items: center;
+    }
+
+    .img-box {
+      background: linear-gradient(135deg, var(--green-light), var(--green-mid));
+      border-radius: 20px;
+      height: 380px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 80px;
+      position: relative;
+    }
+
+    .img-badge {
+      position: absolute;
+      bottom: -16px;
+      right: -16px;
+      background: var(--gold);
+      border-radius: 12px;
+      padding: 14px 18px;
+      text-align: center;
+      box-shadow: 0 6px 20px rgba(201, 168, 76, 0.3);
+    }
+
+    .img-badge-n {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--green-dark);
+      line-height: 1;
+    }
+
+    .img-badge-t {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--green-dark);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+
+    .mission-box {
+      background: var(--green-dark);
+      border-radius: 14px;
+      padding: 26px;
+      margin-top: 24px;
+      color: white;
+    }
+
+    .mission-box h4 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      color: var(--green-mid);
+      margin-bottom: 8px;
+    }
+
+    .mission-box p {
+      font-size: 14px;
+      line-height: 1.75;
+      opacity: .85;
+      font-weight: 300;
+    }
+
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 32px;
+    }
+
+    .vcard {
+      background: white;
+      border-radius: 14px;
+      padding: 22px;
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .vcard-icon {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    .vcard-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--green-dark);
+      margin-bottom: 6px;
+    }
+
+    .vcard-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+      font-weight: 300;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-top: 32px;
+    }
+
+    .tcard {
+      background: white;
+      border-radius: 14px;
+      overflow: hidden;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+
+    .tcard-av {
+      height: 140px;
+      background: linear-gradient(135deg, var(--green-light), var(--green-mid));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .tcard-ini {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: var(--green-dark);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      font-weight: 700;
+      border: 3px solid white;
+    }
+
+    .tcard-body {
+      padding: 14px 12px;
+    }
+
+    .tcard-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--green-dark);
+      margin-bottom: 3px;
+    }
+
+    .tcard-role {
+      font-size: 11px;
+      color: var(--blue);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+
+    @media(max-width:768px) {
+
+      .two-col,
+      .values-grid,
+      .team-grid {
+        grid-template-columns: 1fr !important;
+      }
+
+      .section {
+        padding: 52px 16px;
+      }
+
+      .page-hero {
+        padding: 52px 16px;
+      }
+
+      .ph-title {
+        font-size: 32px;
+      }
+    }
+
+    /* ===== NAVBAR ===== */
+    .navbar {
+      background: white;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08), 0 2px 12px rgba(0, 0, 0, 0.06);
+      position: sticky;
+      top: 0;
+      z-index: 500;
+      height: 72px;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .brand-logo {
+      width: 46px;
+      height: 46px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #085041, #1D9E75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .brand-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #085041;
+      line-height: 1.15;
+    }
+
+    .brand-sub {
+      font-size: 10px;
+      color: #888;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex: 1;
+      justify-content: center;
+    }
+
+    .nl {
+      color: #1a1a1a;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-family: 'Outfit', sans-serif;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+
+    .nl:hover {
+      color: #1a56db;
+      background: rgba(26, 86, 219, 0.07);
+    }
+
+    .nl.active {
+      color: #1a56db;
+      background: rgba(26, 86, 219, 0.09);
+      font-weight: 700;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .nav-portal {
+      background: #1a56db;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+      font-family: 'Outfit', sans-serif;
+      transition: all .2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-portal:hover {
+      background: #1140a6;
+      transform: translateY(-1px);
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 5px;
+    }
+
+    .hamburger span {
+      width: 24px;
+      height: 2.5px;
+      background: #333;
+      border-radius: 2px;
+      transition: all .3s;
+    }
+
+    .mob-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: white;
+      z-index: 490;
+      padding: 80px 24px 24px;
+      flex-direction: column;
+      gap: 4px;
+      overflow-y: auto;
+      box-shadow: none;
+    }
+
+    .mob-menu.open {
+      display: flex;
+    }
+
+    .mob-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      font-size: 28px;
+      cursor: pointer;
+      color: #333;
+    }
+
+    .mob-link {
+      font-size: 15px;
+      font-weight: 600;
+      padding: 13px 16px;
+      border-radius: 10px;
+      text-decoration: none;
+      color: #1a1a1a;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+      font-family: 'Outfit', sans-serif;
+      transition: all .2s;
+    }
+
+    .mob-link:hover {
+      background: rgba(26, 86, 219, 0.07);
+      color: #1a56db;
+    }
+
+    @media(max-width:960px) {
+      .navbar {
+        padding: 0 20px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+    }
+
+    @media(max-width:600px) {
+      .brand-name {
+        font-size: 15px;
+      }
+
+      .brand-sub {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar" id="navbar">
+    <a class="nav-brand" href="school_website.html" title="Go to Home Page">
+      <div class="brand-logo">🌱</div>
+      <div>
+        <div class="brand-name">God's Plan Academy</div>
+        <div class="brand-sub">Nursery &amp; Primary School</div>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a class="nl" href="school_website.html">🏠 Home</a>
+      <a class="nl active" href="about.html">About</a>
+      <a class="nl" href="academics.html">Academics</a>
+      <a class="nl" href="student-life.html">Student Life</a>
+      <a class="nl" href="contact.html">Contact Us</a>
+    </div>
+    <div class="nav-right">
+      <a class="nav-portal" href="gods_plan_academy_portal.html">📊 Student Portal</a>
+      <div class="hamburger" onclick="toggleMob()"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+  <div class="mob-menu" id="mobMenu">
+    <button class="mob-close" onclick="toggleMob()">✕</button>
+    <a class="mob-link" href="school_website.html">🏠 Home</a>
+    <a class="mob-link" href="about.html">🏫 About</a>
+    <a class="mob-link" href="academics.html">📚 Academics</a>
+    <a class="mob-link" href="student-life.html">🎒 Student Life</a>
+    <a class="mob-link" href="contact.html">📞 Contact Us</a>
+    <a class="mob-link" href="gods_plan_academy_portal.html" style="color:#1a56db;font-weight:800;">📊 Student Portal
+      →</a>
+  </div>
+
+  <!-- BREADCRUMB -->
+  <div
+    style="background:#f8faf9;border-bottom:1px solid rgba(0,0,0,0.07);padding:8px 40px;display:flex;align-items:center;gap:6px;font-size:13px;color:#555;">
+    <a href="school_website.html"
+      style="color:#1a56db;font-weight:700;text-decoration:none;display:flex;align-items:center;gap:4px;">🏠 Home</a>
+    <span style="color:#bbb;">›</span>
+    <span style="color:#555;font-weight:600;">About</span>
+  </div>
+  <div class="page-hero">
+    <div class="ph-label">Who We Are</div>
+    <h1 class="ph-title">About God's Plan Academy</h1>
+    <p class="ph-desc">Our story, mission, values and the heart behind everything we do for every child.</p>
+  </div>
+  <section class="section">
+    <div class="container">
+      <div class="two-col">
+        <div class="reveal">
+          <div class="img-box">🏫<div class="img-badge">
+              <div class="img-badge-n">20+</div>
+              <div class="img-badge-t">Years of<br />Excellence</div>
+            </div>
+          </div>
+        </div>
+        <div class="reveal">
+          <div class="sec-label">Our Story</div>
+          <h2 class="sec-title">Founded With a Higher Purpose</h2>
+          <p class="sec-desc">God's Plan Academy was founded in 2005 in Musanze, Rwanda with a simple conviction: every
+            child is a gift from God, deserving quality education, unconditional love and the opportunity to fulfil
+            their unique potential.</p>
+          <p style="font-size:15px;color:var(--muted);line-height:1.8;margin-top:14px;font-weight:300;">What started as
+            a small nursery with 30 pupils has grown into a thriving community of over 450 pupils, 35 teachers and
+            countless graduates making a difference across Rwanda and beyond.</p>
+          <div class="mission-box">
+            <h4>Our Mission</h4>
+            <p>To provide a holistic, faith-based education that nurtures the intellectual, spiritual, social and
+              physical development of every child — equipping them to serve God, Rwanda and the world.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section section-alt">
+    <div class="container">
+      <div style="text-align:center;" class="reveal">
+        <div class="sec-label" style="justify-content:center;">Core Values</div>
+        <h2 class="sec-title" style="text-align:center;">What We Stand For</h2>
+      </div>
+      <div class="values-grid">
+        <div class="vcard reveal">
+          <div class="vcard-icon">✝️</div>
+          <div class="vcard-title">Faith</div>
+          <div class="vcard-desc">Everything we do is grounded in our faith in God and belief in the dignity of every
+            child.</div>
+        </div>
+        <div class="vcard reveal">
+          <div class="vcard-icon">🎓</div>
+          <div class="vcard-title">Excellence</div>
+          <div class="vcard-desc">We set high standards and support every pupil to achieve their personal best in all
+            areas.</div>
+        </div>
+        <div class="vcard reveal">
+          <div class="vcard-icon">❤️</div>
+          <div class="vcard-title">Love & Inclusion</div>
+          <div class="vcard-desc">Every child is loved, respected and included regardless of background or ability.
+          </div>
+        </div>
+        <div class="vcard reveal">
+          <div class="vcard-icon">🤝</div>
+          <div class="vcard-title">Community</div>
+          <div class="vcard-desc">We partner with families and the wider community for the best outcomes for our pupils.
+          </div>
+        </div>
+        <div class="vcard reveal">
+          <div class="vcard-icon">🌱</div>
+          <div class="vcard-title">Growth</div>
+          <div class="vcard-desc">We foster a love of learning and continuous growth in every member of our school
+            family.</div>
+        </div>
+        <div class="vcard reveal">
+          <div class="vcard-icon">🛡️</div>
+          <div class="vcard-title">Integrity</div>
+          <div class="vcard-desc">Honesty and strong moral character are at the heart of the GPA community.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <div style="text-align:center;" class="reveal">
+        <div class="sec-label" style="justify-content:center;">Leadership</div>
+        <h2 class="sec-title" style="text-align:center;">Our Leadership Team</h2>
+      </div>
+      <div class="team-grid">
+        <div class="tcard reveal">
+          <div class="tcard-av">
+            <div class="tcard-ini">JU</div>
+          </div>
+          <div class="tcard-body">
+            <div class="tcard-name">Sr. Josephine Uwera</div>
+            <div class="tcard-role">School Director</div>
+          </div>
+        </div>
+        <div class="tcard reveal">
+          <div class="tcard-av" style="background:linear-gradient(135deg,#E6F1FB,#B5D4F4);">
+            <div class="tcard-ini" style="background:#185FA5;">PH</div>
+          </div>
+          <div class="tcard-body">
+            <div class="tcard-name">Mr. Patrick Habimana</div>
+            <div class="tcard-role">Head Teacher</div>
+          </div>
+        </div>
+        <div class="tcard reveal">
+          <div class="tcard-av" style="background:linear-gradient(135deg,#FAEEDA,#FAC775);">
+            <div class="tcard-ini" style="background:#854F0B;">CU</div>
+          </div>
+          <div class="tcard-body">
+            <div class="tcard-name">Ms. Claudine Uwimana</div>
+            <div class="tcard-role">Deputy Head Teacher</div>
+          </div>
+        </div>
+        <div class="tcard reveal">
+          <div class="tcard-av" style="background:linear-gradient(135deg,#FBEAF0,#F4C0D1);">
+            <div class="tcard-ini" style="background:#993556;">JN</div>
+          </div>
+          <div class="tcard-body">
+            <div class="tcard-name">Mr. Joseph Niyonkuru</div>
+            <div class="tcard-role">Accountant</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer>
+    <div class="container" style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:32px;">
+      <div>
+        <div style="display:flex;align-items:center;gap:9px;margin-bottom:12px;">
+          <div
+            style="width:36px;height:36px;background:rgba(255,255,255,0.1);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;">
+            🌱</div>
+          <span style="font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;color:white;">God's Plan
+            Academy</span>
+        </div>
+        <p style="font-size:13px;line-height:1.75;max-width:220px;font-weight:300;color:rgba(255,255,255,0.7);">A
+          faith-inspired nursery and primary school in Musanze, Rwanda. Est. 2005.</p>
+      </div>
+      <div>
+        <h4
+          style="font-size:12px;font-weight:700;color:white;margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em;">
+          Quick Links</h4>
+        <a href="school_website.html"
+          style="display:block;font-size:13px;color:rgba(255,255,255,0.6);text-decoration:none;margin-bottom:7px;">Home</a>
+        <a href="about.html"
+          style="display:block;font-size:13px;color:rgba(255,255,255,0.6);text-decoration:none;margin-bottom:7px;">About
+          Us</a>
+        <a href="academics.html"
+          style="display:block;font-size:13px;color:rgba(255,255,255,0.6);text-decoration:none;margin-bottom:7px;">Academics</a>
+        <a href="student-life.html"
+          style="display:block;font-size:13px;color:rgba(255,255,255,0.6);text-decoration:none;margin-bottom:7px;">Student
+          Life</a>
+        <a href="contact.html"
+          style="display:block;font-size:13px;color:rgba(255,255,255,0.6);text-decoration:none;">Contact Us</a>
+      </div>
+      <div>
+        <h4
+          style="font-size:12px;font-weight:700;color:white;margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em;">
+          Contact</h4>
+        <p style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:7px;">📞 +250 788 000 000</p>
+        <p style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:7px;">✉️ <a
+            href="/cdn-cgi/l/email-protection" class="__cf_email__"
+            data-cfemail="61080f070e21060e0512110d000f00020005040c184f1316">[email&#160;protected]</a></p>
+        <p style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:7px;">📍 Musanze, Rwanda</p>
+        <a href="gods_plan_academy_portal.html"
+          style="font-size:13px;color:#9FE1CB;font-weight:700;text-decoration:none;">📊 Student Portal →</a>
+      </div>
+    </div>
+    <div
+      style="border-top:1px solid rgba(255,255,255,0.08);padding-top:16px;margin-top:32px;display:flex;justify-content:space-between;font-size:12px;flex-wrap:wrap;gap:8px;">
+      <p>© 2026 God's Plan Academy. All rights reserved.</p>
+      <p style="color:rgba(255,255,255,0.35);">Made with ❤️ for Rwanda</p>
+    </div>
+  </footer>
+  <script>
+    function toggleMob() {
+      const m = document.getElementById('mobMenu');
+      m.classList.toggle('open');
+    }
+    window.addEventListener('scroll', () => {
+      document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => {
+        if (el.getBoundingClientRect().top < window.innerHeight - 50) {
+          el.classList.add('visible');
+        }
+      });
+    });
+    setTimeout(() => window.dispatchEvent(new Event('scroll')), 120);
+  </script>
+</body>
+
+</html>
