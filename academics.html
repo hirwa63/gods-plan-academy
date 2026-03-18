@@ -1,862 +1,256 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-          <meta charset="UTF-8" />
-          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          <title>Academics – God's Plan Academy</title>
-          <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap"
-                    rel="stylesheet" />
-          <style>
-                    *,
-                    *::before,
-                    *::after {
-                              box-sizing: border-box;
-                              margin: 0;
-                              padding: 0;
-                    }
-
-                    :root {
-                              --green: #1D9E75;
-                              --green-dark: #085041;
-                              --green-deeper: #04342C;
-                              --green-light: #E1F5EE;
-                              --green-mid: #9FE1CB;
-                              --blue: #1a56db;
-                              --gold: #C9A84C;
-                              --text: #1a1a1a;
-                              --muted: #555;
-                              --white: #fff;
-                              --bg: #f4f6f8;
-                              --border: rgba(0, 0, 0, 0.08);
-                    }
-
-                    html {
-                              scroll-behavior: smooth;
-                    }
-
-                    body {
-                              font-family: 'Outfit', sans-serif;
-                              color: var(--text);
-                              background: var(--white);
-                    }
-
-                    .reveal {
-                              opacity: 0;
-                              transform: translateY(28px);
-                              transition: opacity .6s, transform .6s;
-                    }
-
-                    .reveal.visible {
-                              opacity: 1;
-                              transform: none;
-                    }
-
-                    /* NAVBAR */
-                    .navbar {
-                              background: white;
-                              padding: 0 40px;
-                              display: flex;
-                              align-items: center;
-                              justify-content: space-between;
-                              box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
-                              position: sticky;
-                              top: 0;
-                              z-index: 500;
-                              height: 72px;
-                    }
-
-                    .nav-brand {
-                              display: flex;
-                              align-items: center;
-                              gap: 11px;
-                              text-decoration: none;
-                              flex-shrink: 0;
-                    }
-
-                    .brand-logo {
-                              width: 44px;
-                              height: 44px;
-                              border-radius: 10px;
-                              background: linear-gradient(135deg, #085041, #1D9E75);
-                              display: flex;
-                              align-items: center;
-                              justify-content: center;
-                              font-size: 22px;
-                              flex-shrink: 0;
-                    }
-
-                    .brand-name {
-                              font-family: 'Cormorant Garamond', serif;
-                              font-size: 18px;
-                              font-weight: 700;
-                              color: #085041;
-                              line-height: 1.1;
-                    }
-
-                    .brand-sub {
-                              font-size: 10px;
-                              color: #555;
-                              font-weight: 500;
-                              letter-spacing: .07em;
-                              text-transform: uppercase;
-                    }
-
-                    .nav-links {
-                              display: flex;
-                              align-items: center;
-                              gap: 2px;
-                              flex: 1;
-                              justify-content: center;
-                    }
-
-                    .nl {
-                              color: #1a1a1a;
-                              font-size: 14px;
-                              font-weight: 600;
-                              padding: 8px 14px;
-                              border-radius: 8px;
-                              text-decoration: none;
-                              font-family: 'Outfit', sans-serif;
-                              transition: all .2s;
-                              white-space: nowrap;
-                    }
-
-                    .nl:hover,
-                    .nl.active {
-                              color: #1a56db;
-                              background: rgba(26, 86, 219, 0.07);
-                    }
-
-                    .nav-right {
-                              display: flex;
-                              align-items: center;
-                              gap: 10px;
-                              flex-shrink: 0;
-                    }
-
-                    .nav-portal {
-                              background: #1a56db;
-                              color: white;
-                              padding: 9px 18px;
-                              border-radius: 8px;
-                              font-size: 13px;
-                              font-weight: 700;
-                              text-decoration: none;
-                              white-space: nowrap;
-                              font-family: 'Outfit', sans-serif;
-                              transition: all .2s;
-                    }
-
-                    .nav-portal:hover {
-                              background: #1140a6;
-                    }
-
-                    .hamburger {
-                              display: none;
-                              flex-direction: column;
-                              gap: 5px;
-                              cursor: pointer;
-                              padding: 4px;
-                    }
-
-                    .hamburger span {
-                              width: 24px;
-                              height: 2.5px;
-                              background: #1a1a1a;
-                              border-radius: 2px;
-                    }
-
-                    .mob-menu {
-                              display: none;
-                              position: fixed;
-                              inset: 0;
-                              background: white;
-                              z-index: 490;
-                              padding: 76px 24px 24px;
-                              flex-direction: column;
-                              gap: 4px;
-                              overflow-y: auto;
-                    }
-
-                    .mob-menu.open {
-                              display: flex;
-                    }
-
-                    .mob-close {
-                              position: absolute;
-                              top: 18px;
-                              right: 18px;
-                              background: none;
-                              border: none;
-                              font-size: 26px;
-                              cursor: pointer;
-                    }
-
-                    .mob-link {
-                              font-size: 16px;
-                              font-weight: 600;
-                              padding: 13px 16px;
-                              border-radius: 10px;
-                              text-decoration: none;
-                              color: #1a1a1a;
-                              border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-                    }
-
-                    .mob-link:hover {
-                              background: rgba(26, 86, 219, 0.07);
-                              color: #1a56db;
-                    }
-
-                    @media(max-width:900px) {
-                              .navbar {
-                                        padding: 0 18px;
-                              }
-
-                              .nav-links {
-                                        display: none;
-                              }
-
-                              .hamburger {
-                                        display: flex;
-                              }
-                    }
-
-                    .page-hero {
-                              background: linear-gradient(135deg, var(--green-dark), var(--green));
-                              padding: 70px 40px;
-                              text-align: center;
-                              color: white;
-                    }
-
-                    .ph-label {
-                              font-size: 11px;
-                              font-weight: 700;
-                              letter-spacing: .12em;
-                              text-transform: uppercase;
-                              color: var(--green-mid);
-                              margin-bottom: 10px;
-                    }
-
-                    .ph-title {
-                              font-family: 'Cormorant Garamond', serif;
-                              font-size: 48px;
-                              font-weight: 700;
-                              margin-bottom: 10px;
-                    }
-
-                    .ph-desc {
-                              font-size: 15px;
-                              opacity: .75;
-                              font-weight: 300;
-                    }
-
-                    .section {
-                              padding: 80px 40px;
-                    }
-
-                    .section-alt {
-                              background: var(--bg);
-                    }
-
-                    .container {
-                              max-width: 1100px;
-                              margin: 0 auto;
-                    }
-
-                    .sec-label {
-                              font-size: 11px;
-                              font-weight: 700;
-                              letter-spacing: .12em;
-                              text-transform: uppercase;
-                              color: var(--blue);
-                              margin-bottom: 10px;
-                              display: flex;
-                              align-items: center;
-                              gap: 8px;
-                    }
-
-                    .sec-label::before {
-                              content: '';
-                              width: 26px;
-                              height: 2px;
-                              background: var(--blue);
-                              display: block;
-                    }
-
-                    .sec-title {
-                              font-family: 'Cormorant Garamond', serif;
-                              font-size: 40px;
-                              font-weight: 700;
-                              color: var(--green-dark);
-                              line-height: 1.2;
-                              margin-bottom: 14px;
-                    }
-
-                    .sec-desc {
-                              font-size: 15px;
-                              color: var(--muted);
-                              line-height: 1.8;
-                              font-weight: 300;
-                    }
-
-                    footer {
-                              background: var(--green-deeper);
-                              color: rgba(255, 255, 255, 0.7);
-                              padding: 48px 40px 18px;
-                    }
-
-                    .prog-grid {
-                              display: grid;
-                              grid-template-columns: repeat(2, 1fr);
-                              gap: 24px;
-                              margin-top: 36px;
-                    }
-
-                    .prog-card {
-                              border-radius: 18px;
-                              overflow: hidden;
-                              border: 1px solid var(--border);
-                              background: white;
-                              box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
-                              transition: transform .3s, box-shadow .3s;
-                    }
-
-                    .prog-card:hover {
-                              transform: translateY(-5px);
-                              box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
-                    }
-
-                    .pc-top {
-                              height: 140px;
-                              display: flex;
-                              align-items: center;
-                              justify-content: center;
-                              font-size: 52px;
-                              position: relative;
-                    }
-
-                    .pc-age {
-                              position: absolute;
-                              top: 12px;
-                              right: 12px;
-                              background: rgba(255, 255, 255, 0.92);
-                              border-radius: 20px;
-                              padding: 3px 12px;
-                              font-size: 11px;
-                              font-weight: 700;
-                              color: var(--green-dark);
-                    }
-
-                    .pc-body {
-                              padding: 22px;
-                    }
-
-                    .pc-title {
-                              font-family: 'Cormorant Garamond', serif;
-                              font-size: 24px;
-                              font-weight: 700;
-                              color: var(--green-dark);
-                              margin-bottom: 8px;
-                    }
-
-                    .pc-desc {
-                              font-size: 14px;
-                              color: var(--muted);
-                              line-height: 1.7;
-                              font-weight: 300;
-                              margin-bottom: 14px;
-                    }
-
-                    .pc-tags {
-                              display: flex;
-                              flex-wrap: wrap;
-                              gap: 5px;
-                              margin-bottom: 12px;
-                    }
-
-                    .ptag {
-                              font-size: 10px;
-                              font-weight: 600;
-                              background: var(--green-light);
-                              color: var(--green-dark);
-                              padding: 3px 10px;
-                              border-radius: 20px;
-                    }
-
-                    .pc-info {
-                              font-size: 12px;
-                              color: var(--muted);
-                              line-height: 1.8;
-                    }
-
-                    .extras {
-                              display: grid;
-                              grid-template-columns: repeat(3, 1fr);
-                              gap: 14px;
-                              margin-top: 32px;
-                    }
-
-                    .extra-item {
-                              background: white;
-                              border-radius: 12px;
-                              padding: 16px;
-                              border: 1px solid var(--border);
-                              display: flex;
-                              align-items: center;
-                              gap: 10px;
-                              font-size: 13px;
-                              font-weight: 700;
-                              color: var(--green-dark);
-                    }
-
-                    @media(max-width:768px) {
-
-                              .prog-grid,
-                              .extras {
-                                        grid-template-columns: 1fr !important;
-                              }
-
-                              .section {
-                                        padding: 52px 16px;
-                              }
-
-                              .page-hero {
-                                        padding: 52px 16px;
-                              }
-
-                              .ph-title {
-                                        font-size: 32px;
-                              }
-                    }
-
-                    /* ===== NAVBAR ===== */
-                    .navbar {
-                              background: white;
-                              padding: 0 40px;
-                              display: flex;
-                              align-items: center;
-                              justify-content: space-between;
-                              box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08), 0 2px 12px rgba(0, 0, 0, 0.06);
-                              position: sticky;
-                              top: 0;
-                              z-index: 500;
-                              height: 72px;
-                    }
-
-                    .nav-brand {
-                              display: flex;
-                              align-items: center;
-                              gap: 11px;
-                              text-decoration: none;
-                              flex-shrink: 0;
-                    }
-
-                    .brand-logo {
-                              width: 46px;
-                              height: 46px;
-                              border-radius: 10px;
-                              background: linear-gradient(135deg, #085041, #1D9E75);
-                              display: flex;
-                              align-items: center;
-                              justify-content: center;
-                              font-size: 24px;
-                              flex-shrink: 0;
-                    }
-
-                    .brand-name {
-                              font-family: 'Cormorant Garamond', serif;
-                              font-size: 18px;
-                              font-weight: 700;
-                              color: #085041;
-                              line-height: 1.15;
-                    }
-
-                    .brand-sub {
-                              font-size: 10px;
-                              color: #888;
-                              font-weight: 600;
-                              letter-spacing: .08em;
-                              text-transform: uppercase;
-                    }
-
-                    .nav-links {
-                              display: flex;
-                              align-items: center;
-                              gap: 4px;
-                              flex: 1;
-                              justify-content: center;
-                    }
-
-                    .nl {
-                              color: #1a1a1a;
-                              font-size: 14px;
-                              font-weight: 600;
-                              padding: 8px 16px;
-                              border-radius: 8px;
-                              text-decoration: none;
-                              font-family: 'Outfit', sans-serif;
-                              transition: all .2s;
-                              white-space: nowrap;
-                    }
-
-                    .nl:hover {
-                              color: #1a56db;
-                              background: rgba(26, 86, 219, 0.07);
-                    }
-
-                    .nl.active {
-                              color: #1a56db;
-                              background: rgba(26, 86, 219, 0.09);
-                              font-weight: 700;
-                    }
-
-                    .nav-right {
-                              display: flex;
-                              align-items: center;
-                              gap: 12px;
-                              flex-shrink: 0;
-                    }
-
-                    .nav-portal {
-                              background: #1a56db;
-                              color: white;
-                              padding: 10px 20px;
-                              border-radius: 9px;
-                              font-size: 13px;
-                              font-weight: 700;
-                              text-decoration: none;
-                              white-space: nowrap;
-                              font-family: 'Outfit', sans-serif;
-                              transition: all .2s;
-                              display: flex;
-                              align-items: center;
-                              gap: 6px;
-                    }
-
-                    .nav-portal:hover {
-                              background: #1140a6;
-                              transform: translateY(-1px);
-                    }
-
-                    .hamburger {
-                              display: none;
-                              flex-direction: column;
-                              gap: 5px;
-                              cursor: pointer;
-                              padding: 5px;
-                    }
-
-                    .hamburger span {
-                              width: 24px;
-                              height: 2.5px;
-                              background: #333;
-                              border-radius: 2px;
-                              transition: all .3s;
-                    }
-
-                    .mob-menu {
-                              display: none;
-                              position: fixed;
-                              inset: 0;
-                              background: white;
-                              z-index: 490;
-                              padding: 80px 24px 24px;
-                              flex-direction: column;
-                              gap: 4px;
-                              overflow-y: auto;
-                              box-shadow: none;
-                    }
-
-                    .mob-menu.open {
-                              display: flex;
-                    }
-
-                    .mob-close {
-                              position: absolute;
-                              top: 20px;
-                              right: 20px;
-                              background: none;
-                              border: none;
-                              font-size: 28px;
-                              cursor: pointer;
-                              color: #333;
-                    }
-
-                    .mob-link {
-                              font-size: 15px;
-                              font-weight: 600;
-                              padding: 13px 16px;
-                              border-radius: 10px;
-                              text-decoration: none;
-                              color: #1a1a1a;
-                              border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-                              font-family: 'Outfit', sans-serif;
-                              transition: all .2s;
-                    }
-
-                    .mob-link:hover {
-                              background: rgba(26, 86, 219, 0.07);
-                              color: #1a56db;
-                    }
-
-                    @media(max-width:960px) {
-                              .navbar {
-                                        padding: 0 20px;
-                              }
-
-                              .nav-links {
-                                        display: none;
-                              }
-
-                              .hamburger {
-                                        display: flex;
-                              }
-                    }
-
-                    @media(max-width:600px) {
-                              .brand-name {
-                                        font-size: 15px;
-                              }
-
-                              .brand-sub {
-                                        display: none;
-                              }
-                    }
-          </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Academics – God's Plan Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--green:#1D9E75;--green-dark:#085041;--green-deeper:#04342C;--green-light:#E1F5EE;--green-mid:#9FE1CB;--blue:#1a56db;--gold:#C9A84C;--text:#1a1a1a;--muted:#555;--white:#fff;--bg:#f4f6f8;--border:rgba(0,0,0,0.08);}
+html{scroll-behavior:smooth;}
+body{font-family:'Outfit',sans-serif;color:var(--text);background:var(--white);}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .6s,transform .6s;}.reveal.visible{opacity:1;transform:none;}
+/* NAVBAR */
+.navbar{background:white;padding:0 40px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 16px rgba(0,0,0,0.08);position:sticky;top:0;z-index:500;height:72px;}
+.nav-brand{display:flex;align-items:center;gap:11px;text-decoration:none;flex-shrink:0;}
+.brand-logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#085041,#1D9E75);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.brand-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:#085041;line-height:1.1;}
+.brand-sub{font-size:10px;color:#555;font-weight:500;letter-spacing:.07em;text-transform:uppercase;}
+.nav-links{display:flex;align-items:center;gap:2px;flex:1;justify-content:center;}
+.nl{color:#1a1a1a;font-size:14px;font-weight:600;padding:8px 14px;border-radius:8px;text-decoration:none;font-family:'Outfit',sans-serif;transition:all .2s;white-space:nowrap;}
+.nl:hover,.nl.active{color:#1a56db;background:rgba(26,86,219,0.07);}
+.nav-right{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.nav-portal{background:#1a56db;color:white;padding:9px 18px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap;font-family:'Outfit',sans-serif;transition:all .2s;}
+.nav-portal:hover{background:#1140a6;}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;}
+.hamburger span{width:24px;height:2.5px;background:#1a1a1a;border-radius:2px;}
+.mob-menu{display:none;position:fixed;inset:0;background:white;z-index:490;padding:76px 24px 24px;flex-direction:column;gap:4px;overflow-y:auto;}
+.mob-menu.open{display:flex;}
+.mob-close{position:absolute;top:18px;right:18px;background:none;border:none;font-size:26px;cursor:pointer;}
+.mob-link{font-size:16px;font-weight:600;padding:13px 16px;border-radius:10px;text-decoration:none;color:#1a1a1a;border-bottom:1px solid rgba(0,0,0,0.08);}
+.mob-link:hover{background:rgba(26,86,219,0.07);color:#1a56db;}
+@media(max-width:900px){.navbar{padding:0 18px;}.nav-links{display:none;}.hamburger{display:flex;}}
+.page-hero{background:linear-gradient(135deg,var(--green-dark),var(--green));padding:70px 40px;text-align:center;color:white;}
+.ph-label{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green-mid);margin-bottom:10px;}
+.ph-title{font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:700;margin-bottom:10px;}
+.ph-desc{font-size:15px;opacity:.75;font-weight:300;}
+.section{padding:80px 40px;}.section-alt{background:var(--bg);}
+.container{max-width:1100px;margin:0 auto;}
+.sec-label{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.sec-label::before{content:'';width:26px;height:2px;background:var(--blue);display:block;}
+.sec-title{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:700;color:var(--green-dark);line-height:1.2;margin-bottom:14px;}
+.sec-desc{font-size:15px;color:var(--muted);line-height:1.8;font-weight:300;}
+footer{background:var(--green-deeper);color:rgba(255,255,255,0.7);padding:48px 40px 18px;}
+.prog-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;margin-top:36px;}
+.prog-card{border-radius:18px;overflow:hidden;border:1px solid var(--border);background:white;box-shadow:0 2px 12px rgba(0,0,0,0.05);transition:transform .3s,box-shadow .3s;}
+.prog-card:hover{transform:translateY(-5px);box-shadow:0 16px 40px rgba(0,0,0,0.1);}
+.pc-top{height:140px;display:flex;align-items:center;justify-content:center;font-size:52px;position:relative;}
+.pc-age{position:absolute;top:12px;right:12px;background:rgba(255,255,255,0.92);border-radius:20px;padding:3px 12px;font-size:11px;font-weight:700;color:var(--green-dark);}
+.pc-body{padding:22px;}
+.pc-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;color:var(--green-dark);margin-bottom:8px;}
+.pc-desc{font-size:14px;color:var(--muted);line-height:1.7;font-weight:300;margin-bottom:14px;}
+.pc-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px;}
+.ptag{font-size:10px;font-weight:600;background:var(--green-light);color:var(--green-dark);padding:3px 10px;border-radius:20px;}
+.pc-info{font-size:12px;color:var(--muted);line-height:1.8;}
+.extras{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:32px;}
+.extra-item{background:white;border-radius:12px;padding:16px;border:1px solid var(--border);display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;color:var(--green-dark);}
+@media(max-width:768px){.prog-grid,.extras{grid-template-columns:1fr!important;}.section{padding:52px 16px;}.page-hero{padding:52px 16px;}.ph-title{font-size:32px;}}
+/* ===== NAVBAR ===== */
+.navbar{
+  background:white;
+  padding:0 40px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  box-shadow:0 1px 0 rgba(0,0,0,0.08), 0 2px 12px rgba(0,0,0,0.06);
+  position:sticky;
+  top:0;
+  z-index:500;
+  height:72px;
+}
+.nav-brand{
+  display:flex;align-items:center;gap:11px;
+  text-decoration:none;flex-shrink:0;
+}
+.brand-logo{
+  width:46px;height:46px;border-radius:10px;
+  background:linear-gradient(135deg,#085041,#1D9E75);
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;flex-shrink:0;
+}
+.brand-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;font-weight:700;color:#085041;line-height:1.15;
+}
+.brand-sub{
+  font-size:10px;color:#888;font-weight:600;
+  letter-spacing:.08em;text-transform:uppercase;
+}
+.nav-links{
+  display:flex;align-items:center;gap:4px;
+  flex:1;justify-content:center;
+}
+.nl{
+  color:#1a1a1a;font-size:14px;font-weight:600;
+  padding:8px 16px;border-radius:8px;
+  text-decoration:none;
+  font-family:'Outfit',sans-serif;
+  transition:all .2s;white-space:nowrap;
+}
+.nl:hover{color:#1a56db;background:rgba(26,86,219,0.07);}
+.nl.active{
+  color:#1a56db;
+  background:rgba(26,86,219,0.09);
+  font-weight:700;
+}
+.nav-right{display:flex;align-items:center;gap:12px;flex-shrink:0;}
+.nav-portal{
+  background:#1a56db;color:white;
+  padding:10px 20px;border-radius:9px;
+  font-size:13px;font-weight:700;
+  text-decoration:none;white-space:nowrap;
+  font-family:'Outfit',sans-serif;
+  transition:all .2s;
+  display:flex;align-items:center;gap:6px;
+}
+.nav-portal:hover{background:#1140a6;transform:translateY(-1px);}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:5px;}
+.hamburger span{width:24px;height:2.5px;background:#333;border-radius:2px;transition:all .3s;}
+.mob-menu{
+  display:none;position:fixed;inset:0;
+  background:white;z-index:490;
+  padding:80px 24px 24px;
+  flex-direction:column;gap:4px;overflow-y:auto;
+  box-shadow:none;
+}
+.mob-menu.open{display:flex;}
+.mob-close{
+  position:absolute;top:20px;right:20px;
+  background:none;border:none;font-size:28px;
+  cursor:pointer;color:#333;
+}
+.mob-link{
+  font-size:15px;font-weight:600;
+  padding:13px 16px;border-radius:10px;
+  text-decoration:none;color:#1a1a1a;
+  border-bottom:1px solid rgba(0,0,0,0.06);
+  font-family:'Outfit',sans-serif;
+  transition:all .2s;
+}
+.mob-link:hover{background:rgba(26,86,219,0.07);color:#1a56db;}
+@media(max-width:960px){
+  .navbar{padding:0 20px;}
+  .nav-links{display:none;}
+  .hamburger{display:flex;}
+}
+@media(max-width:600px){
+  .brand-name{font-size:15px;}
+  .brand-sub{display:none;}
+}
+</style>
 </head>
-
 <body>
-          <nav class="navbar" id="navbar">
-                    <a class="nav-brand" href="school_website.html" title="Go to Home Page">
-                              <div class="brand-logo">🌱</div>
-                              <div>
-                                        <div class="brand-name">God's Plan Academy</div>
-                                        <div class="brand-sub">Nursery &amp; Primary School</div>
-                              </div>
-                    </a>
-                    <div class="nav-links">
-                              <a class="nl" href="school_website.html">🏠 Home</a>
-                              <a class="nl" href="about.html">About</a>
-                              <a class="nl active" href="academics.html">Academics</a>
-                              <a class="nl" href="student-life.html">Student Life</a>
-                              <a class="nl" href="contact.html">Contact Us</a>
-                    </div>
-                    <div class="nav-right">
-                              <a class="nav-portal" href="gods_plan_academy_portal.html">📊 Student Portal</a>
-                              <div class="hamburger" onclick="toggleMob()"><span></span><span></span><span></span></div>
-                    </div>
-          </nav>
-          <div class="mob-menu" id="mobMenu">
-                    <button class="mob-close" onclick="toggleMob()">✕</button>
-                    <a class="mob-link" href="school_website.html">🏠 Home</a>
-                    <a class="mob-link" href="about.html">🏫 About</a>
-                    <a class="mob-link" href="academics.html">📚 Academics</a>
-                    <a class="mob-link" href="student-life.html">🎒 Student Life</a>
-                    <a class="mob-link" href="contact.html">📞 Contact Us</a>
-                    <a class="mob-link" href="gods_plan_academy_portal.html" style="color:#1a56db;font-weight:800;">📊
-                              Student Portal →</a>
-          </div>
+<nav class="navbar" id="navbar">
+  <a class="nav-brand" href="index.html" title="Go to Home Page">
+    <div class="brand-logo">🌱</div>
+    <div><div class="brand-name">God's Plan Academy</div><div class="brand-sub">Nursery &amp; Primary School</div></div>
+  </a>
+  <div class="nav-links">
+    <a class="nl" href="index.html">🏠 Home</a>
+    <a class="nl" href="about.html">About</a>
+    <a class="nl active" href="academics.html">Academics</a>
+    <a class="nl" href="student-life.html">Student Life</a>
+    <a class="nl" href="contact.html">Contact Us</a>
+  </div>
+  <div class="nav-right">
+    <a class="nav-portal" href="gods_plan_academy_portal.html">📊 Student Portal</a>
+    <div class="hamburger" onclick="toggleMob()"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+<div class="mob-menu" id="mobMenu">
+  <button class="mob-close" onclick="toggleMob()">✕</button>
+  <a class="mob-link" href="index.html">🏠 Home</a>
+  <a class="mob-link" href="about.html">🏫 About</a>
+  <a class="mob-link" href="academics.html">📚 Academics</a>
+  <a class="mob-link" href="student-life.html">🎒 Student Life</a>
+  <a class="mob-link" href="contact.html">📞 Contact Us</a>
+  <a class="mob-link" href="gods_plan_academy_portal.html" style="color:#1a56db;font-weight:800;">📊 Student Portal →</a>
+</div>
 
-          <!-- BREADCRUMB -->
-          <div
-                    style="background:#f8faf9;border-bottom:1px solid rgba(0,0,0,0.07);padding:8px 40px;display:flex;align-items:center;gap:6px;font-size:13px;color:#555;">
-                    <a href="school_website.html"
-                              style="color:#1a56db;font-weight:700;text-decoration:none;display:flex;align-items:center;gap:4px;">🏠
-                              Home</a>
-                    <span style="color:#bbb;">›</span>
-                    <span style="color:#555;font-weight:600;">Academics</span>
-          </div>
-          <div class="page-hero">
-                    <div class="ph-label">Academics</div>
-                    <h1 class="ph-title">Our Programmes</h1>
-                    <p class="ph-desc">Quality education from Baby Nursery to Upper Primary — for every stage of your
-                              child's journey.</p>
-          </div>
-          <section class="section">
-                    <div class="container">
-                              <div class="reveal" style="text-align:center;">
-                                        <div class="sec-label" style="justify-content:center;">School Levels</div>
-                                        <h2 class="sec-title" style="text-align:center;">Education For Every Age</h2>
-                              </div>
-                              <div class="prog-grid">
-                                        <div class="prog-card reveal">
-                                                  <div class="pc-top"
-                                                            style="background:linear-gradient(135deg,#E1F5EE,#9FE1CB);">
-                                                            🍼<div class="pc-age">Ages 2–3</div>
-                                                  </div>
-                                                  <div class="pc-body">
-                                                            <div class="pc-title">Baby Nursery</div>
-                                                            <div class="pc-desc">Gentle play-based learning with music,
-                                                                      movement and storytelling. Develops early
-                                                                      language, motor skills and social confidence in a
-                                                                      warm, family-like setting.</div>
-                                                            <div class="pc-tags"><span class="ptag">Play &
-                                                                                Explore</span><span class="ptag">Music &
-                                                                                Rhymes</span><span class="ptag">Sensory
-                                                                                Play</span><span class="ptag">Motor
-                                                                                Skills</span></div>
-                                                            <div class="pc-info">📅 Mon–Fri · Half day
-                                                                      (7am–12pm)<br />👥 Max 18 pupils per class</div>
-                                                  </div>
-                                        </div>
-                                        <div class="prog-card reveal">
-                                                  <div class="pc-top"
-                                                            style="background:linear-gradient(135deg,#EAF3DE,#C0DD97);">
-                                                            🎈<div class="pc-age">Ages 3–4</div>
-                                                  </div>
-                                                  <div class="pc-body">
-                                                            <div class="pc-title">Pre-School</div>
-                                                            <div class="pc-desc">School readiness through structured
-                                                                      play and early academics. Children develop
-                                                                      phonics, basic numeracy, creative arts and social
-                                                                      skills in a joyful classroom.</div>
-                                                            <div class="pc-tags"><span class="ptag">Phonics</span><span
-                                                                                class="ptag">Numbers 1–20</span><span
-                                                                                class="ptag">Creative Arts</span><span
-                                                                                class="ptag">Kinyarwanda</span></div>
-                                                            <div class="pc-info">📅 Mon–Fri · Full day (7am–3pm)<br />👥
-                                                                      Max 20 pupils per class</div>
-                                                  </div>
-                                        </div>
-                                        <div class="prog-card reveal">
-                                                  <div class="pc-top"
-                                                            style="background:linear-gradient(135deg,#E6F1FB,#B5D4F4);">
-                                                            📚<div class="pc-age">Ages 5–8 · P1–P3</div>
-                                                  </div>
-                                                  <div class="pc-body">
-                                                            <div class="pc-title">Lower Primary</div>
-                                                            <div class="pc-desc">Strong foundations in all core
-                                                                      subjects. Hands-on teaching methods that make
-                                                                      learning memorable and build genuine understanding
-                                                                      beyond rote memorisation.</div>
-                                                            <div class="pc-tags"><span class="ptag">English</span><span
-                                                                                class="ptag">Kinyarwanda</span><span
-                                                                                class="ptag">Mathematics</span><span
-                                                                                class="ptag">Science</span><span
-                                                                                class="ptag">Social Studies</span><span
-                                                                                class="ptag">RE</span></div>
-                                                            <div class="pc-info">📅 Mon–Fri · 7am–4pm<br />👥 Max 30
-                                                                      pupils per class</div>
-                                                  </div>
-                                        </div>
-                                        <div class="prog-card reveal">
-                                                  <div class="pc-top"
-                                                            style="background:linear-gradient(135deg,#FAEEDA,#FAC775);">
-                                                            🔬<div class="pc-age">Ages 9–12 · P4–P6</div>
-                                                  </div>
-                                                  <div class="pc-body">
-                                                            <div class="pc-title">Upper Primary</div>
-                                                            <div class="pc-desc">Advanced academics, critical thinking
-                                                                      and leadership development. Pupils prepare for the
-                                                                      National Primary Leaving Examination at the end of
-                                                                      Primary 6.</div>
-                                                            <div class="pc-tags"><span class="ptag">English</span><span
-                                                                                class="ptag">Mathematics</span><span
-                                                                                class="ptag">Sciences</span><span
-                                                                                class="ptag">Social Studies</span><span
-                                                                                class="ptag">ICT</span><span
-                                                                                class="ptag">PE</span></div>
-                                                            <div class="pc-info">📅 Mon–Fri · 7am–5pm<br />👥 Max 30
-                                                                      pupils per class</div>
-                                                  </div>
-                                        </div>
-                              </div>
-                    </div>
-          </section>
-          <section class="section section-alt">
-                    <div class="container">
-                              <div style="text-align:center;" class="reveal">
-                                        <div class="sec-label" style="justify-content:center;">Extra-Curricular</div>
-                                        <h2 class="sec-title" style="text-align:center;">Beyond the Classroom</h2>
-                              </div>
-                              <div class="extras">
-                                        <div class="extra-item reveal"><span style="font-size:24px;">⚽</span> Football
-                                                  Club</div>
-                                        <div class="extra-item reveal"><span style="font-size:24px;">🎨</span> Art Club
-                                        </div>
-                                        <div class="extra-item reveal"><span style="font-size:24px;">🎵</span> Music
-                                                  &amp; Choir</div>
-                                        <div class="extra-item reveal"><span style="font-size:24px;">🎤</span> Debate
-                                                  Club</div>
-                                        <div class="extra-item reveal"><span style="font-size:24px;">🔬</span> Science
-                                                  Club</div>
-                                        <div class="extra-item reveal"><span style="font-size:24px;">📖</span> Reading
-                                                  Club</div>
-                              </div>
-                    </div>
-          </section>
-          <footer>
-                    <div class="container" style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:32px;">
-                              <div>
-                                        <div style="display:flex;align-items:center;gap:9px;margin-bottom:12px;">
-                                                  <div
-                                                            style="width:36px;height:36px;background:rgba(255,255,255,0.1);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;">
-                                                            🌱</div>
-                                                  <span
-                                                            style="font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;color:white;">God's
-                                                            Plan Academy</span>
-                                        </div>
-                                        <p
-                                                  style="font-size:13px;line-height:1.75;max-width:220px;font-weight:300;color:rgba(255,255,255,0.7);">
-                                                  A faith-inspired nursery and primary school in Musanze, Rwanda. Est.
-                                                  2005.</p>
-                              </div>
-                              <div>
-                                        <h4
-                                                  style="font-size:12px;font-weight:700;color:white;margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em;">
-                                                  Quick Links</h4>
-                                        <a href="school_website.html"
-                                                  style="display:block;font-size:13px;color:rgba(255,255,255,0.6);text-decoration:none;margin-bottom:7px;">Home</a>
-                                        <a href="about.html"
-                                                  style="display:block;font-size:13px;color:rgba(255,255,255,0.6);text-decoration:none;margin-bottom:7px;">About
-                                                  Us</a>
-                                        <a href="academics.html"
-                                                  style="display:block;font-size:13px;color:rgba(255,255,255,0.6);text-decoration:none;margin-bottom:7px;">Academics</a>
-                                        <a href="student-life.html"
-                                                  style="display:block;font-size:13px;color:rgba(255,255,255,0.6);text-decoration:none;margin-bottom:7px;">Student
-                                                  Life</a>
-                                        <a href="contact.html"
-                                                  style="display:block;font-size:13px;color:rgba(255,255,255,0.6);text-decoration:none;">Contact
-                                                  Us</a>
-                              </div>
-                              <div>
-                                        <h4
-                                                  style="font-size:12px;font-weight:700;color:white;margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em;">
-                                                  Contact</h4>
-                                        <p style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:7px;">📞 +250
-                                                  788 000 000</p>
-                                        <p style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:7px;">✉️ <a
-                                                            href="/cdn-cgi/l/email-protection" class="__cf_email__"
-                                                            data-cfemail="046d6a626b44636b60777468656a6567656061697d2a7673">[email&#160;protected]</a>
-                                        </p>
-                                        <p style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:7px;">📍
-                                                  Musanze, Rwanda</p>
-                                        <a href="gods_plan_academy_portal.html"
-                                                  style="font-size:13px;color:#9FE1CB;font-weight:700;text-decoration:none;">📊
-                                                  Student Portal →</a>
-                              </div>
-                    </div>
-                    <div
-                              style="border-top:1px solid rgba(255,255,255,0.08);padding-top:16px;margin-top:32px;display:flex;justify-content:space-between;font-size:12px;flex-wrap:wrap;gap:8px;">
-                              <p>© 2026 God's Plan Academy. All rights reserved.</p>
-                              <p style="color:rgba(255,255,255,0.35);">Made with ❤️ for Rwanda</p>
-                    </div>
-          </footer>
-          <script>
-                    function toggleMob() {
-                              const m = document.getElementById('mobMenu');
-                              m.classList.toggle('open');
-                    }
-                    window.addEventListener('scroll', () => {
-                              document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => {
-                                        if (el.getBoundingClientRect().top < window.innerHeight - 50) {
-                                                  el.classList.add('visible');
-                                        }
-                              });
-                    });
-                    setTimeout(() => window.dispatchEvent(new Event('scroll')), 120);
-          </script>
+<!-- BREADCRUMB -->
+<div style="background:#f8faf9;border-bottom:1px solid rgba(0,0,0,0.07);padding:8px 40px;display:flex;align-items:center;gap:6px;font-size:13px;color:#555;">
+  <a href="index.html" style="color:#1a56db;font-weight:700;text-decoration:none;display:flex;align-items:center;gap:4px;">🏠 Home</a>
+  <span style="color:#bbb;">›</span>
+  <span style="color:#555;font-weight:600;">Academics</span>
+</div>
+<div class="page-hero"><div class="ph-label">Academics</div><h1 class="ph-title">Our Programmes</h1><p class="ph-desc">Quality education from Baby Nursery to Upper Primary — for every stage of your child's journey.</p></div>
+<section class="section">
+  <div class="container">
+    <div class="reveal" style="text-align:center;"><div class="sec-label" style="justify-content:center;">School Levels</div><h2 class="sec-title" style="text-align:center;">Education For Every Age</h2></div>
+    <div class="prog-grid">
+      <div class="prog-card reveal"><div class="pc-top" style="background:linear-gradient(135deg,#E1F5EE,#9FE1CB);">🍼<div class="pc-age">Ages 2–3</div></div><div class="pc-body"><div class="pc-title">Baby Nursery</div><div class="pc-desc">Gentle play-based learning with music, movement and storytelling. Develops early language, motor skills and social confidence in a warm, family-like setting.</div><div class="pc-tags"><span class="ptag">Play & Explore</span><span class="ptag">Music & Rhymes</span><span class="ptag">Sensory Play</span><span class="ptag">Motor Skills</span></div><div class="pc-info">📅 Mon–Fri · Half day (7am–12pm)<br/>👥 Max 18 pupils per class</div></div></div>
+      <div class="prog-card reveal"><div class="pc-top" style="background:linear-gradient(135deg,#EAF3DE,#C0DD97);">🎈<div class="pc-age">Ages 3–4</div></div><div class="pc-body"><div class="pc-title">Pre-School</div><div class="pc-desc">School readiness through structured play and early academics. Children develop phonics, basic numeracy, creative arts and social skills in a joyful classroom.</div><div class="pc-tags"><span class="ptag">Phonics</span><span class="ptag">Numbers 1–20</span><span class="ptag">Creative Arts</span><span class="ptag">Kinyarwanda</span></div><div class="pc-info">📅 Mon–Fri · Full day (7am–3pm)<br/>👥 Max 20 pupils per class</div></div></div>
+      <div class="prog-card reveal"><div class="pc-top" style="background:linear-gradient(135deg,#E6F1FB,#B5D4F4);">📚<div class="pc-age">Ages 5–8 · P1–P3</div></div><div class="pc-body"><div class="pc-title">Lower Primary</div><div class="pc-desc">Strong foundations in all core subjects. Hands-on teaching methods that make learning memorable and build genuine understanding beyond rote memorisation.</div><div class="pc-tags"><span class="ptag">English</span><span class="ptag">Kinyarwanda</span><span class="ptag">Mathematics</span><span class="ptag">Science</span><span class="ptag">Social Studies</span><span class="ptag">RE</span></div><div class="pc-info">📅 Mon–Fri · 7am–4pm<br/>👥 Max 30 pupils per class</div></div></div>
+      <div class="prog-card reveal"><div class="pc-top" style="background:linear-gradient(135deg,#FAEEDA,#FAC775);">🔬<div class="pc-age">Ages 9–12 · P4–P6</div></div><div class="pc-body"><div class="pc-title">Upper Primary</div><div class="pc-desc">Advanced academics, critical thinking and leadership development. Pupils prepare for the National Primary Leaving Examination at the end of Primary 6.</div><div class="pc-tags"><span class="ptag">English</span><span class="ptag">Mathematics</span><span class="ptag">Sciences</span><span class="ptag">Social Studies</span><span class="ptag">ICT</span><span class="ptag">PE</span></div><div class="pc-info">📅 Mon–Fri · 7am–5pm<br/>👥 Max 30 pupils per class</div></div></div>
+    </div>
+  </div>
+</section>
+<section class="section section-alt">
+  <div class="container">
+    <div style="text-align:center;" class="reveal"><div class="sec-label" style="justify-content:center;">Extra-Curricular</div><h2 class="sec-title" style="text-align:center;">Beyond the Classroom</h2></div>
+    <div class="extras">
+      <div class="extra-item reveal"><span style="font-size:24px;">⚽</span> Football Club</div>
+      <div class="extra-item reveal"><span style="font-size:24px;">🎨</span> Art Club</div>
+      <div class="extra-item reveal"><span style="font-size:24px;">🎵</span> Music &amp; Choir</div>
+      <div class="extra-item reveal"><span style="font-size:24px;">🎤</span> Debate Club</div>
+      <div class="extra-item reveal"><span style="font-size:24px;">🔬</span> Science Club</div>
+      <div class="extra-item reveal"><span style="font-size:24px;">📖</span> Reading Club</div>
+    </div>
+  </div>
+</section>
+<footer>
+  <div class="container" style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:32px;">
+    <div>
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:12px;">
+        <div style="width:36px;height:36px;background:rgba(255,255,255,0.1);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;">🌱</div>
+        <span style="font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;color:white;">God's Plan Academy</span>
+      </div>
+      <p style="font-size:13px;line-height:1.75;max-width:220px;font-weight:300;color:rgba(255,255,255,0.7);">A faith-inspired nursery and primary school in Musanze, Rwanda. Est. 2005.</p>
+    </div>
+    <div>
+      <h4 style="font-size:12px;font-weight:700;color:white;margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em;">Quick Links</h4>
+      <a href="index.html" style="display:block;font-size:13px;color:rgba(255,255,255,0.6);text-decoration:none;margin-bottom:7px;">Home</a>
+      <a href="about.html" style="display:block;font-size:13px;color:rgba(255,255,255,0.6);text-decoration:none;margin-bottom:7px;">About Us</a>
+      <a href="academics.html" style="display:block;font-size:13px;color:rgba(255,255,255,0.6);text-decoration:none;margin-bottom:7px;">Academics</a>
+      <a href="student-life.html" style="display:block;font-size:13px;color:rgba(255,255,255,0.6);text-decoration:none;margin-bottom:7px;">Student Life</a>
+      <a href="contact.html" style="display:block;font-size:13px;color:rgba(255,255,255,0.6);text-decoration:none;">Contact Us</a>
+    </div>
+    <div>
+      <h4 style="font-size:12px;font-weight:700;color:white;margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em;">Contact</h4>
+      <p style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:7px;">📞 +250 788 000 000</p>
+      <p style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:7px;">✉️ <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="8ee7e0e8e1cee9e1eafdfee2efe0efedefeaebe3f7a0fcf9">[email&#160;protected]</a></p>
+      <p style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:7px;">📍 Musanze, Rwanda</p>
+      <a href="gods_plan_academy_portal.html" style="font-size:13px;color:#9FE1CB;font-weight:700;text-decoration:none;">📊 Student Portal →</a>
+    </div>
+  </div>
+  <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:16px;margin-top:32px;display:flex;justify-content:space-between;font-size:12px;flex-wrap:wrap;gap:8px;">
+    <p>© 2026 God's Plan Academy. All rights reserved.</p>
+    <p style="color:rgba(255,255,255,0.35);">Made with ❤️ for Rwanda</p>
+  </div>
+</footer>
+<script>
+function toggleMob() {
+  document.getElementById('mobMenu').classList.toggle('open');
+}
+window.addEventListener('scroll', () => {
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => {
+    if (el.getBoundingClientRect().top < window.innerHeight - 50) {
+      el.classList.add('visible');
+    }
+  });
+});
+setTimeout(() => window.dispatchEvent(new Event('scroll')), 120);
+</script>
 </body>
-
 </html>

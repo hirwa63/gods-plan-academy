@@ -3,7 +3,7 @@
 // This file connects the frontend to the backend
 // ============================================================
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = 'https://gpa-backend-production-005d.up.railway.app/api';
 
 // ── Helper: get token from localStorage ──────────────────
 const getToken = () => localStorage.getItem('gpa_token');
