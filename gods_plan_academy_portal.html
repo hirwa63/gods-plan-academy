@@ -1734,7 +1734,8 @@ async function loadRealStaff() {
         role: s.role,
         dept: s.department || '—',
         phone: s.phone || '—',
-        email: s.email || '—'
+       email: s.email || '—',
+        status: s.status || 'Active'
       }));
       renderStaff();
       console.log('✅ Loaded ' + staff.length + ' real staff from database');
@@ -2184,7 +2185,8 @@ function enterPortal(role,username,displayName){
               role: s.role,
               dept: s.department || '',
               phone: s.phone || '',
-              email: s.email || ''
+              email: s.email || '',
+              status: s.status || 'Active'
             };
           });
           if(typeof renderStaff === 'function') renderStaff();
