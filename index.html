@@ -64,10 +64,6 @@
 </head>
 <body>
 
-    <div class="notice">
-        2026 Enrollment is now open! <a href="#">Secure your spot today</a>
-    </div>
-
     <nav class="navbar">
         <a href="#" class="nav-brand">
             <div class="brand-logo">GPA</div>
@@ -77,13 +73,14 @@
             </div>
         </a>
         <div class="nav-links">
-            <a href="#about" class="nl">About Us</a>
-            <a href="#academics" class="nl">Academics</a>
-            <a href="#admission" class="nl">Admission</a>
-            <a href="#contact" class="nl">Contact</a>
+            <a href="index.html" class="nl active">Home</a>
+            <a href="about.html" class="nl">About Us</a>
+            <a href="academics.html" class="nl">Academics</a>
+            <a href="student-life.html" class="nl">Student Life</a>
+            <a href="contact.html" class="nl">Contact</a>
         </div>
         <div class="nav-right">
-            <a href="#" class="nav-portal desktop-only">Parent Portal</a>
+            <a href="gods_plan_academy_portal.html" class="nav-portal desktop-only">Parent Portal</a>
             <div class="hamburger" id="menu-toggle">
                 <span></span><span></span><span></span>
             </div>
@@ -92,15 +89,16 @@
 
     <div class="mob-menu" id="mobile-menu">
         <button class="mob-close" id="menu-close">&times;</button>
-        <a href="#about" class="nl">About Us</a>
-        <a href="#academics" class="nl">Academics</a>
-        <a href="#admission" class="nl">Admission</a>
-        <a href="#contact" class="nl">Contact</a>
+        <a href="index.html" class="nl">Home</a>
+        <a href="about.html" class="nl">About Us</a>
+        <a href="academics.html" class="nl">Academics</a>
+        <a href="student-life.html" class="nl">Student Life</a>
+        <a href="contact.html" class="nl">Contact</a>
         <br>
-        <a href="#" class="nav-portal" style="text-align: center;">Parent Portal</a>
+        <a href="gods_plan_academy_portal.html" class="nav-portal" style="text-align: center;">Parent Portal</a>
     </div>
 
-    <header class="hero">
+    <header class="hero" style="background: url('WhatsApp Image 2026-03-15 at 3.56.39 PM (2).jpeg') center/cover no-repeat;">
         <div class="hero-overlay"></div>
         <div class="hero-content reveal">
             <h1>Nurturing Minds, <br>Building Futures in Musanze</h1>
@@ -113,15 +111,15 @@
         <div class="reveal-left">
             <h2 style="font-family:'Cormorant Garamond'; color:var(--green-dark); font-size: 2.5rem; margin-bottom: 15px;">Our Vision</h2>
             <p style="color:var(--muted); line-height: 1.7;">God's Plan Academy is dedicated to providing an exceptional learning experience. Located in the serene environment of Musanze, we focus on small class sizes and personalized attention for every child.</p>
-        </div>
-        <div class="reveal-right">
-            <h2 style="font-family:'Cormorant Garamond'; color:var(--green-dark); font-size: 2.5rem; margin-bottom: 15px;">Why GPA?</h2>
-            <ul style="list-style: none; color: var(--muted); line-height: 2;">
+            <ul style="list-style: none; color: var(--muted); line-height: 2; margin-top: 20px;">
                 <li>✨ Competency-Based Curriculum (CBC)</li>
                 <li>🌍 Bilingual environment (English & French)</li>
                 <li>🙏 Character building & Faith-based values</li>
                 <li>🚌 Safe school transport services</li>
             </ul>
+        </div>
+        <div class="reveal-right">
+            <img src="WhatsApp Image 2026-03-15 at 3.56.35 PM.jpeg" alt="Students in Classroom" style="width:100%; border-radius:15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
         </div>
     </section>
 
@@ -130,40 +128,20 @@
     </footer>
 
     <script>
-        // --- MOBILE MENU LOGIC ---
         const menuToggle = document.getElementById('menu-toggle');
         const menuClose = document.getElementById('menu-close');
         const mobileMenu = document.getElementById('mobile-menu');
 
-        menuToggle.addEventListener('click', () => {
-            mobileMenu.classList.add('open');
-        });
-
-        menuClose.addEventListener('click', () => {
-            mobileMenu.classList.remove('open');
-        });
-
-        // Close menu when clicking a link
-        document.querySelectorAll('.mob-menu .nl').forEach(link => {
-            link.addEventListener('click', () => mobileMenu.classList.remove('open'));
-        });
-
-        // --- SCROLL REVEAL LOGIC ---
-        const observerOptions = {
-            threshold: 0.15
-        };
+        menuToggle.addEventListener('click', () => { mobileMenu.classList.add('open'); });
+        menuClose.addEventListener('click', () => { mobileMenu.classList.remove('open'); });
 
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
+                if (entry.isIntersecting) entry.target.classList.add('visible');
             });
-        }, observerOptions);
+        }, { threshold: 0.15 });
 
-        document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => {
-            observer.observe(el);
-        });
+        document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => { observer.observe(el); });
     </script>
 </body>
 </html>
