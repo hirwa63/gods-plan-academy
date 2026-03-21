@@ -26,46 +26,43 @@
         /* NAVBAR */
         .navbar{background:white;padding:0 40px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 16px rgba(0,0,0,0.08);position:sticky;top:0;z-index:500;height:72px;}
         .nav-brand{display:flex;align-items:center;gap:11px;text-decoration:none;flex-shrink:0;}
-        .brand-logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#085041,#1D9E75);display:flex;align-items:center;justify-content:center;font-size:22px;color: white; font-weight: bold;}
+        .brand-logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#085041,#1D9E75);display:flex;align-items:center;justify-content:center;font-size:20px;color: white; font-weight: bold;}
         .brand-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:#085041;line-height:1.1;}
         .brand-sub{font-size:10px;color:#555;font-weight:500;letter-spacing:.07em;text-transform:uppercase;}
-        .nav-links{display:flex;align-items:center;gap:2px;flex:1;justify-content:center;}
+        .nav-links{display:flex;align-items:center;gap:5px;flex:1;justify-content:center;}
         .nl{color:#1a1a1a;font-size:14px;font-weight:600;padding:8px 14px;border-radius:8px;text-decoration:none;transition:all .2s;}
-        .nl:hover, .nl.active{color:#1a56db;background:rgba(26,86,219,0.07);}
+        .nl:hover, .nl.active{color:var(--blue);background:rgba(26,86,219,0.07);}
         .nav-right{display:flex;align-items:center;gap:10px;}
-        .nav-portal{background:#1a56db;color:white;padding:9px 18px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;transition:all .2s;}
-        .nav-portal:hover{background:#1140a6; transform: translateY(-1px);}
-
-        .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;}
-        .hamburger span{width:24px;height:2.5px;background:#1a1a1a;border-radius:2px;}
-
+        .nav-portal{background:var(--blue);color:white;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;transition:all .2s;}
+        
         /* MOBILE MENU */
-        .mob-menu{display:none;position:fixed;inset:0;background:white;z-index:1000;padding:76px 24px 24px;flex-direction:column;gap:4px;overflow-y:auto;}
+        .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;}
+        .hamburger span{width:24px;height:2px;background:#1a1a1a;}
+        .mob-menu{display:none;position:fixed;inset:0;background:white;z-index:1000;padding:80px 20px;flex-direction:column;gap:15px;text-align:center;}
         .mob-menu.open{display:flex;}
-        .mob-close{position:absolute;top:18px;right:18px;background:none;border:none;font-size:32px;cursor:pointer;}
 
-        /* HERO */
-        .hero{position:relative;height:90vh;display:flex;align-items:center;justify-content:center;text-align:center;color: white; overflow:hidden; background: #04342C;}
-        .hero-overlay{position:absolute; inset:0; background: rgba(0,0,0,0.4); z-index: 1;}
+        /* HERO - USING RENAMED IMAGE */
+        .hero{position:relative;height:85vh;display:flex;align-items:center;justify-content:center;text-align:center;color: white; background: url('hero.jpg') center/cover no-repeat;}
+        .hero-overlay{position:absolute; inset:0; background: rgba(4, 52, 44, 0.65);}
         .hero-content{position:relative; z-index: 2; max-width: 800px; padding: 20px;}
-        .hero h1{font-family:'Cormorant Garamond', serif; font-size: clamp(2.5rem, 5vw, 4.5rem); line-height: 1.1; margin-bottom: 20px;}
-        .hero p{font-size: 1.2rem; margin-bottom: 30px; opacity: 0.9;}
+        .hero h1{font-family:'Cormorant Garamond', serif; font-size: clamp(2.2rem, 5vw, 4rem); line-height: 1.1; margin-bottom: 20px;}
+        .hero p{font-size: 1.1rem; margin-bottom: 30px; opacity: 0.9;}
 
         /* SECTIONS */
         section {padding: 80px 10%;}
-        .grid {display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px;}
+        .grid {display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 50px; align-items: center;}
         
         @media(max-width:900px){
-            .navbar{padding:0 18px;}
-            .nav-links, .nav-right .nav-portal.desktop-only{display:none;}
+            .nav-links, .desktop-only{display:none;}
             .hamburger{display:flex;}
+            section{padding: 60px 5%;}
         }
     </style>
 </head>
 <body>
 
     <nav class="navbar">
-        <a href="#" class="nav-brand">
+        <a href="index.html" class="nav-brand">
             <div class="brand-logo">GPA</div>
             <div>
                 <div class="brand-name">God's Plan Academy</div>
@@ -88,60 +85,56 @@
     </nav>
 
     <div class="mob-menu" id="mobile-menu">
-        <button class="mob-close" id="menu-close">&times;</button>
         <a href="index.html" class="nl">Home</a>
         <a href="about.html" class="nl">About Us</a>
         <a href="academics.html" class="nl">Academics</a>
         <a href="student-life.html" class="nl">Student Life</a>
         <a href="contact.html" class="nl">Contact</a>
-        <br>
-        <a href="gods_plan_academy_portal.html" class="nav-portal" style="text-align: center;">Parent Portal</a>
+        <a href="gods_plan_academy_portal.html" class="nav-portal">Parent Portal</a>
     </div>
 
-    <header class="hero" style="background: url('WhatsApp Image 2026-03-15 at 3.56.39 PM (2).jpeg') center/cover no-repeat;">
+    <header class="hero">
         <div class="hero-overlay"></div>
         <div class="hero-content reveal">
             <h1>Nurturing Minds, <br>Building Futures in Musanze</h1>
-            <p>Empowering children through high-quality education and Christian values to become global citizens.</p>
-            <a href="#admission" class="nav-portal" style="padding: 16px 32px; font-size: 16px;">Enroll Now</a>
+            <p>Providing high-quality education rooted in Christian values for the leaders of tomorrow.</p>
+            <a href="contact.html" class="nav-portal" style="padding: 15px 35px; font-size: 16px;">Visit Us Today</a>
         </div>
     </header>
 
     <section id="about" class="grid">
         <div class="reveal-left">
-            <h2 style="font-family:'Cormorant Garamond'; color:var(--green-dark); font-size: 2.5rem; margin-bottom: 15px;">Our Vision</h2>
-            <p style="color:var(--muted); line-height: 1.7;">God's Plan Academy is dedicated to providing an exceptional learning experience. Located in the serene environment of Musanze, we focus on small class sizes and personalized attention for every child.</p>
-            <ul style="list-style: none; color: var(--muted); line-height: 2; margin-top: 20px;">
-                <li>✨ Competency-Based Curriculum (CBC)</li>
-                <li>🌍 Bilingual environment (English & French)</li>
-                <li>🙏 Character building & Faith-based values</li>
-                <li>🚌 Safe school transport services</li>
+            <h2 style="font-family:'Cormorant Garamond'; color:var(--green-dark); font-size: 2.5rem; margin-bottom: 20px;">Welcome to God's Plan Academy</h2>
+            <p style="color:var(--muted); line-height: 1.8; margin-bottom: 20px;">We offer a serene and safe environment in Musanze where children are encouraged to explore, learn, and grow. Our focus is on holistic development—academic excellence paired with strong moral character.</p>
+            <ul style="list-style: none; color: var(--green-dark); font-weight: 600; line-height: 2.2;">
+                <li>✓ Professional & Caring Teachers</li>
+                <li>✓ Modern CBC Curriculum</li>
+                <li>✓ Safe Playground & Facilities</li>
             </ul>
         </div>
         <div class="reveal-right">
-            <img src="WhatsApp Image 2026-03-15 at 3.56.35 PM.jpeg" alt="Students in Classroom" style="width:100%; border-radius:15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+            <img src="about-us.jpg" alt="God's Plan Academy Classroom" style="width:100%; border-radius:20px; box-shadow: 0 20px 40px rgba(0,0,0,0.12);">
         </div>
     </section>
 
-    <footer style="background: var(--green-deeper); color: white; padding: 40px; text-align: center;">
-        <p>&copy; 2026 God's Plan Academy Musanze. All Rights Reserved.</p>
+    <footer style="background: var(--green-deeper); color: white; padding: 60px 20px; text-align: center;">
+        <p style="opacity: 0.8;">&copy; 2026 God's Plan Academy Musanze. All Rights Reserved.</p>
     </footer>
 
     <script>
-        const menuToggle = document.getElementById('menu-toggle');
-        const menuClose = document.getElementById('menu-close');
-        const mobileMenu = document.getElementById('mobile-menu');
+        // Mobile Menu Toggle
+        const menuBtn = document.getElementById('menu-toggle');
+        const mobMenu = document.getElementById('mobile-menu');
+        menuBtn.addEventListener('click', () => mobMenu.classList.toggle('open'));
 
-        menuToggle.addEventListener('click', () => { mobileMenu.classList.add('open'); });
-        menuClose.addEventListener('click', () => { mobileMenu.classList.remove('open'); });
-
-        const observer = new IntersectionObserver((entries) => {
+        // Intersection Observer for animations
+        const obs = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) entry.target.classList.add('visible');
             });
-        }, { threshold: 0.15 });
+        }, { threshold: 0.1 });
 
-        document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => { observer.observe(el); });
+        document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => obs.observe(el));
     </script>
 </body>
 </html>
