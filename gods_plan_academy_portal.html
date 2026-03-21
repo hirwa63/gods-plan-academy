@@ -256,18 +256,190 @@ tr:hover td{background:#f5fdf9;}
 .guest-btn{width:100%;margin-top:10px;padding:11px;border-radius:9px;border:2px solid var(--border);background:transparent;font-size:13px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;color:var(--muted);transition:all .2s;}
 .guest-btn:hover{border-color:var(--green);color:var(--green);}
 
-@media(max-width:640px){
-  nav{padding:10px 14px 0;}
-  .hero{padding:36px 16px;}
-  .hero h1{font-size:24px;}
-  .container{padding:18px 12px;}
-  .frow,.contact-grid,.fees-layout{grid-template-columns:1fr!important;}
-  .rhead{flex-direction:column;text-align:center;}
-  .tstrip{flex-direction:column;gap:5px;}
+/* ============================================================
+   REPLACE the existing @media(max-width:640px) block in your
+   portal.html <style> section with ALL of this CSS below.
+   
+   Find this in your <style>:
+     @media(max-width:640px){ ... }
+   
+   And replace the entire block with everything below:
+   ============================================================ */
+
+/* ── TABLET (max 900px) ──────────────────────────────────── */
+@media(max-width:900px){
+  .contact-grid{grid-template-columns:1fr;}
+  .fees-layout{grid-template-columns:1fr!important;}
+  .comments-layout{grid-template-columns:1fr!important;}
+  .ngrid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));}
+  .qgrid{grid-template-columns:repeat(auto-fit,minmax(150px,1fr));}
+  .sgrid{grid-template-columns:repeat(auto-fit,minmax(120px,1fr));}
 }
+
+/* ── MOBILE (max 640px) ──────────────────────────────────── */
+@media(max-width:640px){
+
+  /* NAV */
+  nav{padding:8px 12px 0;}
+  .nav-top{margin-bottom:6px;}
+  .nav-logo{font-size:15px;}
+  .nav-user-badge{font-size:11px;padding:3px 8px;}
+  .nav-links{gap:2px;padding-bottom:8px;}
+  .nav-links button{font-size:11px;padding:5px 8px;}
+
+  /* HERO */
+  .hero{padding:28px 14px;}
+  .hero h1{font-size:22px;}
+  .hero p{font-size:13px;}
+  .hbw,.hbg{padding:9px 16px;font-size:13px;}
+
+  /* CONTAINER */
+  .container{padding:14px 10px;}
+
+  /* CARDS */
+  .card{padding:16px 14px;}
+  .card-title{font-size:15px;}
+
+  /* QUICK GRID */
+  .qgrid{grid-template-columns:repeat(2,1fr);gap:10px;}
+  .qcard{padding:14px 10px;}
+  .qi{font-size:24px;margin-bottom:6px;}
+  .qt{font-size:12px;}
+  .qd{font-size:11px;}
+
+  /* STATS */
+  .sgrid{grid-template-columns:repeat(2,1fr);gap:8px;}
+  .scard{padding:12px 10px;}
+  .snum{font-size:22px;}
+  .slbl{font-size:10px;}
+
+  /* FORMS */
+  .frow{grid-template-columns:1fr!important;}
+  .fg input,.fg select,.fg textarea{font-size:13px;padding:9px 11px;}
+  .btn{padding:9px 16px;font-size:13px;}
+  .btn-block{padding:11px;}
+
+  /* TABLES — horizontal scroll */
+  .tw{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  table{min-width:500px;font-size:12px;}
+  th{padding:8px 10px;font-size:11px;}
+  td{padding:7px 10px;}
+
+  /* DASHBOARD TABS — horizontal scroll */
+  .atabs-bar{
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    flex-wrap:nowrap;
+    padding-bottom:8px;
+    gap:4px;
+  }
+  .atab-btn{
+    white-space:nowrap;
+    flex-shrink:0;
+    padding:6px 12px;
+    font-size:12px;
+  }
+
+  /* LAYOUTS → single column */
+  .contact-grid{grid-template-columns:1fr;}
+  .fees-layout{grid-template-columns:1fr!important;}
+  .comments-layout{grid-template-columns:1fr!important;}
+
+  /* REPORT CARD */
+  .rhead{flex-direction:column;text-align:center;padding:16px;}
+  .ravatar{width:42px;height:42px;font-size:15px;}
+  .rname{font-size:15px;}
+  .tstrip{flex-direction:column;gap:5px;padding:10px 14px;}
+  .tb .tv{font-size:16px;}
+  .gpills{flex-wrap:wrap;}
+  .gp{min-width:70px;}
+  .disc-g{grid-template-columns:repeat(2,1fr);}
+
+  /* MODAL */
+  .mbg{padding:10px;}
+  .modal{padding:20px 16px;border-radius:12px;}
+
+  /* PAYMENT METHODS */
+  .pay-methods{grid-template-columns:1fr 1fr;}
+  .pm{padding:12px 8px;}
+  .pm-icon{font-size:22px;}
+  .pm-name{font-size:12px;}
+
+  /* NEWS */
+  .ngrid{grid-template-columns:1fr;}
+  .nfilters{gap:5px;}
+  .nfbtn{padding:5px 10px;font-size:11px;}
+
+  /* GALLERY */
+  .ggrid{grid-template-columns:repeat(3,1fr);}
+
+  /* SPLASH */
+  .splash-inner{padding:20px 12px;}
+  .splash-logo .logo-icon{font-size:40px;}
+  .splash-logo h1{font-size:20px;}
+  .splash-card{padding:20px 16px;}
+  .splash-lang-btns{grid-template-columns:1fr 1fr;}
+  .slang-btn{font-size:12px;padding:8px 6px;}
+  .stab{font-size:12px;padding:8px 6px;}
+  .role-grid{grid-template-columns:1fr 1fr;}
+
+  /* BACK BUTTON */
+  .back-btn{
+    top:10px!important;
+    left:10px!important;
+    padding:7px 13px!important;
+    font-size:12px!important;
+  }
+
+  /* SECTION HEADER */
+  .section-hdr h2{font-size:22px;}
+
+  /* MARKS TABLE */
+  .marks-input-table input{width:55px;}
+
+  /* SETTINGS */
+  .settings-section{padding:14px 12px;}
+  .settings-section h4{font-size:14px;}
+
+  /* PRICE TAG */
+  .price-tag{font-size:16px;padding:6px 16px;}
+
+  /* COMMENT CARDS */
+  .comment-card{padding:12px;}
+  .comment-avatar{width:30px;height:30px;font-size:11px;}
+
+  /* CONTACT */
+  .cinfo-item{gap:8px;}
+  .cicon{width:32px;height:32px;font-size:15px;}
+  .cval{font-size:13px;}
+
+  /* PHONE ROW */
+  .phone-row{flex-direction:row;}
+  .phone-cc{width:85px;}
+
+  /* FEE ROWS */
+  .fee-row{font-size:13px;}
+}
+
+/* ── VERY SMALL PHONES (max 380px) ───────────────────────── */
+@media(max-width:380px){
+  .nav-links button{font-size:10px;padding:4px 6px;}
+  .qgrid{grid-template-columns:1fr 1fr;}
+  .sgrid{grid-template-columns:repeat(2,1fr);}
+  .ggrid{grid-template-columns:repeat(2,1fr);}
+  .pay-methods{grid-template-columns:1fr;}
+  .hero h1{font-size:19px;}
+  .splash-lang-btns{grid-template-columns:1fr 1fr;}
+}
+
+/* ── PRINT ───────────────────────────────────────────────── */
 @media print{
-  #splashScreen,.lang-bar,nav,.tabs-wrap,.btn:not(.print-btn),#page-home,#page-fees,#page-news,#page-login,#page-contact,#page-dashboard{display:none!important;}
+  #splashScreen,.lang-bar,nav,.tabs-wrap,
+  .btn:not(.print-btn),#page-home,#page-fees,
+  #page-news,#page-login,#page-contact,
+  #page-dashboard{display:none!important;}
   .rwrap{box-shadow:none;}
+  .container{padding:0;}
 }
 
 
