@@ -33,29 +33,27 @@
         .nl{color:#1a1a1a;font-size:14px;font-weight:600;padding:8px 14px;border-radius:8px;text-decoration:none;transition:all .2s;}
         .nl:hover, .nl.active{color:var(--blue);background:rgba(26,86,219,0.07);}
         .nav-right{display:flex;align-items:center;gap:10px;}
-        .nav-portal{background:var(--blue);color:white;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;transition:all .2s;}
+        .nav-portal{background:var(--blue);color:white;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;}
+
+        /* HERO - Updated with your actual filename */
+        .hero{position:relative;height:85vh;display:flex;align-items:center;justify-content:center;text-align:center;color: white; background: url('image_5f6e40.jpg') center/cover no-repeat;}
+        .hero-overlay{position:absolute; inset:0; background: rgba(4, 52, 44, 0.65);}
+        .hero-content{position:relative; z-index: 2; max-width: 800px; padding: 20px;}
+        .hero h1{font-family:'Cormorant Garamond', serif; font-size: clamp(2.2rem, 5vw, 4rem); line-height: 1.1; margin-bottom: 20px;}
         
-        /* MOBILE MENU */
+        /* SECTIONS */
+        section {padding: 80px 10%;}
+        .grid {display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 50px; align-items: center;}
+
         .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;}
         .hamburger span{width:24px;height:2px;background:#1a1a1a;}
         .mob-menu{display:none;position:fixed;inset:0;background:white;z-index:1000;padding:80px 20px;flex-direction:column;gap:15px;text-align:center;}
         .mob-menu.open{display:flex;}
 
-        /* HERO - USING RENAMED IMAGE */
-        .hero{position:relative;height:85vh;display:flex;align-items:center;justify-content:center;text-align:center;color: white; background: url('hero.jpg') center/cover no-repeat;}
-        .hero-overlay{position:absolute; inset:0; background: rgba(4, 52, 44, 0.65);}
-        .hero-content{position:relative; z-index: 2; max-width: 800px; padding: 20px;}
-        .hero h1{font-family:'Cormorant Garamond', serif; font-size: clamp(2.2rem, 5vw, 4rem); line-height: 1.1; margin-bottom: 20px;}
-        .hero p{font-size: 1.1rem; margin-bottom: 30px; opacity: 0.9;}
-
-        /* SECTIONS */
-        section {padding: 80px 10%;}
-        .grid {display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 50px; align-items: center;}
-        
         @media(max-width:900px){
             .nav-links, .desktop-only{display:none;}
             .hamburger{display:flex;}
-            section{padding: 60px 5%;}
+            .navbar{padding: 0 20px;}
         }
     </style>
 </head>
@@ -90,50 +88,41 @@
         <a href="academics.html" class="nl">Academics</a>
         <a href="student-life.html" class="nl">Student Life</a>
         <a href="contact.html" class="nl">Contact</a>
-        <a href="gods_plan_academy_portal.html" class="nav-portal">Parent Portal</a>
     </div>
 
     <header class="hero">
         <div class="hero-overlay"></div>
         <div class="hero-content reveal">
             <h1>Nurturing Minds, <br>Building Futures in Musanze</h1>
-            <p>Providing high-quality education rooted in Christian values for the leaders of tomorrow.</p>
-            <a href="contact.html" class="nav-portal" style="padding: 15px 35px; font-size: 16px;">Visit Us Today</a>
+            <p>Providing high-quality education rooted in Christian values.</p>
+            <a href="contact.html" class="nav-portal" style="padding: 15px 35px; font-size: 16px; background: var(--green);">Visit Us Today</a>
         </div>
     </header>
 
     <section id="about" class="grid">
         <div class="reveal-left">
             <h2 style="font-family:'Cormorant Garamond'; color:var(--green-dark); font-size: 2.5rem; margin-bottom: 20px;">Welcome to God's Plan Academy</h2>
-            <p style="color:var(--muted); line-height: 1.8; margin-bottom: 20px;">We offer a serene and safe environment in Musanze where children are encouraged to explore, learn, and grow. Our focus is on holistic development—academic excellence paired with strong moral character.</p>
-            <ul style="list-style: none; color: var(--green-dark); font-weight: 600; line-height: 2.2;">
-                <li>✓ Professional & Caring Teachers</li>
-                <li>✓ Modern CBC Curriculum</li>
-                <li>✓ Safe Playground & Facilities</li>
-            </ul>
+            <p style="color:var(--muted); line-height: 1.8; margin-bottom: 20px;">We offer a serene environment in Musanze where children are encouraged to learn and grow. Our focus is on academic excellence paired with strong moral character.</p>
         </div>
         <div class="reveal-right">
-            <img src="about-us.jpg" alt="God's Plan Academy Classroom" style="width:100%; border-radius:20px; box-shadow: 0 20px 40px rgba(0,0,0,0.12);">
+            <img src="image_5f6e40.jpg" alt="God's Plan Academy" style="width:100%; border-radius:20px; box-shadow: 0 20px 40px rgba(0,0,0,0.12);">
         </div>
     </section>
 
-    <footer style="background: var(--green-deeper); color: white; padding: 60px 20px; text-align: center;">
-        <p style="opacity: 0.8;">&copy; 2026 God's Plan Academy Musanze. All Rights Reserved.</p>
+    <footer style="background: var(--green-deeper); color: white; padding: 40px; text-align: center;">
+        <p>&copy; 2026 God's Plan Academy Musanze. All Rights Reserved.</p>
     </footer>
 
     <script>
-        // Mobile Menu Toggle
         const menuBtn = document.getElementById('menu-toggle');
         const mobMenu = document.getElementById('mobile-menu');
         menuBtn.addEventListener('click', () => mobMenu.classList.toggle('open'));
 
-        // Intersection Observer for animations
         const obs = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) entry.target.classList.add('visible');
             });
         }, { threshold: 0.1 });
-
         document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => obs.observe(el));
     </script>
 </body>
