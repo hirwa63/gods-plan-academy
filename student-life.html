@@ -1,83 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Student Life – God's Plan Academy</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
-<style>
-/* ... (Existing styles remain the same) ... */
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-:root{--green:#1D9E75;--green-dark:#085041;--green-deeper:#04342C;--green-light:#E1F5EE;--green-mid:#9FE1CB;--blue:#1a56db;--gold:#C9A84C;--text:#1a1a1a;--muted:#555;--white:#fff;--bg:#f4f6f8;--border:rgba(0,0,0,0.08);}
-html{scroll-behavior:smooth;}
-body{font-family:'Outfit',sans-serif;color:var(--text);background:var(--white);}
-.reveal{opacity:0;transform:translateY(28px);transition:opacity .6s,transform .6s;}.reveal.visible{opacity:1;transform:none;}
-.navbar{background:white;padding:0 40px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 16px rgba(0,0,0,0.08);position:sticky;top:0;z-index:500;height:72px;}
-/* ... (Rest of CSS) ... */
-</style>
-</head>
-<body>
-<nav class="navbar" id="navbar">
-  <a class="nav-brand" href="index.html">
-    <div class="brand-logo" style="color:white; font-weight:bold;">GPA</div>
-    <div><div class="brand-name">God's Plan Academy</div><div class="brand-sub">Nursery &amp; Primary School</div></div>
-  </a>
-  <div class="nav-links">
-    <a class="nl" href="index.html">Home</a>
-    <a class="nl" href="about.html">About</a>
-    <a class="nl" href="academics.html">Academics</a>
-    <a class="nl active" href="student-life.html">Student Life</a>
-    <a class="nl" href="contact.html">Contact Us</a>
-  </div>
-  <div class="nav-right">
-    <a class="nav-portal" href="gods_plan_academy_portal.html">📊 Parent Portal</a>
-    <div class="hamburger" onclick="toggleMob()"><span></span><span></span><span></span></div>
-  </div>
-</nav>
-
-<div class="page-hero" style="background: linear-gradient(rgba(8,80,65,0.8), rgba(8,80,65,0.8)), url('WhatsApp Image 2026-03-15 at 3.56.39 PM (1).jpeg') center/cover;">
-    <div class="ph-label">School Life</div>
-    <h1 class="ph-title">Student Life</h1>
-    <p class="ph-desc">Trips, games, and precious memories from God's Plan Academy.</p>
-</div>
-
-<section class="section section-alt">
-  <div class="container">
-    <div class="reveal" style="text-align:center;"><div class="sec-label" style="justify-content:center;">Gallery</div><h2 class="sec-title">📸 Photo Gallery</h2></div>
-    <div class="gallery-grid" id="gg"></div>
-  </div>
-</section>
-
 <script>
-// --- UPDATED GALLERY DATA WITH YOUR IMAGES ---
 var galleryData = [
-  { img: "WhatsApp Image 2026-03-15 at 3.56.35 PM (1).jpeg", label: "Students in Uniform" },
-  { img: "WhatsApp Image 2026-03-15 at 3.56.37 PM.jpeg", label: "Morning Assembly" },
-  { img: "WhatsApp Image 2026-03-15 at 3.56.38 PM.jpeg", label: "Learning Together" },
-  { img: "WhatsApp Image 2026-03-15 at 3.56.38 PM (1).jpeg", label: "Classroom Activity" },
-  { img: "WhatsApp Image 2026-03-15 at 3.56.38 PM (2).jpeg", label: "Student Group" },
-  { img: "WhatsApp Image 2026-03-15 at 3.56.39 PM.jpeg", label: "Playtime" },
-  { img: "WhatsApp Image 2026-03-15 at 3.56.37 PM (1).jpeg", label: "School Event" },
-  { img: "WhatsApp Image 2026-03-15 at 3.56.39 PM (2).jpeg", label: "Our Campus" }
+  { img: "hero%20(5).jpeg", label: "Classroom Learning" },
+  { img: "hero%20(6).jpeg", label: "Student Group" },
+  { img: "hero%20(7).jpeg", label: "Morning Assembly" },
+  { img: "hero%20(8).jpeg", label: "Creative Arts" },
+  { img: "hero%20(9).jpeg", label: "Outdoor Play" },
+  { img: "hero%20(10).jpeg", label: "Campus View" },
+  { img: "hero%20(11).jpeg", label: "Our Students" }
 ];
 
 function renderGallery() {
   document.getElementById('gg').innerHTML = galleryData.map(function(g) {
     return '<div class="gi">'
-      + '<div class="gi-inner" style="background:url(\'' + g.img + '\') center/cover no-repeat;"></div>'
-      + '<div class="gi-label">' + g.label + '</div>'
+      + '<div class="gi-inner" style="background:url(' + JSON.stringify(g.img).replace(/ /g, '%20') + ') center/cover no-repeat; height: 300px; border-radius: 15px;"></div>'
+      + '<div class="gi-label" style="padding: 10px; font-weight: bold;">' + g.label + '</div>'
       + '</div>';
   }).join('');
 }
-
 renderGallery();
-
-function toggleMob() { document.getElementById('mobMenu').classList.toggle('open'); }
-window.addEventListener('scroll', function() {
-    document.querySelectorAll('.reveal').forEach(el => {
-        if (el.getBoundingClientRect().top < window.innerHeight - 50) el.classList.add('visible');
-    });
-});
 </script>
-</body>
-</html>
