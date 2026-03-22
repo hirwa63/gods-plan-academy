@@ -1,4 +1,5 @@
 <script>
+// Use the exact names as they appear on GitHub
 var galleryData = [
   { img: "hero (5).jpeg", label: "Classroom Learning" },
   { img: "hero (6).jpeg", label: "Student Group" },
@@ -11,12 +12,21 @@ var galleryData = [
 
 function renderGallery() {
   const container = document.getElementById('gg');
-  container.innerHTML = galleryData.map(g => `
-    <div class="gi">
-      <div class="gi-inner" style="background: url('${g.img}') center/cover no-repeat; height: 300px; border-radius: 15px;"></div>
-      <div class="gi-label" style="padding: 10px; font-weight: bold;">${g.label}</div>
-    </div>
-  `).join('');
+  container.innerHTML = galleryData.map(function(g) {
+    // encodeURIComponent fixes the spaces (hero (5).jpeg -> hero%20(5).jpeg)
+    var fixedPath = encodeURIComponent(g.img).replace(/%2F/g, '/');
+    
+    return '<div class="gi">' +
+           '<div class="gi-inner" style="background:url(\'' + fixedPath + '\') center/cover no-repeat; height:300px; border-radius:15px;"></div>' +
+           '<div class="gi-label" style="padding:10px; font-weight:bold;">' + g.label + '</div>' +
+           '</div>';
+  }).join('');
 }
+
+// Call the function
 renderGallery();
+
+function toggleMob() {
+  document.getElementById('mobMenu').classList.toggle('open');
+}
 </script>
