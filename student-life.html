@@ -1,21 +1,22 @@
 <script>
 var galleryData = [
-  { img: "hero%20(5).jpeg", label: "Classroom Learning" },
-  { img: "hero%20(6).jpeg", label: "Student Group" },
-  { img: "hero%20(7).jpeg", label: "Morning Assembly" },
-  { img: "hero%20(8).jpeg", label: "Creative Arts" },
-  { img: "hero%20(9).jpeg", label: "Outdoor Play" },
-  { img: "hero%20(10).jpeg", label: "Campus View" },
-  { img: "hero%20(11).jpeg", label: "Our Students" }
+  { img: "hero (5).jpeg", label: "Classroom Learning" },
+  { img: "hero (6).jpeg", label: "Student Group" },
+  { img: "hero (7).jpeg", label: "Morning Assembly" },
+  { img: "hero (8).jpeg", label: "Creative Arts" },
+  { img: "hero (9).jpeg", label: "Outdoor Play" },
+  { img: "hero (10).jpeg", label: "Campus View" },
+  { img: "hero (11).jpeg", label: "Our Students" }
 ];
 
 function renderGallery() {
-  document.getElementById('gg').innerHTML = galleryData.map(function(g) {
-    return '<div class="gi">'
-      + '<div class="gi-inner" style="background:url(' + JSON.stringify(g.img).replace(/ /g, '%20') + ') center/cover no-repeat; height: 300px; border-radius: 15px;"></div>'
-      + '<div class="gi-label" style="padding: 10px; font-weight: bold;">' + g.label + '</div>'
-      + '</div>';
-  }).join('');
+  const container = document.getElementById('gg');
+  container.innerHTML = galleryData.map(g => `
+    <div class="gi">
+      <div class="gi-inner" style="background: url('${g.img}') center/cover no-repeat; height: 300px; border-radius: 15px;"></div>
+      <div class="gi-label" style="padding: 10px; font-weight: bold;">${g.label}</div>
+    </div>
+  `).join('');
 }
 renderGallery();
 </script>
