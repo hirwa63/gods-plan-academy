@@ -1,42 +1,163 @@
-<div id="gg" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Student Life | God's Plan Academy Musanze</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--green:#1D9E75;--green-dark:#085041;--green-deeper:#04342C;--green-light:#E1F5EE;--green-mid:#9FE1CB;--blue:#1a56db;--gold:#C9A84C;--text:#1a1a1a;--muted:#555;--white:#fff;--bg:#f4f6f8;--border:rgba(0,0,0,0.08);}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Outfit',sans-serif;color:var(--text);background:var(--white);line-height:1.6;}
+    
+    .reveal{opacity:0;transform:translateY(28px);transition:opacity .6s,transform .6s;}.reveal.visible{opacity:1;transform:none;}
+
+    /* NAVBAR */
+    .navbar{background:white;padding:0 40px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 16px rgba(0,0,0,0.08);position:sticky;top:0;z-index:500;height:72px;}
+    .nav-brand{display:flex;align-items:center;gap:11px;text-decoration:none;flex-shrink:0;}
+    .brand-logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#085041,#1D9E75);display:flex;align-items:center;justify-content:center;font-size:22px;}
+    .brand-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:#085041;line-height:1.1;}
+    .brand-sub{font-size:10px;color:#555;font-weight:500;letter-spacing:.07em;text-transform:uppercase;}
+    .nav-links{display:flex;align-items:center;gap:5px;flex:1;justify-content:center;}
+    .nl{color:#1a1a1a;font-size:14px;font-weight:600;padding:8px 14px;border-radius:8px;text-decoration:none;transition:all .2s;}
+    .nl:hover, .nl.active{color:#1a56db;background:rgba(26,86,219,0.07);}
+
+    /* HERO */
+    .page-hero{background:linear-gradient(135deg,var(--green-dark),var(--green));padding:70px 40px;text-align:center;color:white;}
+    .ph-title{font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:700;margin-bottom:10px;}
+
+    /* SECTIONS */
+    .section{padding:80px 10%;}.section-alt{background:var(--bg);}
+    .container{max-width:1200px;margin:0 auto;}
+    .sec-label{font-size:11px;font-weight:700;text-transform:uppercase;color:var(--blue);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+    .sec-label::before{content:'';width:26px;height:2px;background:var(--blue);}
+    .sec-title{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:700;color:var(--green-dark);margin-bottom:30px;}
+
+    /* NEWS GRID */
+    .news-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:25px;margin-top:30px;}
+    .ncard{background:white;border-radius:16px;overflow:hidden;border:1px solid var(--border);box-shadow:0 4px 12px rgba(0,0,0,0.05);}
+    .nbody{padding:20px;}
+    .ntitle{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--green-dark);margin-bottom:10px;}
+
+    /* GALLERY GRID */
+    .gallery-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:15px;margin-top:30px;}
+    .gi{border-radius:15px;aspect-ratio:1;overflow:hidden;position:relative;background:#eee;box-shadow:0 4px 10px rgba(0,0,0,0.1);}
+    .gi-inner{width:100%;height:100%;transition:transform .5s ease;}
+    .gi:hover .gi-inner{transform:scale(1.1);}
+    .gi-label{position:absolute;bottom:0;left:0;right:0;background:rgba(8,80,65,0.85);color:white;font-size:12px;font-weight:600;padding:10px;text-align:center;backdrop-filter:blur(4px);}
+
+    /* FOOTER */
+    footer{background:var(--green-deeper);color:white;padding:60px 10% 20px;}
+    
+    @media(max-width:768px){
+        .navbar{padding:0 20px;}
+        .nav-links{display:none;}
+        .section{padding:50px 20px;}
+    }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+    <a class="nav-brand" href="index.html">
+        <div class="brand-logo">🌱</div>
+        <div>
+            <div class="brand-name">God's Plan Academy</div>
+            <div class="brand-sub">Nursery & Primary School</div>
+        </div>
+    </a>
+    <div class="nav-links">
+        <a class="nl" href="index.html">Home</a>
+        <a class="nl" href="about.html">About</a>
+        <a class="nl" href="academics.html">Academics</a>
+        <a class="nl active" href="student-life.html">Student Life</a>
+        <a class="nl" href="contact.html">Contact</a>
     </div>
+</nav>
+
+<div class="page-hero">
+    <h1 class="ph-title">Student Life</h1>
+    <p>Precious memories and events from our school community.</p>
+</div>
+
+<section class="section">
+    <div class="container">
+        <div class="reveal visible">
+            <div class="sec-label">Updates</div>
+            <h2 class="sec-title">News & Events</h2>
+        </div>
+        <div class="news-grid" id="ng">
+            </div>
+    </div>
+</section>
+
+<section class="section section-alt">
+    <div class="container">
+        <div class="reveal visible" style="text-align:center;">
+            <div class="sec-label" style="justify-content:center;">Gallery</div>
+            <h2 class="sec-title">📸 Photo Gallery</h2>
+        </div>
+        <div class="gallery-grid" id="gg">
+            </div>
+    </div>
+</section>
+
+<footer>
+    <div style="text-align:center; margin-bottom:30px;">
+        <p>© 2026 God's Plan Academy. Musanze, Rwanda.</p>
+    </div>
+</footer>
 
 <script>
-/**
- * UPDATED FILENAMES: 
- * I matched these exactly to your GitHub screenshot: "hero (10).jpeg"
- * Note the SPACE between 'hero' and '(10)'.
- */
-const galleryData = [
-  { img: "hero (10).jpeg", label: "Campus View" },
-  { img: "hero (11).jpeg", label: "Our Students" },
-  { img: "hero (12).jpeg", label: "Academic Excellence" },
-  { img: "hero (13).jpeg", label: "Learning Environment" },
-  { img: "hero (14).jpeg", label: "Student Activities" },
-  { img: "hero (15).jpeg", label: "School Community" }
+// --- 1. NEWS DATA ---
+const newsData = [
+    { title: "Inter-School Debate", date: "Oct 2025", desc: "Our students showcased excellent public speaking skills." },
+    { title: "Annual Sports Day", date: "Sept 2025", desc: "A day filled with energy, teamwork, and healthy competition." },
+    { title: "Educational Field Trip", date: "Aug 2025", desc: "Exploring the local environment and learning outside the classroom." }
 ];
 
-function renderGallery() {
-  const container = document.getElementById('gg');
-  if (!container) return;
+// --- 2. GALLERY DATA (Matched to your GitHub exactly) ---
+const galleryData = [
+    { img: "hero (10).jpeg", label: "Campus View" },
+    { img: "hero (11).jpeg", label: "Our Students" },
+    { img: "hero (12).jpeg", label: "Classroom Learning" },
+    { img: "hero (13).jpeg", label: "School Grounds" },
+    { img: "hero (14).jpeg", label: "Student Group" },
+    { img: "hero (15).jpeg", label: "Morning Assembly" }
+];
 
-  container.innerHTML = galleryData.map(function(g) {
-    /** * CRITICAL FIX: encodeURIComponent converts the " " (space) to "%20" 
-     * so Vercel can find the file.
-     */
-    const encodedPath = encodeURIComponent(g.img);
-    
-    return `
-      <div class="gi" style="background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: transform 0.3s ease;">
-        <div class="gi-inner" style="background: url('${encodedPath}') center/cover no-repeat; height: 350px;"></div>
-        <div class="gi-label" style="padding: 20px; font-family: 'Outfit', sans-serif; font-weight: 600; color: #085041; text-align: center;">
-          ${g.label}
+function initPage() {
+    // Render News
+    const newsContainer = document.getElementById('ng');
+    newsContainer.innerHTML = newsData.map(n => `
+        <div class="ncard">
+            <div class="nbody">
+                <div style="font-size:11px; color:#1a56db; font-weight:700;">${n.date}</div>
+                <h3 class="ntitle">${n.title}</h3>
+                <p style="font-size:14px; color:#555;">${n.desc}</p>
+            </div>
         </div>
-      </div>
-    `;
-  }).join('');
+    `).join('');
+
+    // Render Gallery
+    const galleryContainer = document.getElementById('gg');
+    galleryContainer.innerHTML = galleryData.map(g => {
+        // Critical: encodes the " " and "( )" so Vercel finds them
+        const safePath = encodeURIComponent(g.img);
+        return `
+            <div class="gi">
+                <div class="gi-inner" style="background: url('${safePath}') center/cover no-repeat;"></div>
+                <div class="gi-label">${g.label}</div>
+            </div>
+        `;
+    }).join('');
 }
 
-// Execute the render
-renderGallery();
+// Run everything
+window.onload = initPage;
 </script>
+
+</body>
+</html>
