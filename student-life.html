@@ -1,27 +1,42 @@
+<div id="gg" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+    </div>
+
 <script>
-// Use this version ONLY if your files have NO SPACE (hero(5).jpeg)
-var galleryData = [
-  { img: "hero(5).jpeg", label: "Classroom Learning" },
-  { img: "hero(6).jpeg", label: "Student Group" },
-  { img: "hero(7).jpeg", label: "Morning Assembly" },
-  { img: "hero(8).jpeg", label: "Creative Arts" },
-  { img: "hero(9).jpeg", label: "Outdoor Play" },
-  { img: "hero(10).jpeg", label: "Campus View" },
-  { img: "hero(11).jpeg", label: "Our Students" }
+/**
+ * UPDATED FILENAMES: 
+ * I matched these exactly to your GitHub screenshot: "hero (10).jpeg"
+ * Note the SPACE between 'hero' and '(10)'.
+ */
+const galleryData = [
+  { img: "hero (10).jpeg", label: "Campus View" },
+  { img: "hero (11).jpeg", label: "Our Students" },
+  { img: "hero (12).jpeg", label: "Academic Excellence" },
+  { img: "hero (13).jpeg", label: "Learning Environment" },
+  { img: "hero (14).jpeg", label: "Student Activities" },
+  { img: "hero (15).jpeg", label: "School Community" }
 ];
 
 function renderGallery() {
   const container = document.getElementById('gg');
+  if (!container) return;
+
   container.innerHTML = galleryData.map(function(g) {
-    // This part handles the parentheses correctly for the browser
-    var fixedPath = encodeURIComponent(g.img).replace(/%2F/g, '/');
+    /** * CRITICAL FIX: encodeURIComponent converts the " " (space) to "%20" 
+     * so Vercel can find the file.
+     */
+    const encodedPath = encodeURIComponent(g.img);
     
-    return '<div class="gi">' +
-           '<div class="gi-inner" style="background:url(\'' + fixedPath + '\') center/cover no-repeat; height:300px; border-radius:15px;"></div>' +
-           '<div class="gi-label" style="padding:10px; font-weight:bold;">' + g.label + '</div>' +
-           '</div>';
+    return `
+      <div class="gi" style="background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: transform 0.3s ease;">
+        <div class="gi-inner" style="background: url('${encodedPath}') center/cover no-repeat; height: 350px;"></div>
+        <div class="gi-label" style="padding: 20px; font-family: 'Outfit', sans-serif; font-weight: 600; color: #085041; text-align: center;">
+          ${g.label}
+        </div>
+      </div>
+    `;
   }).join('');
 }
 
+// Execute the render
 renderGallery();
 </script>
