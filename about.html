@@ -6,42 +6,92 @@
 <title>About Us | God's Plan Academy Musanze</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
-    /* ... Same CSS as above ... */
-    .img-wrap{position:relative; padding-bottom:70%; overflow:hidden; border-radius:24px;}
-    .img-wrap img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--green:#1D9E75;--green-dark:#085041;--green-deeper:#04342C;--text:#1a1a1a;--muted:#555;--white:#fff;--bg:#f4f6f8;--border:rgba(0,0,0,0.08);}
+    
+    body{font-family:'Outfit',sans-serif;color:var(--text);background:var(--white);line-height:1.6;}
+    
+    /* NAVBAR */
+    .navbar{background:white;padding:0 40px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 16px rgba(0,0,0,0.08);position:sticky;top:0;z-index:500;height:72px;}
+    .nav-brand{display:flex;align-items:center;gap:11px;text-decoration:none;}
+    .brand-logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#085041,#1D9E75);display:flex;align-items:center;justify-content:center;font-size:22px;}
+    .brand-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:#085041;line-height:1.1;}
+    .brand-sub{font-size:10px;color:#555;font-weight:500;letter-spacing:.07em;text-transform:uppercase;}
+    .nav-links{display:flex;align-items:center;gap:5px;}
+    .nl{color:#1a1a1a;font-size:14px;font-weight:600;padding:8px 14px;border-radius:8px;text-decoration:none;transition:all .2s;}
+    .nl:hover, .nl.active{color:#1a56db;background:rgba(26,86,219,0.07);}
+
+    /* HERO */
+    .page-hero{background:linear-gradient(135deg,var(--green-dark),var(--green));padding:70px 40px;text-align:center;color:white;}
+    .ph-title{font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:700;}
+
+    /* ABOUT CONTENT */
     section{padding: 80px 10%;}
     .about-grid{display:grid; grid-template-columns: 1fr 1fr; gap:60px; align-items:center;}
+    .img-wrap{position:relative; padding-bottom:75%; overflow:hidden; border-radius:24px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); background: #eee;}
+    .img-wrap img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
+    
+    .story-title{font-family:'Cormorant Garamond',serif; font-size: 3rem; color: #085041; margin-bottom: 20px;}
+    .story-text{line-height: 1.8; color: #555; font-size: 1.1rem; margin-bottom: 20px;}
+
+    @media(max-width:900px){
+        .about-grid{grid-template-columns: 1fr;}
+        .navbar{padding: 0 20px;}
+        .nav-links{display:none;}
+        section{padding: 50px 20px;}
+    }
 </style>
 </head>
 <body>
-    <nav class="navbar">
-        <a class="nav-brand" href="index.html">
-            <div class="brand-logo">G</div>
-            <div><div class="brand-name">God's Plan Academy</div><div class="brand-sub">Musanze, Rwanda</div></div>
-        </a>
-        <div class="nav-links">
-            <a class="nl" href="index.html">Home</a>
-            <a class="nl active" href="about.html">About Us</a>
-            <a class="nl" href="academics.html">Academics</a>
-            <a href="student-life.html" class="nl">Student Life</a>
-        </div>
-    </nav>
 
-    <section class="main-section">
+<nav class="navbar">
+    <a class="nav-brand" href="index.html">
+        <div class="brand-logo">🌱</div>
+        <div>
+            <div class="brand-name">God's Plan Academy</div>
+            <div class="brand-sub">Nursery & Primary School</div>
+        </div>
+    </a>
+    <div class="nav-links">
+        <a class="nl" href="index.html">Home</a>
+        <a class="nl active" href="about.html">About</a>
+        <a class="nl" href="academics.html">Academics</a>
+        <a class="nl" href="student-life.html">Student Life</a>
+        <a class="nl" href="contact.html">Contact</a>
+    </div>
+</nav>
+
+<div class="page-hero">
+    <h1 class="ph-title">Our Story</h1>
+    <p>Building a foundation of faith and excellence since 2005.</p>
+</div>
+
+<section class="main-section">
     <div class="about-grid">
         <div class="reveal-left">
             <div class="img-wrap">
-                <img src="/about.jpeg" alt="Our School" />
+                <img src="/about.jpeg" alt="God's Plan Academy Campus" />
             </div>
         </div>
         <div class="reveal-right">
-            <h2 style="font-family:'Cormorant Garamond'; font-size: 3rem; color: #085041;">Our Story</h2>
-            <p style="line-height: 1.8; color: #555;">Founded with a vision to combine academic rigour with Christian values...</p>
+            <h2 class="story-title">A Vision for Excellence</h2>
+            <p class="story-text">
+                Founded with a vision to combine academic rigour with Christian values, 
+                God's Plan Academy has grown from a small community initiative into 
+                one of Musanze's most respected primary schools.
+            </p>
+            <p class="story-text">
+                Our mission is to provide a holistic education that nurtures the mind, 
+                body, and spirit of every child, preparing them to be the leaders of 
+                tomorrow in Rwanda and beyond.
+            </p>
         </div>
     </div>
-    <div class="img-wrap" style="margin-top: 40px;">
-        <img src="/about.jpeg" alt="About God's Plan Academy" />
-    </div>
 </section>
+
+<footer style="background: var(--green-deeper); color: white; padding: 40px 10%; text-align: center;">
+    <p>© 2026 God's Plan Academy. Musanze, Rwanda.</p>
+</footer>
+
 </body>
 </html>

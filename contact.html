@@ -158,6 +158,56 @@ footer{background:var(--green-deeper);color:rgba(255,255,255,0.7);padding:48px 4
 }
 </style>
 </head>
+
+
+<script>
+async function send() {
+    // 1. Get the data from your input fields
+    // Ensure your HTML inputs have these IDs: id="name", id="email", id="subject", id="message"
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const subject = document.getElementById('subject').value;
+    const message = document.getElementById('message').value;
+
+    // Basic check to make sure they filled the form
+    if (!name || !email || !message) {
+        alert("Please fill in all required fields.");
+        return;
+    }
+
+    try {
+        // 2. Send the data to your Railway Backend
+        const response = await fetch('https://gpa-backend-production-005d.up.railway.app/api/comments', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                sender_name: name,
+                sender_email: email,
+                subject: subject,
+                message: message
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            alert("Message sent successfully! Check your email soon.");
+            // Optional: Clear the form
+            document.getElementById('name').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('message').value = '';
+        } else {
+            alert("Server error: " + data.message);
+        }
+    } catch (error) {
+        console.error("Connection Error:", error);
+        alert("Could not reach the server. Make sure the backend is Online.");
+    }
+}
+</script>
+
 <body>
 <nav class="navbar" id="navbar">
   <a class="nav-brand" href="index.html" title="Go to Home Page">
