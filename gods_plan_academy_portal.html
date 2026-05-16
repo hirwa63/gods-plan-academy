@@ -492,6 +492,20 @@ tr:hover td{background:#f5fdf9;}
 // ============================================================
 
 const API_URL = window.GPA_API_URL || 'http://localhost:3000/api';
+const GPA_ADMIN_KEY = 'gpa-admin-2026';
+
+function adminHeaders() {
+  if (['admin','director'].includes(currentRole))
+    return { 'Content-Type':'application/json', 'x-admin-key': GPA_ADMIN_KEY };
+  return { 'Content-Type':'application/json' };
+}
+
+async function apiFetch(method, endpoint, body) {
+  const opts = { method, headers: adminHeaders() };
+  if (body) opts.body = JSON.stringify(body);
+  const r = await fetch(API_URL + endpoint, opts);
+  return r.json();
+}
 
 // ── Helper: get token from localStorage ──────────────────
 const getToken = () => localStorage.getItem('gpa_token');
@@ -926,6 +940,8 @@ console.log('✅ GPA portal client ready');
     <button onclick="showPage('home')" id="nav-home" class="active" data-i18n="nav_home">🏠 Home</button>
     <a href="index.html" class="school-website-link">🌐 School Website</a>
     <button onclick="showPage('results')" id="nav-results" data-i18n="nav_results">📊 Results</button>
+    <button onclick="showPage('students-public')" id="nav-students-public">👨‍🎓 Students</button>
+    <button onclick="showPage('staff-public')" id="nav-staff-public">👩‍🏫 Staff</button>
     <button onclick="showPage('fees')" id="nav-fees" data-i18n="nav_fees">💳 Fees</button>
     <button onclick="showPage('news')" id="nav-news" data-i18n="nav_news">📰 News</button>
     <button onclick="showPage('comments')" id="nav-comments" data-i18n="nav_comments">💬 Comments</button>
@@ -1409,13 +1425,13 @@ console.log('✅ GPA portal client ready');
         <div class="settings-section">
           <h4>👔 Leadership</h4>
           <p>Update director and head teacher names.</p>
-          <div class="frow"><div class="fg"><label>Director Name</label><input type="text" id="sDirector" value="Sr. Josephine Uwera"/></div><div class="fg"><label>Head Teacher</label><input type="text" id="sHeadTeacher" value="Mr. Patrick Habimana"/></div></div>
+          <div class="frow"><div class="fg"><label>Director Name</label><input type="text" id="sDirector" value="MUKIZA B GORETH"/></div><div class="fg"><label>Head Teacher</label><input type="text" id="sHeadTeacher" value="MUKIZA B GORETH"/></div></div>
         </div>
         <div class="settings-section">
           <h4>🏦 Bank Account Details</h4>
           <p>Update the school bank account shown on the fees page.</p>
           <div class="frow"><div class="fg"><label>Account Name</label><input type="text" id="sBankName" value="God's Plan Academy Ltd"/></div><div class="fg"><label>Account Number</label><input type="text" id="sBankAcc" value="00012-345678-01"/></div></div>
-          <div class="frow"><div class="fg"><label>Bank Branch</label><input type="text" id="sBankBranch" value="Musanze Branch"/></div><div class="fg"><label>SWIFT/BIC</label><input type="text" id="sBankSwift" value="BKIGRWRW"/></div></div>
+          <div class="frow"><div class="fg"><label>Bank Branch</label><input type="text" id="sBankBranch" value="Kigali Branch"/></div><div class="fg"><label>SWIFT/BIC</label><input type="text" id="sBankSwift" value="BKIGRWRW"/></div></div>
         </div>
         <div class="settings-section">
           <h4>📢 Notice Bar Message</h4>
@@ -1460,6 +1476,46 @@ console.log('✅ GPA portal client ready');
       </div>
     </div>
 
+  </div>
+</div>
+
+<!-- ===== STUDENTS BY CLASS (PUBLIC) ===== -->
+<div class="page" id="page-students-public">
+  <div class="container">
+    <div class="section-hdr">
+      <h2>👨‍🎓 Students by Class</h2>
+      <p>All enrolled students of God's Plan Academy, organized by class.</p>
+      <div class="section-line"></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
+      <input type="text" id="spSearch" placeholder="Search student name…" oninput="renderStudentsByClass()" style="flex:1;min-width:180px;padding:10px 14px;border-radius:9px;border:1.5px solid var(--border);font-family:'Nunito',sans-serif;font-size:14px;"/>
+      <select id="spClass" onchange="renderStudentsByClass()" style="padding:10px 14px;border-radius:9px;border:1.5px solid var(--border);font-family:'Nunito',sans-serif;font-size:14px;">
+        <option value="">All Classes</option>
+        <option>Baby Nursery</option><option>Pre-School</option>
+        <option>Primary 1</option><option>Primary 2</option><option>Primary 3</option>
+        <option>Primary 4</option><option>Primary 5</option><option>Primary 6</option>
+      </select>
+    </div>
+    <div id="studentsByClassContainer"></div>
+  </div>
+</div>
+
+<!-- ===== STAFF DIRECTORY (PUBLIC) ===== -->
+<div class="page" id="page-staff-public">
+  <div class="container">
+    <div class="section-hdr">
+      <h2>👩‍🏫 School Staff Directory</h2>
+      <p>Meet the dedicated team at God's Plan Academy.</p>
+      <div class="section-line"></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
+      <input type="text" id="sdSearch" placeholder="Search by name or role…" oninput="renderStaffDirectory()" style="flex:1;min-width:180px;padding:10px 14px;border-radius:9px;border:1.5px solid var(--border);font-family:'Nunito',sans-serif;font-size:14px;"/>
+      <select id="sdDept" onchange="renderStaffDirectory()" style="padding:10px 14px;border-radius:9px;border:1.5px solid var(--border);font-family:'Nunito',sans-serif;font-size:14px;">
+        <option value="">All Departments</option>
+        <option>Leadership</option><option>Teaching</option><option>Admin</option><option>Support</option>
+      </select>
+    </div>
+    <div id="staffDirectoryContainer"></div>
   </div>
 </div>
 
@@ -1565,6 +1621,8 @@ function showPage(id){
   const nb=document.getElementById('nav-'+id);
   if(nb)nb.classList.add('active');
   window.scrollTo({top:0,behavior:'smooth'});
+  if(id==='students-public'){ loadRealStudents().then(renderStudentsByClass); }
+  if(id==='staff-public'){ loadRealStaff().then(renderStaffDirectory); }
 }
 
 // ============================================================
@@ -1908,59 +1966,24 @@ async function sendContact(){
 // ============================================================
 async function loadRealStudents() {
   try {
-    const token = localStorage.getItem('gpa_token');
-    if (!token) return;
-    const resp = await fetch(`${API_URL}/students`, {
-      headers: {'Authorization': 'Bearer ' + token}
-    });
-    const result = await resp.json();
+    const result = await fetch(API_URL + '/students').then(r => r.json());
     if (result.success && result.students.length > 0) {
-      students = result.students.map(s => ({
-        reg: s.reg_number,
-        name: s.first_name + ' ' + s.last_name,
-        cls: s.class,
-        gender: s.gender || '—',
-        parent: s.parent_name || '—',
-        phone: s.parent_phone || '—',
-        status: s.fee_status || 'ok',
-        marks: {},
-        disc: {},
-        teacherRmk: '',
-        headRmk: '',
-        pos: '—'
-      }));
+      students = result.students;
       renderStu();
-      console.log('✅ Loaded ' + students.length + ' real students from database');
+      renderStudentsByClass();
     }
-  } catch(err) {
-    console.log('Using demo students:', err.message);
-  }
+  } catch(err) { console.log('Using local students:', err.message); }
 }
 
 async function loadRealStaff() {
   try {
-    const token = localStorage.getItem('gpa_token');
-    if (!token) return;
-    const resp = await fetch(`${API_URL}/staff`, {
-      headers: {'Authorization': 'Bearer ' + token}
-    });
-    const result = await resp.json();
+    const result = await fetch(API_URL + '/staff').then(r => r.json());
     if (result.success && result.staff.length > 0) {
-      staff = result.staff.map(s => ({
-        id: s.staff_id,
-        name: s.first_name + ' ' + s.last_name,
-        role: s.role,
-        dept: s.department || '—',
-        phone: s.phone || '—',
-       email: s.email || '—',
-        status: s.status || 'Active'
-      }));
+      staff = result.staff;
       renderStaff();
-      console.log('✅ Loaded ' + staff.length + ' real staff from database');
+      renderStaffDirectory();
     }
-  } catch(err) {
-    console.log('Using demo staff:', err.message);
-  }
+  } catch(err) { console.log('Using local staff:', err.message); }
 }
 
 async function loadRealNews() {
@@ -2038,7 +2061,11 @@ function setupDash(role){
   if(tabs.length)document.getElementById('sub-'+tabs[0].id).classList.add('active');
 
   buildMarkInputs();
-  if(['admin','director'].includes(role)){renderStu();renderPayments();renderStaff();renderActivityLog();}
+  if(['admin','director'].includes(role)){
+    loadRealStudents().then(()=>{renderStu();setupDash(role);});
+    loadRealStaff().then(()=>{renderStaff();});
+    renderPayments(); renderActivityLog();
+  }
   if(role==='director'){renderDirComments();renderAccounts();}
 }
 
@@ -2094,27 +2121,7 @@ function saveMarks(){
 // STUDENTS TABLE
 // ============================================================
 async function loadAndRenderStudents(){
-  const token = localStorage.getItem('gpa_token');
-  if(token){
-    try{
-      const r = await fetch(`${API_URL}/students`,{
-        headers:{'Authorization':'Bearer '+token}
-      });
-      const d = await r.json();
-      if(d.success && d.students && d.students.length > 0){
-        students = d.students.map(s=>({
-          reg:s.reg_number,
-          name:s.first_name+' '+s.last_name,
-          cls:s.class,
-          gender:s.gender||'—',
-          parent:s.parent_name||'—',
-          phone:s.parent_phone||'—',
-          status:s.fee_status||'ok',
-          marks:{},disc:{},teacherRmk:'',headRmk:'',pos:'—'
-        }));
-      }
-    }catch(e){ console.log('Using demo students'); }
-  }
+  await loadRealStudents();
   renderStu();
 }
 
@@ -2132,10 +2139,24 @@ function renderStu(){
     </td></tr>`).join('')||'<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:18px;">No students found.</td></tr>';
 }
 
-function toggleCredit(reg){const s=students.find(x=>x.reg===reg);if(s){s.status=s.status==='credit'?'ok':'credit';renderStu();}}
-function delStudent(reg){if(!confirm('Delete this student permanently?'))return;students=students.filter(s=>s.reg!==reg);loadAndRenderStudents();setupDash(currentRole);}
+async function toggleCredit(reg){
+  const s=students.find(x=>x.reg===reg);
+  if(!s) return;
+  s.status = s.status==='credit' ? 'ok' : 'credit';
+  renderStu(); renderStudentsByClass();
+  try { await apiFetch('PUT', '/students/'+reg, {status: s.status}); }
+  catch(e){ console.warn('Could not sync credit status:', e.message); }
+}
 
-function addStudent(){
+async function delStudent(reg){
+  if(!confirm('Delete this student permanently?')) return;
+  students = students.filter(s=>s.reg!==reg);
+  renderStu(); renderStudentsByClass(); setupDash(currentRole);
+  try { await apiFetch('DELETE', '/students/'+reg); }
+  catch(e){ console.warn('Could not delete from backend:', e.message); }
+}
+
+async function addStudent(){
   const reg=document.getElementById('nsFull').value.trim().toUpperCase();
   const name=document.getElementById('nsName').value.trim();
   const cls=document.getElementById('nsCls').value;
@@ -2146,34 +2167,21 @@ function addStudent(){
   hideAlert('nsErr');
   if(!reg||!name){showAlert('nsErr','⚠️ Registration number and name are required.');return;}
   if(students.find(s=>s.reg===reg)){showAlert('nsErr','❌ Student with this reg. already exists.');return;}
-  students.push({reg,name,cls,gender,parent,phone,status,marks:{},disc:{},teacherRmk:'',headRmk:'',pos:'—'});
-  closeMod('addStuMod');renderStu();
-  document.getElementById('nsFull').value='';document.getElementById('nsName').value='';
+  const student={reg,name,cls,gender,parent,phone,status,marks:{},disc:{},teacherRmk:'',headRmk:'',pos:'—'};
+  try {
+    const r = await apiFetch('POST', '/students', student);
+    if(r && !r.success){ showAlert('nsErr','❌ '+r.message); return; }
+  } catch(e){ console.warn('Could not save to backend:', e.message); }
+  students.push(student);
+  closeMod('addStuMod'); renderStu(); renderStudentsByClass(); setupDash(currentRole);
+  document.getElementById('nsFull').value=''; document.getElementById('nsName').value='';
 }
 
 // ============================================================
 // STAFF TABLE
 // ============================================================
 async function loadAndRenderStaff(){
-  const token = localStorage.getItem('gpa_token');
-  if(token){
-    try{
-      const r = await fetch(`${API_URL}/staff`,{
-        headers:{'Authorization':'Bearer '+token}
-      });
-      const d = await r.json();
-      if(d.success && d.staff && d.staff.length > 0){
-        staff = d.staff.map(s=>({
-          id:s.staff_id,
-          name:s.first_name+' '+s.last_name,
-          role:s.role,
-          dept:s.department||'—',
-          phone:s.phone||'—',
-          email:s.email||'—'
-        }));
-      }
-    }catch(e){ console.log('Using demo staff'); }
-  }
+  await loadRealStaff();
   renderStaff();
 }
 
@@ -2188,9 +2196,15 @@ function renderStaff(){
     <td><button class="btn btn-sm btn-red" onclick="delStaff('${s.id}')">🗑️ Remove</button></td></tr>`).join('')||'<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:18px;">No staff found.</td></tr>';
 }
 
-function delStaff(id){if(!confirm('Remove this staff member?'))return;staff=staff.filter(s=>s.id!==id);renderStaff();}
+async function delStaff(id){
+  if(!confirm('Remove this staff member?')) return;
+  staff = staff.filter(s=>s.id!==id);
+  renderStaff(); renderStaffDirectory();
+  try { await apiFetch('DELETE', '/staff/'+id); }
+  catch(e){ console.warn('Could not delete from backend:', e.message); }
+}
 
-function addStaff(){
+async function addStaff(){
   const id=document.getElementById('sfId').value.trim().toUpperCase();
   const name=document.getElementById('sfName').value.trim();
   const role=document.getElementById('sfRole').value;
@@ -2200,9 +2214,127 @@ function addStaff(){
   hideAlert('sfErr');
   if(!id||!name){showAlert('sfErr','⚠️ Staff ID and name are required.');return;}
   if(staff.find(s=>s.id===id)){showAlert('sfErr','❌ Staff ID already exists.');return;}
-  staff.push({id,name,role,dept,phone,email,status:'Active'});
-  closeMod('addStaffMod');renderStaff();
+  const member={id,name,role,dept,phone,email,status:'Active'};
+  try {
+    const r = await apiFetch('POST', '/staff', member);
+    if(r && !r.success){ showAlert('sfErr','❌ '+r.message); return; }
+  } catch(e){ console.warn('Could not save to backend:', e.message); }
+  staff.push(member);
+  closeMod('addStaffMod'); renderStaff(); renderStaffDirectory();
   ['sfId','sfName','sfPhone','sfEmail'].forEach(el=>document.getElementById(el).value='');
+}
+
+// ============================================================
+// STUDENTS BY CLASS — PUBLIC VIEW
+// ============================================================
+const CLASS_ORDER = ['Baby Nursery','Pre-School','Primary 1','Primary 2','Primary 3','Primary 4','Primary 5','Primary 6'];
+const CLASS_COLORS = {'Baby Nursery':'#E1F5EE','Pre-School':'#EAF3DE','Primary 1':'#E6F1FB','Primary 2':'#FAEEDA','Primary 3':'#FBEAF0','Primary 4':'#EEEDFE','Primary 5':'#E1F5EE','Primary 6':'#EAF3DE'};
+
+function renderStudentsByClass(){
+  const container = document.getElementById('studentsByClassContainer');
+  if(!container) return;
+  const q = (document.getElementById('spSearch')?.value||'').toLowerCase();
+  const filterCls = document.getElementById('spClass')?.value||'';
+  const isPriv = ['admin','director'].includes(currentRole);
+
+  const classes = filterCls ? [filterCls] : CLASS_ORDER;
+  let html = '';
+
+  classes.forEach(cls => {
+    const list = students.filter(s => s.cls === cls && (!q || s.name.toLowerCase().includes(q)));
+    const bg = CLASS_COLORS[cls]||'#f5f5f5';
+    html += `<div class="card" style="margin-bottom:16px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:38px;height:38px;border-radius:10px;background:${bg};display:flex;align-items:center;justify-content:center;font-size:18px;">🎒</div>
+          <div><div style="font-size:16px;font-weight:800;color:var(--green-dark);">${cls}</div>
+          <div style="font-size:12px;color:var(--muted);">${list.length} student${list.length!==1?'s':''} enrolled</div></div>
+        </div>
+        ${isPriv?`<button class="btn btn-green btn-sm" onclick="openMod('addStuMod')">+ Add Student</button>`:''}
+      </div>`;
+
+    if(!list.length){
+      html += `<div style="text-align:center;color:var(--muted);padding:16px;font-size:13px;">No students enrolled in ${cls} yet.</div>`;
+    } else {
+      html += `<div class="tw"><table><thead><tr>
+        ${isPriv?'<th>Reg No</th>':''}
+        <th>#</th><th>Name</th><th>Gender</th>
+        ${isPriv?'<th>Parent Phone</th><th>Fee Status</th><th>Actions</th>':''}
+      </tr></thead><tbody>`;
+      list.forEach((s,i) => {
+        html += `<tr>
+          ${isPriv?`<td><strong>${s.reg}</strong></td>`:''}
+          <td style="color:var(--muted);font-size:12px;">${i+1}</td>
+          <td><strong>${s.name}</strong></td>
+          <td>${s.gender||'—'}</td>
+          ${isPriv?`<td>${s.phone||'—'}</td>
+          <td><span class="badge ${s.status==='ok'?'bg-green':'bg-red'}">${s.status==='ok'?'✅ Paid':'⚠️ Credit'}</span></td>
+          <td style="white-space:nowrap;">
+            <button class="btn btn-sm btn-blue" onclick="toggleCredit('${s.reg}')" style="margin-right:4px;">${s.status==='credit'?'Mark Paid':'Mark Credit'}</button>
+            <button class="btn btn-sm btn-red" onclick="delStudent('${s.reg}')">🗑️</button>
+          </td>`:''}
+        </tr>`;
+      });
+      html += '</tbody></table></div>';
+    }
+    html += '</div>';
+  });
+
+  if(!html) html = '<div style="text-align:center;color:var(--muted);padding:36px;">No students found.</div>';
+  container.innerHTML = html;
+}
+
+// ============================================================
+// STAFF DIRECTORY — PUBLIC VIEW
+// ============================================================
+const DEPT_ICONS = {Leadership:'👔',Teaching:'📚',Admin:'🗂️',Support:'🔧'};
+
+function renderStaffDirectory(){
+  const container = document.getElementById('staffDirectoryContainer');
+  if(!container) return;
+  const q = (document.getElementById('sdSearch')?.value||'').toLowerCase();
+  const dept = document.getElementById('sdDept')?.value||'';
+  const isPriv = ['admin','director'].includes(currentRole);
+
+  const list = staff.filter(s =>
+    (!q || s.name.toLowerCase().includes(q) || s.role.toLowerCase().includes(q)) &&
+    (!dept || s.dept === dept)
+  );
+
+  if(!list.length){
+    container.innerHTML='<div style="text-align:center;color:var(--muted);padding:36px;font-size:14px;">No staff members found.</div>';
+    return;
+  }
+
+  const byDept = {};
+  list.forEach(s => { if(!byDept[s.dept]) byDept[s.dept] = []; byDept[s.dept].push(s); });
+
+  let html = '';
+  Object.entries(byDept).forEach(([d, members]) => {
+    html += `<div class="card" style="margin-bottom:16px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <span style="font-size:22px;">${DEPT_ICONS[d]||'👤'}</span>
+        <div style="font-size:16px;font-weight:800;color:var(--green-dark);">${d} Department</div>
+        <span class="badge bg-green" style="margin-left:auto;">${members.length} member${members.length!==1?'s':''}</span>
+        ${isPriv?`<button class="btn btn-green btn-sm" onclick="openMod('addStaffMod')">+ Add Staff</button>`:''}
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;">`;
+    members.forEach(s => {
+      const ini = s.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+      html += `<div style="background:var(--bg);border-radius:12px;padding:14px;border:1px solid var(--border);">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:var(--green-dark);color:white;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;">${ini}</div>
+          <div><div style="font-size:14px;font-weight:800;">${s.name}</div>
+          <div style="font-size:11px;color:var(--muted);">${s.role}</div></div>
+        </div>
+        ${s.phone?`<div style="font-size:12px;color:var(--muted);">📞 ${s.phone}</div>`:''}
+        ${s.email?`<div style="font-size:12px;color:var(--muted);word-break:break-all;">✉️ ${s.email}</div>`:''}
+        ${isPriv?`<div style="margin-top:8px;"><button class="btn btn-sm btn-red" onclick="delStaff('${s.id}')">🗑️ Remove</button></div>`:''}
+      </div>`;
+    });
+    html += '</div></div>';
+  });
+  container.innerHTML = html;
 }
 
 // ============================================================
