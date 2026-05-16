@@ -491,7 +491,7 @@ tr:hover td{background:#f5fdf9;}
 // This file connects the frontend to the backend
 // ============================================================
 
-const API_URL = 'https://gpa-backend-production-005d.up.railway.app/api';
+const API_URL = window.GPA_API_URL || 'http://localhost:3000/api';
 
 // ── Helper: get token from localStorage ──────────────────
 const getToken = () => localStorage.getItem('gpa_token');
@@ -1910,7 +1910,7 @@ async function loadRealStudents() {
   try {
     const token = localStorage.getItem('gpa_token');
     if (!token) return;
-    const resp = await fetch('https://gpa-backend-production-005d.up.railway.app/api/students', {
+    const resp = await fetch(`${API_URL}/students`, {
       headers: {'Authorization': 'Bearer ' + token}
     });
     const result = await resp.json();
@@ -1941,7 +1941,7 @@ async function loadRealStaff() {
   try {
     const token = localStorage.getItem('gpa_token');
     if (!token) return;
-    const resp = await fetch('https://gpa-backend-production-005d.up.railway.app/api/staff', {
+    const resp = await fetch(`${API_URL}/staff`, {
       headers: {'Authorization': 'Bearer ' + token}
     });
     const result = await resp.json();
@@ -1965,7 +1965,7 @@ async function loadRealStaff() {
 
 async function loadRealNews() {
   try {
-    const resp = await fetch('https://gpa-backend-production-005d.up.railway.app/api/news');
+    const resp = await fetch(`${API_URL}/news`);
     const result = await resp.json();
     if (result.success && result.news.length > 0) {
       news = result.news.map(n => ({
@@ -1986,7 +1986,7 @@ async function loadRealNews() {
 
 async function loadRealSettings() {
   try {
-    const resp = await fetch('https://gpa-backend-production-005d.up.railway.app/api/settings');
+    const resp = await fetch(`${API_URL}/settings`);
     const result = await resp.json();
     if (result.success) {
       const s = result.settings;
@@ -2097,7 +2097,7 @@ async function loadAndRenderStudents(){
   const token = localStorage.getItem('gpa_token');
   if(token){
     try{
-      const r = await fetch('https://gpa-backend-production-005d.up.railway.app/api/students',{
+      const r = await fetch(`${API_URL}/students`,{
         headers:{'Authorization':'Bearer '+token}
       });
       const d = await r.json();
@@ -2158,7 +2158,7 @@ async function loadAndRenderStaff(){
   const token = localStorage.getItem('gpa_token');
   if(token){
     try{
-      const r = await fetch('https://gpa-backend-production-005d.up.railway.app/api/staff',{
+      const r = await fetch(`${API_URL}/staff`,{
         headers:{'Authorization':'Bearer '+token}
       });
       const d = await r.json();
@@ -2319,7 +2319,7 @@ function recordActivity(action, details){
 
   const token = localStorage.getItem('gpa_token');
   if(token){
-    fetch('https://gpa-backend-production-005d.up.railway.app/api/activities', {
+    fetch(`${API_URL}/activities`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -2437,7 +2437,7 @@ function enterPortal(role,username,displayName){
     var token = localStorage.getItem('gpa_token');
     if(token){
       // Load students
-      fetch('https://gpa-backend-production-005d.up.railway.app/api/students', {
+      fetch(`${API_URL}/students`, {
         headers:{'Authorization':'Bearer '+token}
       }).then(function(r){return r.json();}).then(function(data){
         if(data.success && data.students && data.students.length > 0){
@@ -2459,7 +2459,7 @@ function enterPortal(role,username,displayName){
       }).catch(function(e){ console.log('Students load error:', e); });
 
       // Load staff
-      fetch('https://gpa-backend-production-005d.up.railway.app/api/staff', {
+      fetch(`${API_URL}/staff`, {
         headers:{'Authorization':'Bearer '+token}
       }).then(function(r){return r.json();}).then(function(data){
         if(data.success && data.staff && data.staff.length > 0){
@@ -2480,7 +2480,7 @@ function enterPortal(role,username,displayName){
       }).catch(function(e){ console.log('Staff load error:', e); });
 
       // Load settings
-      fetch('https://gpa-backend-production-005d.up.railway.app/api/settings')
+      fetch(`${API_URL}/settings`)
       .then(function(r){return r.json();}).then(function(data){
         if(data.success && data.settings){
           var s = data.settings;
@@ -2528,7 +2528,7 @@ async function splashLogin(){
   var btn = document.querySelector('#sform-login .btn-green');
   if(btn){ btn.textContent='Logging in...'; btn.disabled=true; }
   try {
-    var resp = await fetch('https://gpa-backend-production-005d.up.railway.app/api/auth/login', {
+    var resp = await fetch(`${API_URL}/auth/login`, {
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({login:id, password:pass})
