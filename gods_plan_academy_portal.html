@@ -1576,9 +1576,14 @@ function pickRegLang(l){
 }
 
 function pickRegRole(r){
-  regRole=r;
-  document.querySelectorAll('.rbtn').forEach(b=>b.classList.remove('sel'));
-  document.getElementById('rr-'+r).classList.add('sel');
+  // Unified role picker: update both splash (`sr-`) and register (`rr-`) controls
+  regRole = r;
+  ['parent','student','teacher','staff'].forEach(x=>{
+    const a = document.getElementById('sr-'+x);
+    const b = document.getElementById('rr-'+x);
+    if(a) a.classList.toggle('sel', x === r);
+    if(b) b.classList.toggle('sel', x === r);
+  });
 }
 
 function doLogin(){
@@ -1640,10 +1645,22 @@ function doForgot(){
 }
 
 function logout(){
-  currentUser=null;currentRole=null;
+  // Unified logout: clear session, show splash when available, otherwise go home
+  currentUser=null; currentRole=null;
   document.getElementById('navUserInfo').style.display='none';
   document.getElementById('nav-login').style.display='inline-block';
-  showPage('home');
+  const splash = document.getElementById('splashScreen');
+  if(splash){
+    // show splash screen
+    splash.style.display = 'flex'; splash.style.opacity = '0';
+    setTimeout(()=>{ splash.style.transition='opacity .4s ease'; splash.style.opacity='1'; }, 10);
+    document.getElementById('sLoginId') && (document.getElementById('sLoginId').value='');
+    document.getElementById('sLoginPass') && (document.getElementById('sLoginPass').value='');
+    hideAlert('sLoginErr'); switchSplashTab('login');
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  } else {
+    showPage('home');
+  }
 }
 
 // ============================================================
@@ -2471,27 +2488,7 @@ function splashForgot(){
   if(!acc){showAlert('sForgotErr','❌ No account found. Contact school office.');return;}
   showAlert('sForgotSuc',`✅ Reset code sent to ${acc.email}. (Demo: your password is "${acc.password}")`);
 }
-
-function pickRegRole(r){
-  regRole=r;
-  ['parent','student','teacher','staff'].forEach(x=>{
-    document.getElementById('sr-'+x)?.classList.toggle('sel',x===r);
-    document.getElementById('rr-'+x)?.classList.toggle('sel',x===r);
-  });
-}
-
-function logout(){
-  currentUser=null;currentRole=null;
-  document.getElementById('navUserInfo').style.display='none';
-  document.getElementById('nav-login').style.display='inline-block';
-  const splash=document.getElementById('splashScreen');
-  splash.style.display='flex';splash.style.opacity='0';
-  setTimeout(()=>{splash.style.transition='opacity .4s ease';splash.style.opacity='1';},10);
-  document.getElementById('sLoginId').value='';
-  document.getElementById('sLoginPass').value='';
-  hideAlert('sLoginErr');switchSplashTab('login');
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-}
+ 
 
 </script>
 </body>
