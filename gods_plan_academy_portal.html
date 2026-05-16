@@ -783,7 +783,7 @@ window.GPA = {
   isLoggedIn: Auth.isLoggedIn
 };
 
-console.log('✅ GPA API loaded — God\'s Plan Academy Backend Connected');
+console.log('✅ GPA portal client ready');
 
 
 })();
@@ -974,7 +974,7 @@ console.log('✅ GPA API loaded — God\'s Plan Academy Backend Connected');
         <div class="price-tag" data-i18n="res_price">100 RWF to view marks & report</div>
         <div class="momo-box" style="text-align:left;">
           <strong data-i18n="res_pay_how">📱 How to pay 100 RWF</strong>
-          <span data-i18n="res_pay_steps">Dial <strong>*182*8*1*0788000000*100#</strong> on your MTN<br/>OR MTN MoMo App → Send → <strong>+250 788 000 000</strong><br/><em>Save your transaction code to enter below.</em></span>
+          <span data-i18n="res_pay_steps">Dial <strong>*182*8*1*0785285758*100#</strong> on your MTN<br/>OR MTN MoMo App → Send → <strong>0785285758</strong><br/><em>Save your transaction code to enter below.</em></span>
         </div>
         <div class="fg"><label data-i18n="res_reg_lbl">Student Registration Number</label><input type="text" id="resReg" placeholder="GPA-2026-001" oninput="checkCredit()"/></div>
         <div class="credit-warn" id="creditWarn"><h4 data-i18n="credit_title">🚫 Results Locked — Outstanding Fees</h4><p data-i18n="credit_desc">Fees not paid. <button onclick="showPage('fees')" style="background:none;border:none;color:var(--red);font-weight:800;cursor:pointer;text-decoration:underline;" data-i18n="credit_link">Pay fees online →</button></p></div>
@@ -1047,8 +1047,8 @@ console.log('✅ GPA API loaded — God\'s Plan Academy Backend Connected');
           <!-- MTN -->
           <div id="pi-mtn" class="momo-box">
             <strong>📱 MTN Mobile Money</strong>
-            Dial: <strong>*182*8*1*0788000000*[AMOUNT]#</strong><br/>
-            Or App → Pay → <strong>+250 788 000 000</strong><br/>
+            Dial: <strong>*182*8*1*0785285758*[AMOUNT]#</strong><br/>
+            Or App → Pay → <strong>0785285758</strong><br/>
             Account: <strong>God's Plan Academy</strong>
           </div>
           <!-- AIRTEL -->
@@ -1162,17 +1162,17 @@ console.log('✅ GPA API loaded — God\'s Plan Academy Backend Connected');
       <div>
         <div class="card">
           <div class="card-title" data-i18n="contact_info_title">School Contact Information</div>
-          <div class="cinfo-item"><div class="cicon">📍</div><div><div class="clabel" data-i18n="contact_address_lbl">Address</div><div class="cval" id="settAddress">14 School Lane, Musanze, Northern Province, Rwanda</div></div></div>
-          <div class="cinfo-item"><div class="cicon">📞</div><div><div class="clabel" data-i18n="contact_phone_lbl">Phone</div><div class="cval" id="settPhone">+250 788 000 000</div></div></div>
-          <div class="cinfo-item"><div class="cicon">💬</div><div><div class="clabel">WhatsApp</div><div class="cval" id="settWhatsapp">+250 788 000 001</div></div></div>
-          <div class="cinfo-item"><div class="cicon">✉️</div><div><div class="clabel" data-i18n="contact_email_lbl">Email</div><div class="cval" id="settEmail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3950575f56795e565d4a49555857585a585d5c5440174b4e">[email&#160;protected]</a></div></div></div>
-          <div class="cinfo-item"><div class="cicon">✉️</div><div><div class="clabel" data-i18n="contact_admin_email_lbl">Admin Email</div><div class="cval" id="settAdminEmail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a0c9cec6cfe0c7cfc4d3d0ccc1cec1c3c1c4c5cdd98ed2d7">[email&#160;protected]</a></div></div></div>
-          <div class="cinfo-item"><div class="cicon">🕐</div><div><div class="clabel" data-i18n="contact_hours_lbl">Office Hours</div><div class="cval" id="settHours">Monday – Friday: 7:00am – 5:00pm</div></div></div>
+          <div class="cinfo-item"><div class="cicon">📍</div><div><div class="clabel" data-i18n="contact_address_lbl">Address</div><div class="cval" id="settAddress">Gasabo, Kigali, Rwanda</div></div></div>
+          <div class="cinfo-item"><div class="cicon">📞</div><div><div class="clabel" data-i18n="contact_phone_lbl">Phone</div><div class="cval" id="settPhone">0785285758</div></div></div>
+          <div class="cinfo-item"><div class="cicon">💬</div><div><div class="clabel">WhatsApp</div><div class="cval" id="settWhatsapp">0793736343</div></div></div>
+          <div class="cinfo-item"><div class="cicon">✉️</div><div><div class="clabel" data-i18n="contact_email_lbl">Email</div><div class="cval" id="settEmail"><a href="mailto:hirwaolivier63@gmail.com">hirwaolivier63@gmail.com</a></div></div></div>
+          <div class="cinfo-item"><div class="cicon">✉️</div><div><div class="clabel" data-i18n="contact_admin_email_lbl">Admin Email</div><div class="cval" id="settAdminEmail"><a href="mailto:hirwaolivier63@gmail.com">hirwaolivier63@gmail.com</a></div></div></div>
+          <div class="cinfo-item"><div class="cicon">🕐</div><div><div class="clabel" data-i18n="contact_hours_lbl">Office Hours</div><div class="cval" id="settHours">Mon–Fri: 8:00–17:00</div></div></div>
         </div>
         <div class="card">
           <div class="card-title" data-i18n="contact_director_title">🏫 School Leadership</div>
-          <div class="cinfo-item"><div class="cicon">👔</div><div><div class="clabel" data-i18n="contact_director_lbl">Director</div><div class="cval" id="settDirector">Sr. Josephine Uwera</div></div></div>
-          <div class="cinfo-item"><div class="cicon">👩‍🏫</div><div><div class="clabel" data-i18n="contact_headteacher_lbl">Head Teacher</div><div class="cval" id="settHeadTeacher">Mr. Patrick Habimana</div></div></div>
+          <div class="cinfo-item"><div class="cicon">👔</div><div><div class="clabel" data-i18n="contact_director_lbl">Director</div><div class="cval" id="settDirector">MUKIZA B GORETH</div></div></div>
+          <div class="cinfo-item"><div class="cicon">👩‍🏫</div><div><div class="clabel" data-i18n="contact_headteacher_lbl">Head Teacher</div><div class="cval" id="settHeadTeacher">MUKIZA B GORETH</div></div></div>
         </div>
       </div>
       <div>
@@ -1289,7 +1289,7 @@ console.log('✅ GPA API loaded — God\'s Plan Academy Backend Connected');
           <div id="forgotErr" class="alert a-error"></div>
           <div id="forgotSuc" class="alert a-success"></div>
           <button class="btn btn-amber btn-block" onclick="doForgot()" data-i18n="forgot_btn">📧 Send Reset Code</button>
-          <div style="margin-top:14px;font-size:12px;color:var(--muted);text-align:center;line-height:1.7;" data-i18n="forgot_contact_hint">If you don't receive a reset code, contact the school at <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e1888f878ea1868e8592918d808f80828085848c98cf9396">[email&#160;protected]</a></strong> or call <strong>+250 788 000 000</strong>.</div>
+          <div style="margin-top:14px;font-size:12px;color:var(--muted);text-align:center;line-height:1.7;" data-i18n="forgot_contact_hint">If you don't receive a reset code, contact the school at <strong><a href="mailto:hirwaolivier63@gmail.com">hirwaolivier63@gmail.com</a></strong> or call <strong>0785285758</strong>.</div>
         </div>
       </div>
     </div>
@@ -1401,7 +1401,7 @@ console.log('✅ GPA API loaded — God\'s Plan Academy Backend Connected');
         <div class="settings-section">
           <h4>📍 Contact Information</h4>
           <p>Update the school's address, phone, and email displayed on the portal.</p>
-          <div class="frow"><div class="fg"><label>School Phone</label><input type="text" id="sPhone" value="+250 788 000 000"/></div><div class="fg"><label>WhatsApp</label><input type="text" id="sWhatsapp" value="+250 788 000 001"/></div></div>
+          <div class="frow"><div class="fg"><label>School Phone</label><input type="text" id="sPhone" value="0785285758"/></div><div class="fg"><label>WhatsApp</label><input type="text" id="sWhatsapp" value="0793736343"/></div></div>
           <div class="frow"><div class="fg"><label>School Email</label><input type="email" id="sEmail" value="info@godsplanacademy.rw"/></div><div class="fg"><label>Admin Email</label><input type="email" id="sAdminEmail" value="admin@godsplanacademy.rw"/></div></div>
           <div class="fg"><label>School Address</label><input type="text" id="sAddress" value="14 School Lane, Musanze, Northern Province, Rwanda"/></div>
           <div class="fg"><label>Office Hours</label><input type="text" id="sHours" value="Monday – Friday: 7:00am – 5:00pm"/></div>
@@ -1535,7 +1535,7 @@ let galleryItems=[
 
 let comments=[];
 let accounts=[];
-let settings={phone:'+250 788 000 000',whatsapp:'+250 788 000 001',email:'info@godsplanacademy.rw',adminEmail:'admin@godsplanacademy.rw',address:'14 School Lane, Musanze, Northern Province, Rwanda',hours:'Monday – Friday: 7:00am – 5:00pm',director:'Sr. Josephine Uwera',headTeacher:'Mr. Patrick Habimana',bankName:"God's Plan Academy Ltd",bankAcc:'00012-345678-01',bankBranch:'Musanze Branch',bankSwift:'BKIGRWRW',notice:'📢 Term 2 2026 — School fees are due by April 28, 2026. Pay online now to avoid delays.'};
+let settings={phone:'0785285758',whatsapp:'0793736343',email:'hirwaolivier63@gmail.com',adminEmail:'hirwaolivier63@gmail.com',address:'Gasabo, Kigali, Rwanda',hours:'Mon–Fri: 8:00–17:00',director:'MUKIZA B GORETH',headTeacher:'MUKIZA B GORETH',bankName:"God's Plan Academy Ltd",bankAcc:'00012-345678-01',bankBranch:'Musanze Branch',bankSwift:'BKIGRWRW',notice:'📢 Term 2 2026 — School fees are due by April 28, 2026. Pay online now to avoid delays.'};
 
 const LOGINS={admin:{pass:'gpa2026',role:'admin'},director:{pass:'gpa999',role:'director'},teacher:{pass:'gpa123',role:'teacher'},parent:{pass:'mypwd',role:'parent'}};
 let currentUser=null;
@@ -1864,14 +1864,23 @@ function renderComments(){
 // ============================================================
 // CONTACT
 // ============================================================
-function sendContact(){
+async function sendContact(){
   const name=document.getElementById('ctcName').value.trim();
   const email=document.getElementById('ctcEmail').value.trim();
+  const phone=document.getElementById('ctcPhone').value.trim();
+  const subject=document.getElementById('ctcSubject').value.trim();
   const msg=document.getElementById('ctcMsg').value.trim();
   hideAlert('ctcErr');hideAlert('ctcSuc');
   if(!name||!email||!msg){showAlert('ctcErr','⚠️ Please fill in name, email and message.');return;}
-  showAlert('ctcSuc',`✅ Message sent! We'll reply to ${email} within 24 hours. Thank you, ${name}!`);
-  ['ctcName','ctcEmail','ctcPhone','ctcMsg'].forEach(id=>document.getElementById(id).value='');
+  try {
+    if(window.GPA && window.GPA.Comments && typeof window.GPA.Comments.send === 'function'){
+      await window.GPA.Comments.send(name, 'visitor', subject || 'General enquiry', msg);
+    }
+    showAlert('ctcSuc',`✅ Message sent! We'll reply to ${email} within 24 hours. Thank you, ${name}!`);
+    ['ctcName','ctcEmail','ctcPhone','ctcSubject','ctcMsg'].forEach(id=>document.getElementById(id).value='');
+  } catch(err){
+    showAlert('ctcErr','❌ Unable to submit the contact form. Please try again later.');
+  }
 }
 
 // ============================================================
@@ -2457,7 +2466,7 @@ async function splashLogin(){
     if(found&&found.pass===pass){ enterPortal(found.role,id,id); return; }
     var acc=accounts.find(function(a){ return a.username===id||a.email===id; });
     if(acc&&acc.password===pass){ splashLangChoice=acc.lang||splashLangChoice; enterPortal(acc.role,acc.username,acc.firstName); return; }
-    showAlert('sLoginErr','Cannot connect to server. Please check your internet.');
+    showAlert('sLoginErr','Login is unavailable right now. Use a demo account or try again later.');
     if(btn){ btn.textContent='Login →'; btn.disabled=false; }
   }
 }
