@@ -1,1 +1,11 @@
-[]
+[
+  {
+    "id": "1778948500247",
+    "sender_name": "Test Parent",
+    "sender_email": "testparent@example.com",
+    "sender_role": "parent",
+    "subject": "Contact Form Test",
+    "message": "Hello, this is a test from the contact form on the website. If you see this email, the contact form is working!",
+    "received_at": "2026-05-16T16:21:40.248Z"
+  }
+]

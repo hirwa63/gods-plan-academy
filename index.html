@@ -247,6 +247,16 @@ footer{background:var(--green-deeper);color:rgba(255,255,255,0.7);padding:60px 4
   .nav-links{display:none;}
   .hamburger{display:flex;}
 }
+/* ANNOUNCEMENT PREVIEW CARDS */
+.ann-prev-card{background:white;border-radius:14px;border:1px solid var(--border);overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.05);transition:transform .25s,box-shadow .25s;cursor:pointer;text-decoration:none;display:block;}
+.ann-prev-card:hover{transform:translateY(-4px);box-shadow:0 10px 24px rgba(0,0,0,0.1);}
+.ann-prev-thumb{height:80px;display:flex;align-items:center;justify-content:center;font-size:30px;}
+.ann-prev-body{padding:16px;}
+.ann-prev-cat{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;padding:2px 8px;border-radius:20px;display:inline-block;}
+.ann-prev-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--green-dark);margin-bottom:5px;line-height:1.3;}
+.ann-prev-text{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:10px;}
+.ann-prev-date{font-size:11px;color:var(--muted);}
+
 @media(max-width:600px){
   .brand-name{font-size:15px;}
   .brand-sub{display:none;}
@@ -283,6 +293,7 @@ footer{background:var(--green-deeper);color:rgba(255,255,255,0.7);padding:60px 4
     <a class="nl" href="about.html">About</a>
     <a class="nl" href="academics.html">Academics</a>
     <a class="nl" href="student-life.html">Student Life</a>
+    <a class="nl" href="announcements.html">📢 Announcements</a>
     <a class="nl" href="contact.html">Contact Us</a>
   </div>
   <div class="nav-right">
@@ -299,6 +310,7 @@ footer{background:var(--green-deeper);color:rgba(255,255,255,0.7);padding:60px 4
   <a class="mob-link" href="about.html">About</a>
   <a class="mob-link" href="academics.html">Academics</a>
   <a class="mob-link" href="student-life.html">Student Life</a>
+  <a class="mob-link" href="announcements.html">📢 Announcements</a>
   <a class="mob-link" href="contact.html">Contact Us</a>
   <a class="mob-link" href="gods_plan_academy_portal.html" style="color:#1a56db;font-weight:800;border-top:2px solid #1a56db;margin-top:8px;">📊 Student Portal →</a>
 </div>
@@ -403,6 +415,23 @@ footer{background:var(--green-deeper);color:rgba(255,255,255,0.7);padding:60px 4
   </div>
 </section>
 
+<!-- ANNOUNCEMENTS PREVIEW -->
+<section class="section">
+  <div class="container">
+    <div class="reveal" style="text-align:center;margin-bottom:10px;">
+      <div class="sec-label" style="justify-content:center;">📢 Latest Updates</div>
+      <h2 class="sec-title" style="text-align:center;">School Announcements</h2>
+      <p style="color:var(--muted);font-size:15px;font-weight:300;max-width:520px;margin:0 auto 28px;">Important notices, exam schedules, parent meetings and school events.</p>
+    </div>
+    <div id="homeAnnouncements" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px;min-height:80px;">
+      <div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--muted);font-size:14px;">Loading announcements…</div>
+    </div>
+    <div style="text-align:center;margin-top:28px;">
+      <a href="announcements.html" style="display:inline-block;background:var(--green-dark);color:white;padding:12px 28px;border-radius:9px;font-size:14px;font-weight:700;text-decoration:none;transition:all .2s;">📢 View All Announcements →</a>
+    </div>
+  </div>
+</section>
+
 <!-- TESTIMONIALS -->
 <section class="section section-alt">
   <div class="container">
@@ -489,6 +518,39 @@ window.addEventListener('scroll', () => {
   });
 });
 setTimeout(() => window.dispatchEvent(new Event('scroll')), 120);
+
+// ── Load live announcements ──────────────────────────────────
+const ANN_BG  = {general:'#E1F5EE',exam:'#FAEEDA',meeting:'#E6F1FB',event:'#EEEDFE',report:'#FBEAF0',notice:'#EAF3DE'};
+const ANN_IC  = {general:'📋',exam:'📝',meeting:'👪',event:'🎉',report:'📊',notice:'📌'};
+const ANN_LBL = {general:'General',exam:'Exam',meeting:'Meeting',event:'Event',report:'Report Card',notice:'Notice'};
+const ANN_TC  = {general:'#085041',exam:'#633806',meeting:'#042C53',event:'#26215C',report:'#501313',notice:'#173404'};
+(async function loadHomeAnn() {
+  const con = document.getElementById('homeAnnouncements');
+  if (!con) return;
+  try {
+    const r = await fetch('http://localhost:3000/api/announcements');
+    const d = await r.json();
+    const list = (d.announcements || []).filter(a => a.status === 'published').slice(0, 3);
+    if (!list.length) {
+      con.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:28px;color:#777;font-size:14px;">No announcements at this time. Check back soon.</div>';
+      return;
+    }
+    con.innerHTML = list.map(a => `
+      <a href="announcements.html" class="ann-prev-card">
+        <div class="ann-prev-thumb" style="background:${ANN_BG[a.category]||'#f5f5f5'};">
+          ${a.image ? `<img src="${a.image}" style="width:100%;height:80px;object-fit:cover;" alt="${a.title}"/>` : ANN_IC[a.category]||'📋'}
+        </div>
+        <div class="ann-prev-body">
+          <span class="ann-prev-cat" style="background:${ANN_BG[a.category]||'#eee'};color:${ANN_TC[a.category]||'#333'};">${ANN_LBL[a.category]||a.category}</span>
+          <div class="ann-prev-title">${a.pinned?'📌 ':''}${a.title}</div>
+          <div class="ann-prev-text">${(a.content||'').slice(0,90)}${(a.content||'').length>90?'…':''}</div>
+          <div class="ann-prev-date">📅 ${new Date(a.publishDate).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}</div>
+        </div>
+      </a>`).join('');
+  } catch(e) {
+    con.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:20px;color:#777;font-size:13px;">Could not load announcements (server may be offline).</div>';
+  }
+})();
 </script>
 <script>
 if ('serviceWorker' in navigator) {

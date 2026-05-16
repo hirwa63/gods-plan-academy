@@ -1384,6 +1384,46 @@ console.log('✅ GPA portal client ready');
       </div>
     </div>
 
+    <!-- ANNOUNCEMENTS MANAGEMENT -->
+    <div class="asub" id="sub-announcements">
+      <div class="container" style="padding:0;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:18px;">
+          <div><div class="card-title" style="font-size:19px;">📢 Announcements</div><div class="card-sub" style="margin-bottom:0;">Publish notices, exam dates, events and parent meeting info.</div></div>
+          <button class="btn btn-green" onclick="openMod('annMod')">+ New Announcement</button>
+        </div>
+        <!-- Stats row -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:18px;" id="annStats"></div>
+        <!-- Filter -->
+        <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
+          <input type="text" id="annSearch" placeholder="Search…" oninput="renderAnnouncements()" style="flex:1;min-width:140px;padding:9px 12px;border-radius:8px;border:1.5px solid var(--border);font-family:'Nunito',sans-serif;font-size:13px;"/>
+          <select id="annStatusFilter" onchange="renderAnnouncements()" style="padding:9px 12px;border-radius:8px;border:1.5px solid var(--border);font-family:'Nunito',sans-serif;font-size:13px;">
+            <option value="">All Status</option><option>published</option><option>scheduled</option><option>archived</option><option>draft</option>
+          </select>
+          <select id="annCatFilter" onchange="renderAnnouncements()" style="padding:9px 12px;border-radius:8px;border:1.5px solid var(--border);font-family:'Nunito',sans-serif;font-size:13px;">
+            <option value="">All Categories</option><option>general</option><option>exam</option><option>meeting</option><option>event</option><option>report</option><option>notice</option>
+          </select>
+        </div>
+        <div class="tw"><table><thead><tr><th>Title</th><th>Category</th><th>Status</th><th>Published</th><th>Expires</th><th>Pinned</th><th>Actions</th></tr></thead><tbody id="annTBody"></tbody></table></div>
+      </div>
+    </div>
+
+    <!-- GALLERY MANAGEMENT -->
+    <div class="asub" id="sub-gallery-admin">
+      <div class="container" style="padding:0;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:18px;">
+          <div><div class="card-title" style="font-size:19px;">🖼️ Gallery & Daily Posts</div><div class="card-sub" style="margin-bottom:0;">Upload photos from activities, trips, events and daily school life.</div></div>
+          <button class="btn btn-green" onclick="openMod('galMod')">+ Upload Post</button>
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
+          <input type="text" id="galSearch" placeholder="Search posts…" oninput="renderGalleryAdmin()" style="flex:1;min-width:140px;padding:9px 12px;border-radius:8px;border:1.5px solid var(--border);font-family:'Nunito',sans-serif;font-size:13px;"/>
+          <select id="galCatFilter" onchange="renderGalleryAdmin()" style="padding:9px 12px;border-radius:8px;border:1.5px solid var(--border);font-family:'Nunito',sans-serif;font-size:13px;">
+            <option value="">All Categories</option><option>general</option><option>sports</option><option>trip</option><option>ceremony</option><option>daily</option><option>event</option>
+          </select>
+        </div>
+        <div id="galGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;"></div>
+      </div>
+    </div>
+
     <!-- PAYMENTS LOG -->
     <div class="asub" id="sub-payments">
       <div class="card">
@@ -1520,6 +1560,83 @@ console.log('✅ GPA portal client ready');
 </div>
 
 <!-- ===== MODALS ===== -->
+<!-- ANNOUNCEMENT MODAL -->
+<div class="mbg" id="annMod">
+  <div class="modal">
+    <button class="modal-close" onclick="closeMod('annMod')">✕</button>
+    <h3 id="annModTitle">New Announcement</h3><div class="modal-sub">Publish a notice to the school website.</div>
+    <input type="hidden" id="annEditId"/>
+    <div class="fg"><label>Title *</label><input type="text" id="annTitle" placeholder="e.g. Parent Meeting – Term 3"/></div>
+    <div class="frow">
+      <div class="fg"><label>Category</label>
+        <select id="annCategory">
+          <option value="general">📋 General</option><option value="exam">📝 Exam</option>
+          <option value="meeting">👪 Parent Meeting</option><option value="event">🎉 Event</option>
+          <option value="report">📊 Report Card</option><option value="notice">📌 Notice</option>
+        </select>
+      </div>
+      <div class="fg"><label>Status</label>
+        <select id="annStatus">
+          <option value="published">✅ Publish Now</option>
+          <option value="scheduled">⏰ Schedule</option>
+          <option value="draft">📝 Save as Draft</option>
+        </select>
+      </div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label>Publish Date</label><input type="datetime-local" id="annPublishDate"/></div>
+      <div class="fg"><label>Expiry Date (optional)</label><input type="datetime-local" id="annExpiryDate"/></div>
+    </div>
+    <div class="fg"><label>Content / Message *</label><textarea id="annContent" style="height:120px;" placeholder="Write the full announcement here…"></textarea></div>
+    <div class="fg"><label>Image (optional)</label><input type="file" id="annImage" accept="image/*" style="padding:8px;"/></div>
+    <div class="fg" style="display:flex;align-items:center;gap:10px;">
+      <input type="checkbox" id="annPinned" style="width:18px;height:18px;cursor:pointer;"/>
+      <label for="annPinned" style="font-size:13px;font-weight:700;cursor:pointer;">📌 Pin this announcement at the top</label>
+    </div>
+    <div id="annErr" class="alert a-error"></div>
+    <div id="annSuc" class="alert a-success"></div>
+    <button class="btn btn-green btn-block" onclick="saveAnnouncement()">📢 Publish Announcement</button>
+  </div>
+</div>
+
+<!-- GALLERY POST MODAL -->
+<div class="mbg" id="galMod">
+  <div class="modal">
+    <button class="modal-close" onclick="closeMod('galMod')">✕</button>
+    <h3 id="galModTitle">Upload Gallery Post</h3><div class="modal-sub">Share photos from school activities and daily life.</div>
+    <input type="hidden" id="galEditId"/>
+    <div class="fg"><label>Post Title *</label><input type="text" id="galTitle" placeholder="e.g. Sports Day 2026 Highlights"/></div>
+    <div class="fg"><label>Category</label>
+      <select id="galCategory">
+        <option value="general">📋 General</option><option value="sports">⚽ Sports</option>
+        <option value="trip">✈️ Trip</option><option value="ceremony">🎓 Ceremony</option>
+        <option value="daily">📅 Daily Life</option><option value="event">🎉 Event</option>
+      </select>
+    </div>
+    <div class="fg"><label>Caption / Description</label><textarea id="galCaption" style="height:80px;" placeholder="Describe what's happening in the photo…"></textarea></div>
+    <div class="fg"><label>Image *</label><input type="file" id="galImage" accept="image/*" style="padding:8px;"/></div>
+    <div id="galErr" class="alert a-error"></div>
+    <div id="galSuc" class="alert a-success"></div>
+    <button class="btn btn-green btn-block" onclick="saveGalleryPost()">🖼️ Upload Post</button>
+  </div>
+</div>
+
+<!-- GALLERY COMMENTS VIEW MODAL -->
+<div class="mbg" id="galCommentsMod">
+  <div class="modal" style="max-width:520px;">
+    <button class="modal-close" onclick="closeMod('galCommentsMod')">✕</button>
+    <h3 id="galCommentsTitle">Comments</h3>
+    <div class="modal-sub" id="galCommentsPostTitle"></div>
+    <div id="galCommentsList" style="max-height:280px;overflow-y:auto;margin:12px 0;"></div>
+    <div style="border-top:1px solid var(--border);padding-top:12px;">
+      <div class="fg"><label>Your Name</label><input type="text" id="galCommentName" placeholder="Your name"/></div>
+      <div class="fg"><label>Comment</label><textarea id="galCommentText" style="height:70px;" placeholder="Write a comment…"></textarea></div>
+      <div id="galCommentErr" class="alert a-error"></div>
+      <button class="btn btn-green btn-block" onclick="submitGalleryComment()">💬 Post Comment</button>
+    </div>
+  </div>
+</div>
+
 <div class="mbg" id="addStuMod">
   <div class="modal">
     <button class="modal-close" onclick="closeMod('addStuMod')">✕</button>
@@ -1623,6 +1740,8 @@ function showPage(id){
   window.scrollTo({top:0,behavior:'smooth'});
   if(id==='students-public'){ loadRealStudents().then(renderStudentsByClass); }
   if(id==='staff-public'){ loadRealStaff().then(renderStaffDirectory); }
+  if(id==='announcements'){ loadAnnouncements(); }
+  if(id==='gallery-public'){ loadGalleryPublic(); }
 }
 
 // ============================================================
@@ -2051,8 +2170,8 @@ function setupDash(role){
 
   const tabsMap={
     teacher:[{id:'marks',label:'📝 Post Marks'}],
-    admin:[{id:'marks',label:'📝 Marks'},{id:'students',label:'👨‍🎓 Students'},{id:'staff',label:'👩‍🏫 Staff'},{id:'payments',label:'💳 Payments'},{id:'activity',label:'📌 Activity'},{id:'news',label:'📰 News'},{id:'settings',label:'⚙️ Settings'}],
-    director:[{id:'marks',label:'📝 Marks'},{id:'students',label:'👨‍🎓 Students'},{id:'staff',label:'👩‍🏫 Staff'},{id:'payments',label:'💳 Payments'},{id:'activity',label:'📌 Activity'},{id:'news',label:'📰 News'},{id:'comments-admin',label:'💬 Messages'},{id:'settings',label:'⚙️ Settings'}],
+    admin:[{id:'marks',label:'📝 Marks'},{id:'students',label:'👨‍🎓 Students'},{id:'staff',label:'👩‍🏫 Staff'},{id:'announcements',label:'📢 Announcements'},{id:'gallery-admin',label:'🖼️ Gallery'},{id:'payments',label:'💳 Payments'},{id:'activity',label:'📌 Activity'},{id:'news',label:'📰 News'},{id:'settings',label:'⚙️ Settings'}],
+    director:[{id:'marks',label:'📝 Marks'},{id:'students',label:'👨‍🎓 Students'},{id:'staff',label:'👩‍🏫 Staff'},{id:'announcements',label:'📢 Announcements'},{id:'gallery-admin',label:'🖼️ Gallery'},{id:'payments',label:'💳 Payments'},{id:'activity',label:'📌 Activity'},{id:'news',label:'📰 News'},{id:'comments-admin',label:'💬 Messages'},{id:'settings',label:'⚙️ Settings'}],
     parent:[{id:'marks',label:'📊 Check Results'}],
   };
   const tabs=tabsMap[role]||[];
@@ -2065,6 +2184,8 @@ function setupDash(role){
     renderStu(); renderStaff(); renderPayments(); renderActivityLog();
     loadRealStudents();
     loadRealStaff();
+    loadAnnouncements();
+    loadGalleryAdmin();
   }
   if(role==='director'){renderDirComments();renderAccounts();}
 }
@@ -2222,6 +2343,291 @@ async function addStaff(){
   staff.push(member);
   closeMod('addStaffMod'); renderStaff(); renderStaffDirectory();
   ['sfId','sfName','sfPhone','sfEmail'].forEach(el=>document.getElementById(el).value='');
+}
+
+// ============================================================
+// ANNOUNCEMENTS MANAGEMENT
+// ============================================================
+let announcements = [];
+const ANN_CAT_ICONS  = {general:'📋',exam:'📝',meeting:'👪',event:'🎉',report:'📊',notice:'📌'};
+const ANN_CAT_LABELS = {general:'General',exam:'Exam',meeting:'Meeting',event:'Event',report:'Report Card',notice:'Notice'};
+const ANN_STATUS_BADGE = {published:'bg-green',scheduled:'bg-amber',archived:'bg-purple',draft:'bg-blue'};
+
+async function loadAnnouncements() {
+  try {
+    const r = await fetch(API_URL + '/announcements', { headers: { 'x-admin-key': GPA_ADMIN_KEY } });
+    const d = await r.json();
+    if (d.success) announcements = d.announcements;
+    renderAnnouncements();
+    updateAnnStats();
+  } catch(e) { console.warn('Could not load announcements:', e.message); }
+}
+
+function updateAnnStats() {
+  const pub  = announcements.filter(a => a.status === 'published').length;
+  const sch  = announcements.filter(a => a.status === 'scheduled').length;
+  const arch = announcements.filter(a => a.status === 'archived').length;
+  const el   = document.getElementById('annStats');
+  if (!el) return;
+  el.innerHTML = [
+    {n: announcements.length, l:'Total', c:'bg-green'},
+    {n: pub,  l:'Published', c:'bg-green'},
+    {n: sch,  l:'Scheduled', c:'bg-amber'},
+    {n: arch, l:'Archived',  c:'bg-purple'}
+  ].map(s=>`<div class="card" style="text-align:center;padding:14px;"><div style="font-size:24px;font-weight:800;color:var(--green-dark);">${s.n}</div><div style="font-size:11px;color:var(--muted);font-weight:700;">${s.l}</div></div>`).join('');
+}
+
+function renderAnnouncements() {
+  const tb = document.getElementById('annTBody');
+  if (!tb) return;
+  const q    = (document.getElementById('annSearch')?.value||'').toLowerCase();
+  const st   = document.getElementById('annStatusFilter')?.value||'';
+  const cat  = document.getElementById('annCatFilter')?.value||'';
+  const list = announcements.filter(a =>
+    (!q  || a.title.toLowerCase().includes(q)) &&
+    (!st || a.status === st) &&
+    (!cat|| a.category === cat)
+  );
+  if (!list.length) {
+    tb.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:18px;">No announcements found. Click "+ New Announcement" to create one.</td></tr>';
+    return;
+  }
+  tb.innerHTML = list.map(a => {
+    const badge = ANN_STATUS_BADGE[a.status] || 'bg-blue';
+    return `<tr>
+      <td><strong>${a.pinned?'📌 ':''}${a.title}</strong></td>
+      <td>${ANN_CAT_ICONS[a.category]||''} ${ANN_CAT_LABELS[a.category]||a.category}</td>
+      <td><span class="badge ${badge}">${a.status}</span></td>
+      <td style="font-size:12px;">${fmtAnnDate(a.publishDate)}</td>
+      <td style="font-size:12px;">${a.expiryDate ? fmtAnnDate(a.expiryDate) : '—'}</td>
+      <td>${a.pinned?'<span class="badge bg-amber">📌 Yes</span>':'—'}</td>
+      <td style="white-space:nowrap;display:flex;gap:4px;">
+        <button class="btn btn-sm btn-blue" onclick="editAnnouncement('${a.id}')">✏️ Edit</button>
+        <button class="btn btn-sm btn-amber" onclick="toggleAnnPin('${a.id}')">${a.pinned?'Unpin':'Pin'}</button>
+        <button class="btn btn-sm btn-red" onclick="deleteAnnouncement('${a.id}')">🗑️</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function fmtAnnDate(iso) {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+}
+
+function editAnnouncement(id) {
+  const a = announcements.find(x => x.id === id);
+  if (!a) return;
+  document.getElementById('annEditId').value   = a.id;
+  document.getElementById('annModTitle').textContent = '✏️ Edit Announcement';
+  document.getElementById('annTitle').value    = a.title;
+  document.getElementById('annCategory').value = a.category;
+  document.getElementById('annStatus').value   = a.status;
+  document.getElementById('annContent').value  = a.content;
+  document.getElementById('annPinned').checked = !!a.pinned;
+  if (a.publishDate) document.getElementById('annPublishDate').value = a.publishDate.slice(0,16);
+  if (a.expiryDate)  document.getElementById('annExpiryDate').value  = a.expiryDate.slice(0,16);
+  hideAlert('annErr'); hideAlert('annSuc');
+  openMod('annMod');
+}
+
+async function saveAnnouncement() {
+  const title   = document.getElementById('annTitle').value.trim();
+  const content = document.getElementById('annContent').value.trim();
+  const editId  = document.getElementById('annEditId').value;
+  hideAlert('annErr'); hideAlert('annSuc');
+  if (!title || !content) { showAlert('annErr','⚠️ Title and content are required.'); return; }
+
+  const fd = new FormData();
+  fd.append('title',       title);
+  fd.append('content',     content);
+  fd.append('category',    document.getElementById('annCategory').value);
+  fd.append('status',      document.getElementById('annStatus').value);
+  fd.append('pinned',      document.getElementById('annPinned').checked ? 'true' : 'false');
+  fd.append('createdBy',   currentUser || 'admin');
+  const pub = document.getElementById('annPublishDate').value;
+  const exp = document.getElementById('annExpiryDate').value;
+  if (pub) fd.append('publishDate', new Date(pub).toISOString());
+  if (exp) fd.append('expiryDate',  new Date(exp).toISOString());
+  const imgFile = document.getElementById('annImage').files[0];
+  if (imgFile) fd.append('image', imgFile);
+
+  try {
+    const url = editId ? `${API_URL}/announcements/${editId}` : `${API_URL}/announcements`;
+    const method = editId ? 'PUT' : 'POST';
+    const r = await fetch(url, { method, headers: { 'x-admin-key': GPA_ADMIN_KEY }, body: fd });
+    const d = await r.json();
+    if (!d.success) { showAlert('annErr', '❌ ' + d.message); return; }
+    showAlert('annSuc', editId ? '✅ Announcement updated!' : '✅ Announcement published!');
+    document.getElementById('annEditId').value = '';
+    document.getElementById('annTitle').value  = '';
+    document.getElementById('annContent').value= '';
+    document.getElementById('annImage').value  = '';
+    document.getElementById('annPinned').checked = false;
+    setTimeout(() => { closeMod('annMod'); loadAnnouncements(); }, 1200);
+    recordActivity('announcement', `${editId?'Updated':'Published'} announcement: ${title}`);
+  } catch(e) { showAlert('annErr', '❌ ' + e.message); }
+}
+
+async function deleteAnnouncement(id) {
+  if (!confirm('Delete this announcement permanently?')) return;
+  try {
+    await fetch(`${API_URL}/announcements/${id}`, { method:'DELETE', headers:{'x-admin-key':GPA_ADMIN_KEY} });
+    announcements = announcements.filter(a => a.id !== id);
+    renderAnnouncements(); updateAnnStats();
+  } catch(e) { alert('Error: ' + e.message); }
+}
+
+async function toggleAnnPin(id) {
+  const a = announcements.find(x => x.id === id);
+  if (!a) return;
+  const fd = new FormData();
+  fd.append('pinned', a.pinned ? 'false' : 'true');
+  try {
+    const r = await fetch(`${API_URL}/announcements/${id}`, { method:'PUT', headers:{'x-admin-key':GPA_ADMIN_KEY}, body:fd });
+    const d = await r.json();
+    if (d.success) { a.pinned = d.announcement.pinned; renderAnnouncements(); }
+  } catch(e) { console.warn(e); }
+}
+
+// ============================================================
+// GALLERY MANAGEMENT
+// ============================================================
+let galleryPosts = [];
+const GAL_CAT_ICONS  = {general:'📋',sports:'⚽',trip:'✈️',ceremony:'🎓',daily:'📅',event:'🎉'};
+const GAL_CAT_LABELS = {general:'General',sports:'Sports',trip:'Trip',ceremony:'Ceremony',daily:'Daily Life',event:'Event'};
+let galCommentPostId = null;
+
+async function loadGalleryAdmin() {
+  try {
+    const r = await fetch(API_URL + '/gallery');
+    const d = await r.json();
+    if (d.success) galleryPosts = d.posts;
+    renderGalleryAdmin();
+  } catch(e) { console.warn('Could not load gallery:', e.message); }
+}
+
+function renderGalleryAdmin() {
+  const con = document.getElementById('galGrid');
+  if (!con) return;
+  const q   = (document.getElementById('galSearch')?.value||'').toLowerCase();
+  const cat = document.getElementById('galCatFilter')?.value||'';
+  const list = galleryPosts.filter(p =>
+    (!q   || p.title.toLowerCase().includes(q)) &&
+    (!cat || p.category === cat)
+  );
+  if (!list.length) {
+    con.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--muted);padding:36px;">No gallery posts yet. Click "+ Upload Post" to add photos.</div>';
+    return;
+  }
+  con.innerHTML = list.map(p => `
+    <div style="background:white;border-radius:14px;border:1px solid var(--border);overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+      ${p.image
+        ? `<img src="${p.image}" style="width:100%;height:160px;object-fit:cover;" alt="${p.title}"/>`
+        : `<div style="width:100%;height:100px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:36px;">${GAL_CAT_ICONS[p.category]||'🖼️'}</div>`}
+      <div style="padding:12px;">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:4px;">${GAL_CAT_ICONS[p.category]||''} ${GAL_CAT_LABELS[p.category]||p.category} · ${fmtAnnDate(p.publishedAt)}</div>
+        <div style="font-size:14px;font-weight:800;color:var(--green-dark);margin-bottom:4px;">${p.title}</div>
+        ${p.caption ? `<div style="font-size:12px;color:var(--muted);margin-bottom:8px;">${p.caption.slice(0,80)}${p.caption.length>80?'…':''}</div>` : ''}
+        <div style="display:flex;gap:5px;flex-wrap:wrap;">
+          <button class="btn btn-sm btn-blue" onclick="openGalComments('${p.id}')">💬 ${(p.comments||[]).length}</button>
+          <button class="btn btn-sm btn-amber" onclick="editGalleryPost('${p.id}')">✏️ Edit</button>
+          <button class="btn btn-sm btn-red" onclick="deleteGalleryPost('${p.id}')">🗑️</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function editGalleryPost(id) {
+  const p = galleryPosts.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('galEditId').value      = p.id;
+  document.getElementById('galModTitle').textContent = '✏️ Edit Gallery Post';
+  document.getElementById('galTitle').value       = p.title;
+  document.getElementById('galCategory').value    = p.category;
+  document.getElementById('galCaption').value     = p.caption || '';
+  hideAlert('galErr'); hideAlert('galSuc');
+  openMod('galMod');
+}
+
+async function saveGalleryPost() {
+  const title   = document.getElementById('galTitle').value.trim();
+  const editId  = document.getElementById('galEditId').value;
+  hideAlert('galErr'); hideAlert('galSuc');
+  if (!title) { showAlert('galErr','⚠️ Title is required.'); return; }
+
+  const fd = new FormData();
+  fd.append('title',     title);
+  fd.append('caption',   document.getElementById('galCaption').value.trim());
+  fd.append('category',  document.getElementById('galCategory').value);
+  fd.append('createdBy', currentUser || 'admin');
+  const imgFile = document.getElementById('galImage').files[0];
+  if (imgFile) fd.append('image', imgFile);
+
+  try {
+    const url = editId ? `${API_URL}/gallery/${editId}` : `${API_URL}/gallery`;
+    const method = editId ? 'PUT' : 'POST';
+    const r = await fetch(url, { method, headers: { 'x-admin-key': GPA_ADMIN_KEY }, body: fd });
+    const d = await r.json();
+    if (!d.success) { showAlert('galErr','❌ ' + d.message); return; }
+    showAlert('galSuc', editId ? '✅ Post updated!' : '✅ Photo posted!');
+    document.getElementById('galEditId').value = '';
+    document.getElementById('galTitle').value  = '';
+    document.getElementById('galCaption').value= '';
+    document.getElementById('galImage').value  = '';
+    setTimeout(() => { closeMod('galMod'); loadGalleryAdmin(); }, 1200);
+    recordActivity('gallery', `${editId?'Updated':'Uploaded'} gallery post: ${title}`);
+  } catch(e) { showAlert('galErr','❌ ' + e.message); }
+}
+
+async function deleteGalleryPost(id) {
+  if (!confirm('Delete this gallery post?')) return;
+  try {
+    await fetch(`${API_URL}/gallery/${id}`, { method:'DELETE', headers:{'x-admin-key':GPA_ADMIN_KEY} });
+    galleryPosts = galleryPosts.filter(p => p.id !== id);
+    renderGalleryAdmin();
+  } catch(e) { alert('Error: ' + e.message); }
+}
+
+function openGalComments(id) {
+  const p = galleryPosts.find(x => x.id === id);
+  if (!p) return;
+  galCommentPostId = id;
+  document.getElementById('galCommentsTitle').textContent = '💬 Comments';
+  document.getElementById('galCommentsPostTitle').textContent = p.title;
+  const list = p.comments || [];
+  const con  = document.getElementById('galCommentsList');
+  if (!list.length) {
+    con.innerHTML = '<div style="text-align:center;color:var(--muted);padding:16px;font-size:13px;">No comments yet.</div>';
+  } else {
+    con.innerHTML = list.map(c => `
+      <div style="background:var(--bg);border-radius:10px;padding:10px 12px;margin-bottom:8px;">
+        <div style="font-size:12px;font-weight:800;color:var(--green-dark);">${c.name}</div>
+        <div style="font-size:13px;margin:3px 0;">${c.text}</div>
+        <div style="font-size:10px;color:var(--muted);">${fmtAnnDate(c.date)}</div>
+      </div>`).join('');
+  }
+  hideAlert('galCommentErr');
+  openMod('galCommentsMod');
+}
+
+async function submitGalleryComment() {
+  const name = document.getElementById('galCommentName').value.trim();
+  const text = document.getElementById('galCommentText').value.trim();
+  hideAlert('galCommentErr');
+  if (!name || !text) { showAlert('galCommentErr','⚠️ Name and comment are required.'); return; }
+  try {
+    const r = await fetch(`${API_URL}/gallery/${galCommentPostId}/comments`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ name, text })
+    });
+    const d = await r.json();
+    if (!d.success) { showAlert('galCommentErr','❌ ' + d.message); return; }
+    const p = galleryPosts.find(x => x.id === galCommentPostId);
+    if (p) { if (!p.comments) p.comments=[]; p.comments.push(d.comment); openGalComments(galCommentPostId); }
+    document.getElementById('galCommentName').value = '';
+    document.getElementById('galCommentText').value = '';
+  } catch(e) { showAlert('galCommentErr','❌ ' + e.message); }
 }
 
 // ============================================================

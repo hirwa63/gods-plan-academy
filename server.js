@@ -1,37 +1,64 @@
-const express = require('express');
-const cors = require('cors');
+const express  = require('express');
+const cors     = require('cors');
 const nodemailer = require('nodemailer');
-const fs = require('fs').promises;
-const path = require('path');
-const dotenv = require('dotenv');
+const multer   = require('multer');
+const fs       = require('fs').promises;
+const fss      = require('fs');
+const path     = require('path');
+const dotenv   = require('dotenv');
 
 dotenv.config();
 
-const PORT = process.env.PORT || 3000;
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@godsplanacademy.rw';
-const ADMIN_KEY = process.env.ADMIN_KEY || 'gpa-admin-2026';
-const SMTP_HOST = process.env.SMTP_HOST;
-const SMTP_PORT = Number(process.env.SMTP_PORT || 587);
-const SMTP_SECURE = process.env.SMTP_SECURE === 'true';
-const SMTP_USER = process.env.SMTP_USER;
-const SMTP_PASS = process.env.SMTP_PASS;
+const PORT       = process.env.PORT       || 3000;
+const ADMIN_EMAIL= process.env.ADMIN_EMAIL|| 'admin@godsplanacademy.rw';
+const ADMIN_KEY  = process.env.ADMIN_KEY  || 'gpa-admin-2026';
+const SMTP_HOST  = process.env.SMTP_HOST;
+const SMTP_PORT  = Number(process.env.SMTP_PORT || 587);
+const SMTP_SECURE= process.env.SMTP_SECURE === 'true';
+const SMTP_USER  = process.env.SMTP_USER;
+const SMTP_PASS  = process.env.SMTP_PASS;
 
-const app = express();
-const dataDir = path.join(__dirname, 'data');
-const activitiesPath = path.join(dataDir, 'activities.json');
-const commentsPath   = path.join(dataDir, 'comments.json');
-const studentsPath   = path.join(dataDir, 'students.json');
-const staffPath      = path.join(dataDir, 'staff.json');
+const app      = express();
+const dataDir  = path.join(__dirname, 'data');
+const uploadDir= path.join(__dirname, 'uploads');
+
+const activitiesPath    = path.join(dataDir, 'activities.json');
+const commentsPath      = path.join(dataDir, 'comments.json');
+const studentsPath      = path.join(dataDir, 'students.json');
+const staffPath         = path.join(dataDir, 'staff.json');
+const announcementsPath = path.join(dataDir, 'announcements.json');
+const galleryPath       = path.join(dataDir, 'gallery.json');
 
 app.use(cors());
 app.use(express.json());
 app.use(express.static(__dirname));
+app.use('/uploads', express.static(uploadDir));
 
-// ── Helpers ──────────────────────────────────────────────────
+// ── File upload (multer) ──────────────────────────────────────
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, uploadDir),
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname).toLowerCase();
+    cb(null, Date.now() + '-' + Math.random().toString(36).slice(2) + ext);
+  }
+});
+const upload = multer({
+  storage,
+  limits: { fileSize: 8 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) cb(null, true);
+    else cb(new Error('Only image files are allowed.'));
+  }
+});
+
+// ── Helpers ───────────────────────────────────────────────────
 async function ensureDataFiles() {
+  if (!fss.existsSync(uploadDir)) fss.mkdirSync(uploadDir, { recursive: true });
   await fs.mkdir(dataDir, { recursive: true });
-  for (const file of [activitiesPath, commentsPath, studentsPath, staffPath]) {
-    try { await fs.access(file); } catch { await fs.writeFile(file, '[]', 'utf8'); }
+  const files = [activitiesPath, commentsPath, studentsPath, staffPath,
+                 announcementsPath, galleryPath];
+  for (const f of files) {
+    try { await fs.access(f); } catch { await fs.writeFile(f, '[]', 'utf8'); }
   }
 }
 
@@ -60,8 +87,22 @@ function createMailer() {
     auth: { user: SMTP_USER, pass: SMTP_PASS },
   });
 }
-
 const transporter = createMailer();
+
+// Auto-update announcement statuses based on dates
+function syncAnnouncementStatuses(list) {
+  const now = new Date();
+  let changed = false;
+  list.forEach(a => {
+    if (a.status === 'scheduled' && new Date(a.publishDate) <= now) {
+      a.status = 'published'; changed = true;
+    }
+    if (a.status === 'published' && a.expiryDate && new Date(a.expiryDate) <= now) {
+      a.status = 'archived'; changed = true;
+    }
+  });
+  return changed;
+}
 
 // ── Health ────────────────────────────────────────────────────
 app.get('/api/health', (req, res) => {
@@ -173,7 +214,147 @@ app.delete('/api/staff/:id', requireAdmin, async (req, res) => {
   } catch { res.status(500).json({ success: false, message: 'Unable to delete staff.' }); }
 });
 
-// ── Comments / Contact ────────────────────────────────────────
+// ── Announcements ─────────────────────────────────────────────
+app.get('/api/announcements', async (req, res) => {
+  try {
+    const list = await readJson(announcementsPath);
+    const changed = syncAnnouncementStatuses(list);
+    if (changed) await writeJson(announcementsPath, list);
+
+    const { status } = req.query;
+    let result = isAdmin(req) ? list : list.filter(a => a.status === 'published');
+    if (status) result = result.filter(a => a.status === status);
+
+    result.sort((a, b) => {
+      if (a.pinned && !b.pinned) return -1;
+      if (!a.pinned && b.pinned) return 1;
+      return new Date(b.publishDate) - new Date(a.publishDate);
+    });
+    res.json({ success: true, announcements: result });
+  } catch { res.status(500).json({ success: false, message: 'Unable to load announcements.' }); }
+});
+
+app.post('/api/announcements', requireAdmin, upload.single('image'), async (req, res) => {
+  try {
+    const list = await readJson(announcementsPath);
+    const now = new Date();
+    const publishDate = req.body.publishDate ? new Date(req.body.publishDate) : now;
+    const status = req.body.status || (publishDate <= now ? 'published' : 'scheduled');
+    const ann = {
+      id: 'ann_' + Date.now(),
+      title: req.body.title || 'Untitled',
+      content: req.body.content || '',
+      category: req.body.category || 'general',
+      image: req.file ? '/uploads/' + req.file.filename : null,
+      publishDate: publishDate.toISOString(),
+      expiryDate: req.body.expiryDate || null,
+      status,
+      pinned: req.body.pinned === 'true',
+      createdBy: req.body.createdBy || 'admin',
+      createdAt: now.toISOString()
+    };
+    list.unshift(ann);
+    await writeJson(announcementsPath, list);
+    res.json({ success: true, announcement: ann });
+  } catch (e) { res.status(500).json({ success: false, message: e.message }); }
+});
+
+app.put('/api/announcements/:id', requireAdmin, upload.single('image'), async (req, res) => {
+  try {
+    const list = await readJson(announcementsPath);
+    const idx = list.findIndex(a => a.id === req.params.id);
+    if (idx === -1) return res.status(404).json({ success: false, message: 'Announcement not found.' });
+    const updated = { ...list[idx] };
+    ['title','content','category','publishDate','expiryDate','status','createdBy'].forEach(k => {
+      if (req.body[k] !== undefined) updated[k] = req.body[k];
+    });
+    if (req.body.pinned !== undefined) updated.pinned = req.body.pinned === 'true';
+    if (req.file) updated.image = '/uploads/' + req.file.filename;
+    list[idx] = updated;
+    await writeJson(announcementsPath, list);
+    res.json({ success: true, announcement: updated });
+  } catch (e) { res.status(500).json({ success: false, message: e.message }); }
+});
+
+app.delete('/api/announcements/:id', requireAdmin, async (req, res) => {
+  try {
+    let list = await readJson(announcementsPath);
+    const before = list.length;
+    list = list.filter(a => a.id !== req.params.id);
+    if (list.length === before) return res.status(404).json({ success: false, message: 'Announcement not found.' });
+    await writeJson(announcementsPath, list);
+    res.json({ success: true });
+  } catch { res.status(500).json({ success: false, message: 'Unable to delete announcement.' }); }
+});
+
+// ── Gallery Posts ─────────────────────────────────────────────
+app.get('/api/gallery', async (req, res) => {
+  try {
+    const posts = await readJson(galleryPath);
+    res.json({ success: true, posts });
+  } catch { res.status(500).json({ success: false, message: 'Unable to load gallery.' }); }
+});
+
+app.post('/api/gallery', requireAdmin, upload.single('image'), async (req, res) => {
+  try {
+    const posts = await readJson(galleryPath);
+    const post = {
+      id: 'gal_' + Date.now(),
+      title: req.body.title || 'Untitled',
+      caption: req.body.caption || '',
+      category: req.body.category || 'general',
+      image: req.file ? '/uploads/' + req.file.filename : null,
+      publishedAt: new Date().toISOString(),
+      createdBy: req.body.createdBy || 'admin',
+      comments: []
+    };
+    posts.unshift(post);
+    await writeJson(galleryPath, posts);
+    res.json({ success: true, post });
+  } catch (e) { res.status(500).json({ success: false, message: e.message }); }
+});
+
+app.put('/api/gallery/:id', requireAdmin, upload.single('image'), async (req, res) => {
+  try {
+    const posts = await readJson(galleryPath);
+    const idx = posts.findIndex(p => p.id === req.params.id);
+    if (idx === -1) return res.status(404).json({ success: false, message: 'Post not found.' });
+    const updated = { ...posts[idx], ...req.body };
+    if (req.file) updated.image = '/uploads/' + req.file.filename;
+    posts[idx] = updated;
+    await writeJson(galleryPath, posts);
+    res.json({ success: true, post: updated });
+  } catch (e) { res.status(500).json({ success: false, message: e.message }); }
+});
+
+app.delete('/api/gallery/:id', requireAdmin, async (req, res) => {
+  try {
+    let posts = await readJson(galleryPath);
+    const before = posts.length;
+    posts = posts.filter(p => p.id !== req.params.id);
+    if (posts.length === before) return res.status(404).json({ success: false, message: 'Post not found.' });
+    await writeJson(galleryPath, posts);
+    res.json({ success: true });
+  } catch { res.status(500).json({ success: false, message: 'Unable to delete post.' }); }
+});
+
+// Comments on gallery posts
+app.post('/api/gallery/:id/comments', async (req, res) => {
+  const { name, text } = req.body;
+  if (!name || !text) return res.status(400).json({ success: false, message: 'Name and comment text are required.' });
+  try {
+    const posts = await readJson(galleryPath);
+    const idx = posts.findIndex(p => p.id === req.params.id);
+    if (idx === -1) return res.status(404).json({ success: false, message: 'Post not found.' });
+    const comment = { id: Date.now().toString(), name, text, date: new Date().toISOString() };
+    if (!posts[idx].comments) posts[idx].comments = [];
+    posts[idx].comments.push(comment);
+    await writeJson(galleryPath, posts);
+    res.json({ success: true, comment });
+  } catch { res.status(500).json({ success: false, message: 'Unable to save comment.' }); }
+});
+
+// ── Contact / Comments ────────────────────────────────────────
 app.post('/api/comments', async (req, res) => {
   const { sender_name, sender_email, sender_role, subject, message } = req.body;
   if (!sender_name || !sender_email || !message)
@@ -214,7 +395,10 @@ app.post('/api/comments', async (req, res) => {
 (async () => {
   await ensureDataFiles();
   app.listen(PORT, () => {
-    console.log(`GPA backend running on http://localhost:${PORT}`);
-    if (!transporter) console.warn('SMTP credentials missing. Email delivery is disabled.');
+    console.log(`\n🌱 God's Plan Academy backend → http://localhost:${PORT}`);
+    console.log(`   Students API : http://localhost:${PORT}/api/students`);
+    console.log(`   Announcements: http://localhost:${PORT}/api/announcements`);
+    console.log(`   Gallery      : http://localhost:${PORT}/api/gallery`);
+    if (!transporter) console.warn('   ⚠️  SMTP credentials missing — email disabled.');
   });
 })();
