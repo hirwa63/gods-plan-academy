@@ -64,7 +64,18 @@
     footer{background:var(--green-deeper);color:white;padding:60px 10% 20px;}
     
     @media(max-width:900px){.navbar{padding:0 18px;}.nav-links{display:none;}.hamburger{display:flex;}}
-    @media(max-width:768px){.section{padding:50px 20px;}}
+    @media(max-width:768px){.section{padding:50px 16px;}.news-grid{grid-template-columns:1fr;}.gallery-grid{grid-template-columns:1fr 1fr;}}
+    @media(max-width:600px){
+        .navbar{padding:0 14px;}
+        .brand-sub{display:none;}
+        .ph-title{font-size:30px!important;}
+        .page-hero{padding:44px 16px;}
+        .section{padding:36px 14px;}
+        .news-grid{grid-template-columns:1fr;}
+        .gallery-grid{grid-template-columns:1fr 1fr;gap:12px;}
+        h2,.sec-title{font-size:26px!important;}
+        .ntitle{font-size:18px!important;}
+    }
 </style>
 </head>
 <body>

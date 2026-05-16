@@ -20,6 +20,16 @@
     .nav-links{display:flex;align-items:center;gap:5px;flex:1;justify-content:center;}
     .nl{color:#1a1a1a;font-size:14px;font-weight:600;padding:8px 14px;border-radius:8px;text-decoration:none;transition:all .2s;}
     .nl:hover, .nl.active{color:#1a56db;background:rgba(26,86,219,0.07);}
+    .nav-right{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+    .nav-portal{background:#1a56db;color:white;padding:9px 18px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap;transition:all .2s;}
+    .nav-portal:hover{background:#1140a6;}
+    .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;}
+    .hamburger span{width:24px;height:2.5px;background:#1a1a1a;border-radius:2px;}
+    .mob-menu{display:none;position:fixed;inset:0;background:white;z-index:490;padding:76px 24px 24px;flex-direction:column;gap:4px;overflow-y:auto;}
+    .mob-menu.open{display:flex;}
+    .mob-close{position:absolute;top:18px;right:18px;background:none;border:none;font-size:26px;cursor:pointer;}
+    .mob-link{font-size:16px;font-weight:600;padding:13px 16px;border-radius:10px;text-decoration:none;color:#1a1a1a;border-bottom:1px solid rgba(0,0,0,0.08);}
+    .mob-link:hover{background:rgba(26,86,219,0.07);color:#1a56db;}
 
     /* HERO */
     .page-hero{background:linear-gradient(135deg,var(--green-dark),var(--green));padding:70px 40px;text-align:center;color:white;}
@@ -35,10 +45,22 @@
     .story-text{line-height: 1.8; color: #555; font-size: 1.1rem; margin-bottom: 20px;}
 
     @media(max-width:900px){
-        .about-grid{grid-template-columns: 1fr;}
-        .navbar{padding: 0 20px;}
+        .about-grid{grid-template-columns:1fr;}
+        .navbar{padding:0 20px;}
         .nav-links{display:none;}
-        section{padding: 50px 20px;}
+        .hamburger{display:flex;}
+        section{padding:50px 20px;}
+    }
+    @media(max-width:600px){
+        .navbar{padding:0 14px;}
+        .brand-sub{display:none;}
+        section{padding:36px 14px;}
+        .ph-title{font-size:30px!important;}
+        .page-hero{padding:44px 16px;}
+        h2,h3{font-size:26px!important;word-break:break-word;}
+        .team-grid{grid-template-columns:1fr!important;}
+        .stats-row{grid-template-columns:1fr 1fr!important;}
+        .img-wrap img{border-radius:12px;}
     }
 </style>
 </head>
@@ -53,13 +75,26 @@
         </div>
     </a>
     <div class="nav-links">
-        <a class="nl" href="index.html">Home</a>
+        <a class="nl" href="index.html">🏠 Home</a>
         <a class="nl active" href="about.html">About</a>
         <a class="nl" href="academics.html">Academics</a>
         <a class="nl" href="student-life.html">Student Life</a>
-        <a class="nl" href="contact.html">Contact</a>
+        <a class="nl" href="contact.html">Contact Us</a>
+    </div>
+    <div class="nav-right">
+        <a class="nav-portal" href="gods_plan_academy_portal.html">📊 Student Portal</a>
+        <div class="hamburger" onclick="document.getElementById('mobMenu').classList.toggle('open')"><span></span><span></span><span></span></div>
     </div>
 </nav>
+<div class="mob-menu" id="mobMenu">
+    <button class="mob-close" onclick="document.getElementById('mobMenu').classList.remove('open')">✕</button>
+    <a class="mob-link" href="index.html">🏠 Home</a>
+    <a class="mob-link" href="about.html">🏫 About</a>
+    <a class="mob-link" href="academics.html">📚 Academics</a>
+    <a class="mob-link" href="student-life.html">🎒 Student Life</a>
+    <a class="mob-link" href="contact.html">📞 Contact Us</a>
+    <a class="mob-link" href="gods_plan_academy_portal.html" style="color:#1a56db;font-weight:800;">📊 Student Portal →</a>
+</div>
 
 <div class="page-hero">
     <h1 class="ph-title">Our Story</h1>
