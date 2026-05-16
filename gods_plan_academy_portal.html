@@ -1450,6 +1450,16 @@ console.log('✅ GPA portal client ready');
       </div>
     </div>
 
+    <!-- ACTIVITY LOG -->
+    <div class="asub" id="sub-activity">
+      <div class="card">
+        <div class="card-title">📌 Activity Log</div>
+        <div class="card-sub">Login attempts, contact submissions, and dashboard actions are tracked here.</div>
+        <div class="tw"><table><thead><tr><th>Date</th><th>User</th><th>Action</th><th>Details</th></tr></thead><tbody id="activityLogBody"></tbody></table></div>
+        <button class="btn btn-sm btn-outline" onclick="clearActivityLog()">🧹 Clear Log</button>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -1535,6 +1545,7 @@ let galleryItems=[
 
 let comments=[];
 let accounts=[];
+let activityLog=[];
 let settings={phone:'0785285758',whatsapp:'0793736343',email:'hirwaolivier63@gmail.com',adminEmail:'hirwaolivier63@gmail.com',address:'Gasabo, Kigali, Rwanda',hours:'Mon–Fri: 8:00–17:00',director:'MUKIZA B GORETH',headTeacher:'MUKIZA B GORETH',bankName:"God's Plan Academy Ltd",bankAcc:'00012-345678-01',bankBranch:'Musanze Branch',bankSwift:'BKIGRWRW',notice:'📢 Term 2 2026 — School fees are due by April 28, 2026. Pay online now to avoid delays.'};
 
 const LOGINS={admin:{pass:'gpa2026',role:'admin'},director:{pass:'gpa999',role:'director'},teacher:{pass:'gpa123',role:'teacher'},parent:{pass:'mypwd',role:'parent'}};
@@ -1601,6 +1612,7 @@ function doLogin(){
     document.getElementById('navUserInfo').style.display='flex';
     document.getElementById('navUserBadge').textContent={admin:'🏫 Admin',director:'👔 Director',teacher:'👩‍🏫 Teacher',parent:'👨‍👩‍👧 Parent'}[currentRole]||'👤 '+id;
     document.getElementById('nav-login').style.display='none';
+    recordActivity('login', `Successful login for ${id} as ${currentRole}`);
     return;
   }
   // Check registered accounts
@@ -1612,8 +1624,10 @@ function doLogin(){
     document.getElementById('navUserInfo').style.display='flex';
     document.getElementById('navUserBadge').textContent='👤 '+acc.firstName;
     document.getElementById('nav-login').style.display='none';
+    recordActivity('login', `Successful registered user login for ${currentUser} as ${currentRole}`);
     return;
   }
+  recordActivity('login-failed', `Failed login attempt for ${id}`);
   showAlert('loginErr','❌ Incorrect username or password. Please try again.');
 }
 
@@ -1633,6 +1647,7 @@ function doRegister(){
   if(accounts.find(a=>a.username===username)){showAlert('regErr','❌ Username already taken. Choose another.');return;}
   if(accounts.find(a=>a.email===email)){showAlert('regErr','❌ Email already registered.');return;}
   accounts.push({firstName:first,lastName:last,email,phone:cc+phone,username,password:pass,role:regRole,lang:regLang,joined:new Date().toISOString().slice(0,10)});
+  recordActivity('registration', `New portal account created: ${username} (${email})`);
   setLang(regLang);
   showAlert('regSuc','✅ Account created successfully! You can now login.');
   setTimeout(()=>switchAuthTab('login'),2000);
@@ -1877,8 +1892,10 @@ async function sendContact(){
       await window.GPA.Comments.send(name, 'visitor', subject || 'General enquiry', msg);
     }
     showAlert('ctcSuc',`✅ Message sent! We'll reply to ${email} within 24 hours. Thank you, ${name}!`);
+    recordActivity('contact', `Contact form submitted by ${name} (${email})`);
     ['ctcName','ctcEmail','ctcPhone','ctcSubject','ctcMsg'].forEach(id=>document.getElementById(id).value='');
   } catch(err){
+    recordActivity('contact-failed', `Contact form failed for ${name || 'unknown'} (${email || 'unknown'})`);
     showAlert('ctcErr','❌ Unable to submit the contact form. Please try again later.');
   }
 }
@@ -2011,8 +2028,8 @@ function setupDash(role){
 
   const tabsMap={
     teacher:[{id:'marks',label:'📝 Post Marks'}],
-    admin:[{id:'marks',label:'📝 Marks'},{id:'students',label:'👨‍🎓 Students'},{id:'staff',label:'👩‍🏫 Staff'},{id:'payments',label:'💳 Payments'},{id:'news',label:'📰 News'},{id:'settings',label:'⚙️ Settings'}],
-    director:[{id:'marks',label:'📝 Marks'},{id:'students',label:'👨‍🎓 Students'},{id:'staff',label:'👩‍🏫 Staff'},{id:'payments',label:'💳 Payments'},{id:'news',label:'📰 News'},{id:'comments-admin',label:'💬 Messages'},{id:'settings',label:'⚙️ Settings'}],
+    admin:[{id:'marks',label:'📝 Marks'},{id:'students',label:'👨‍🎓 Students'},{id:'staff',label:'👩‍🏫 Staff'},{id:'payments',label:'💳 Payments'},{id:'activity',label:'📌 Activity'},{id:'news',label:'📰 News'},{id:'settings',label:'⚙️ Settings'}],
+    director:[{id:'marks',label:'📝 Marks'},{id:'students',label:'👨‍🎓 Students'},{id:'staff',label:'👩‍🏫 Staff'},{id:'payments',label:'💳 Payments'},{id:'activity',label:'📌 Activity'},{id:'news',label:'📰 News'},{id:'comments-admin',label:'💬 Messages'},{id:'settings',label:'⚙️ Settings'}],
     parent:[{id:'marks',label:'📊 Check Results'}],
   };
   const tabs=tabsMap[role]||[];
@@ -2021,7 +2038,7 @@ function setupDash(role){
   if(tabs.length)document.getElementById('sub-'+tabs[0].id).classList.add('active');
 
   buildMarkInputs();
-  if(['admin','director'].includes(role)){renderStu();renderPayments();renderStaff();}
+  if(['admin','director'].includes(role)){renderStu();renderPayments();renderStaff();renderActivityLog();}
   if(role==='director'){renderDirComments();renderAccounts();}
 }
 
@@ -2251,6 +2268,73 @@ function saveSettings(){
   document.getElementById('settBankSwift').textContent=settings.bankSwift;
   document.querySelector('[data-i18n="home_notice"]').textContent=settings.notice;
   showAlert('settSuc','✅ Settings saved! All changes are live across the portal.');
+  recordActivity('settings-update', `School settings updated by ${currentUser||'unknown user'}`);
+}
+
+function loadActivityLog(){
+  try {
+    const stored = localStorage.getItem('gpa_activity_log');
+    activityLog = stored ? JSON.parse(stored) : [];
+  } catch (e) {
+    activityLog = [];
+  }
+}
+
+function saveActivityLog(){
+  try {
+    localStorage.setItem('gpa_activity_log', JSON.stringify(activityLog.slice(0, 100)));
+  } catch (e) {
+    console.log('Activity log save failed', e);
+  }
+}
+
+function renderActivityLog(){
+  const body = document.getElementById('activityLogBody');
+  if(!body)return;
+  if(!activityLog.length){
+    body.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:16px;">No activity logged yet.</td></tr>';
+    return;
+  }
+  body.innerHTML = activityLog.slice(0, 50).map(entry => `
+    <tr>
+      <td>${new Date(entry.timestamp).toLocaleString()}</td>
+      <td>${entry.user || 'guest'}</td>
+      <td>${entry.action}</td>
+      <td>${entry.details || ''}</td>
+    </tr>
+  `).join('');
+}
+
+function recordActivity(action, details){
+  const entry = {
+    timestamp: new Date().toISOString(),
+    user: currentUser || 'guest',
+    action,
+    details: details || ''
+  };
+  activityLog.unshift(entry);
+  if(activityLog.length > 100) activityLog.length = 100;
+  saveActivityLog();
+  renderActivityLog();
+
+  const token = localStorage.getItem('gpa_token');
+  if(token){
+    fetch('https://gpa-backend-production-005d.up.railway.app/api/activities', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      },
+      body: JSON.stringify(entry)
+    }).catch(()=>{});
+  }
+}
+
+function clearActivityLog(){
+  if(!confirm('Clear the activity log?')) return;
+  activityLog = [];
+  saveActivityLog();
+  renderActivityLog();
 }
 
 // ============================================================
@@ -2507,6 +2591,7 @@ function splashForgot(){
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js').then(reg=>console.log('SW registered',reg.scope)).catch(err=>console.log('SW reg failed',err));
+    loadActivityLog();
   });
 }
 </script>
