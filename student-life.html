@@ -42,11 +42,13 @@
     .ntitle{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--green-dark);margin-bottom:10px;}
 
     /* GALLERY GRID */
-    .gallery-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:15px;margin-top:30px;}
-    .gi{border-radius:15px;aspect-ratio:1;overflow:hidden;position:relative;background:#eee;box-shadow:0 4px 10px rgba(0,0,0,0.1);}
-    .gi-inner{width:100%;height:100%;transition:transform .5s ease;}
-    .gi:hover .gi-inner{transform:scale(1.1);}
-    .gi-label{position:absolute;bottom:0;left:0;right:0;background:rgba(8,80,65,0.85);color:white;font-size:12px;font-weight:600;padding:10px;text-align:center;backdrop-filter:blur(4px);}
+    .gallery-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));gap:22px;margin-top:30px;}
+    .gi{border-radius:24px;aspect-ratio:1;overflow:hidden;position:relative;background:#f4f6f8;box-shadow:0 18px 40px rgba(0,0,0,0.08);transition:transform .35s ease,box-shadow .35s ease;}
+    .gi:hover{transform:translateY(-6px);box-shadow:0 26px 48px rgba(0,0,0,0.16);}
+    .gi-inner{width:100%;height:100%;transition:transform .6s ease,filter .4s ease;background-position:center;background-size:cover;position:relative;z-index:1;}
+    .gi:hover .gi-inner{transform:scale(1.08);filter:brightness(.95);}
+    .gi::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 45%,rgba(0,0,0,0.42) 100%);pointer-events:none;z-index:2;}
+    .gi-label{position:absolute;bottom:0;left:0;right:0;padding:16px 14px;color:white;font-size:13px;font-weight:700;text-align:center;letter-spacing:.02em;z-index:3;text-shadow:0 1px 10px rgba(0,0,0,0.35);}
 
     /* FOOTER */
     footer{background:var(--green-deeper);color:white;padding:60px 10% 20px;}
@@ -120,12 +122,15 @@ const newsData = [
 
 // --- 2. GALLERY DATA (Matched to your GitHub exactly) ---
 const galleryData = [
-    { img: "hero (10).jpeg", label: "Campus View" },
-    { img: "hero (11).jpeg", label: "Our Students" },
-    { img: "hero (12).jpeg", label: "Classroom Learning" },
-    { img: "hero (13).jpeg", label: "School Grounds" },
-    { img: "hero (14).jpeg", label: "Student Group" },
-    { img: "hero (15).jpeg", label: "Morning Assembly" }
+    { img: "campus view.jpeg", label: "Campus View" },
+    { img: "our students.jpeg", label: "Our Students" },
+    { img: "classroom learning.jpeg", label: "Classroom Learning" },
+    { img: "school ground.jpeg", label: "School Grounds" },
+    { img: "student group.jpeg", label: "Student Group" },
+    { img: "morning assembly.jpeg", label: "Morning Assembly" },
+    { img: "about.jpeg", label: "School Community" },
+    { img: "we.jpeg", label: "Our Team" },
+    { img: "hero (10).jpeg", label: "Learning Together" }
 ];
 
 function initPage() {
@@ -144,8 +149,8 @@ function initPage() {
     // Render Gallery
     const galleryContainer = document.getElementById('gg');
     galleryContainer.innerHTML = galleryData.map(g => {
-        // Critical: encodes the " " and "( )" so Vercel finds them
-        const safePath = encodeURIComponent(g.img);
+        // critical: encode spaces/special chars and use the local images/ folder
+        const safePath = `images/${encodeURIComponent(g.img)}`;
         return `
             <div class="gi">
                 <div class="gi-inner" style="background: url('${safePath}') center/cover no-repeat;"></div>

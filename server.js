@@ -22,6 +22,7 @@ const commentsPath = path.join(dataDir, 'comments.json');
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static(__dirname));
 
 async function ensureDataFiles() {
   await fs.mkdir(dataDir, { recursive: true });
