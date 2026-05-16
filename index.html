@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>God's Plan Academy – Nursery & Primary School | Musanze, Rwanda</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#085041">
+  <link rel="apple-touch-icon" href="/images/icon-192.svg">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -472,6 +475,13 @@ window.addEventListener('scroll', () => {
   });
 });
 setTimeout(() => window.dispatchEvent(new Event('scroll')), 120);
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').then(reg=>console.log('SW registered',reg.scope)).catch(err=>console.log('SW reg failed',err));
+  });
+}
 </script>
 </body>
 </html>

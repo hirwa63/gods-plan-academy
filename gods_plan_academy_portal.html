@@ -6,7 +6,7 @@
 <title>God's Plan Academy – School Portal</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet"/>
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
   --green:#1D9E75;--green-dark:#085041;--green-light:#E1F5EE;--green-mid:#9FE1CB;
   --amber:#EF9F27;--amber-light:#FAEEDA;--red:#E24B4A;--red-light:#FCEBEB;
@@ -478,6 +478,9 @@ tr:hover td{background:#f5fdf9;}
 }
 .school-website-link:hover { background: rgba(255,255,255,0.18); }
 </style>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#085041">
+  <link rel="apple-touch-icon" href="/images/icon-192.svg">
 </head>
 <body>
 <script>
@@ -2490,6 +2493,13 @@ function splashForgot(){
 }
  
 
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').then(reg=>console.log('SW registered',reg.scope)).catch(err=>console.log('SW reg failed',err));
+  });
+}
 </script>
 </body>
 </html>
