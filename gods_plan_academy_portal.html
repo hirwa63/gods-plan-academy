@@ -2062,9 +2062,9 @@ function setupDash(role){
 
   buildMarkInputs();
   if(['admin','director'].includes(role)){
-    loadRealStudents().then(()=>{renderStu();setupDash(role);});
-    loadRealStaff().then(()=>{renderStaff();});
-    renderPayments(); renderActivityLog();
+    renderStu(); renderStaff(); renderPayments(); renderActivityLog();
+    loadRealStudents();
+    loadRealStaff();
   }
   if(role==='director'){renderDirComments();renderAccounts();}
 }
