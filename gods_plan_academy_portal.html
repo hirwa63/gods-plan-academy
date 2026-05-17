@@ -1482,13 +1482,6 @@ console.log('✅ GPA portal client ready');
         <button class="btn btn-green" onclick="saveSettings()">💾 Save All Settings</button>
       </div>
 
-      <!-- MESSAGES TO DIRECTOR (admin/director can read here) -->
-      <div class="card">
-        <div class="card-title">💬 Messages from Parents / Community</div>
-        <div class="card-sub">All messages sent via the Comments page.</div>
-        <div id="adminCommentsList"></div>
-      </div>
-
       <!-- ACCOUNTS MANAGEMENT -->
       <div class="card">
         <div class="card-title">👥 Registered Accounts</div>
@@ -1497,13 +1490,28 @@ console.log('✅ GPA portal client ready');
       </div>
     </div>
 
-    <!-- DIRECTOR COMMENTS VIEW -->
+    <!-- MESSAGES ADMIN -->
     <div class="asub" id="sub-comments-admin">
-      <div class="card">
-        <div class="card-title">💬 All Messages to Director</div>
-        <div class="card-sub">Messages sent by parents and community.</div>
-        <div id="directorComments"></div>
+      <!-- Stats strip -->
+      <div class="sgrid" id="msgStats" style="margin-bottom:16px;"></div>
+
+      <!-- Toolbar -->
+      <div class="card" style="margin-bottom:14px;padding:14px 16px;">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+          <input id="msgSearch" type="text" placeholder="🔍 Search by name, email, subject or message…" oninput="filterMessages()" style="flex:1;min-width:180px;padding:8px 12px;border-radius:8px;border:1.5px solid var(--border);font-family:'Nunito',sans-serif;font-size:13px;outline:none;"/>
+          <button class="btn btn-sm btn-outline" onclick="loadMessages()">🔄 Refresh</button>
+        </div>
+        <div class="nfilters" style="margin-top:10px;" id="msgFilters">
+          <button class="nfbtn active" onclick="setMsgFilter('all',this)">All</button>
+          <button class="nfbtn" onclick="setMsgFilter('unread',this)">🔵 Unread</button>
+          <button class="nfbtn" onclick="setMsgFilter('parent',this)">👪 Parent</button>
+          <button class="nfbtn" onclick="setMsgFilter('student',this)">👨‍🎓 Student</button>
+          <button class="nfbtn" onclick="setMsgFilter('visitor',this)">🌐 Visitor</button>
+        </div>
       </div>
+
+      <!-- Messages list -->
+      <div id="msgsList"></div>
     </div>
 
     <!-- ACTIVITY LOG -->
@@ -2175,7 +2183,7 @@ function setupDash(role){
 
   const tabsMap={
     teacher:[{id:'marks',label:'📝 Post Marks'}],
-    admin:[{id:'marks',label:'📝 Marks'},{id:'students',label:'👨‍🎓 Students'},{id:'staff',label:'👩‍🏫 Staff'},{id:'announcements',label:'📢 Announcements'},{id:'gallery-admin',label:'🖼️ Gallery'},{id:'payments',label:'💳 Payments'},{id:'activity',label:'📌 Activity'},{id:'news',label:'📰 News'},{id:'settings',label:'⚙️ Settings'}],
+    admin:[{id:'marks',label:'📝 Marks'},{id:'students',label:'👨‍🎓 Students'},{id:'staff',label:'👩‍🏫 Staff'},{id:'announcements',label:'📢 Announcements'},{id:'gallery-admin',label:'🖼️ Gallery'},{id:'comments-admin',label:'💬 Messages'},{id:'payments',label:'💳 Payments'},{id:'activity',label:'📌 Activity'},{id:'news',label:'📰 News'},{id:'settings',label:'⚙️ Settings'}],
     director:[{id:'marks',label:'📝 Marks'},{id:'students',label:'👨‍🎓 Students'},{id:'staff',label:'👩‍🏫 Staff'},{id:'announcements',label:'📢 Announcements'},{id:'gallery-admin',label:'🖼️ Gallery'},{id:'payments',label:'💳 Payments'},{id:'activity',label:'📌 Activity'},{id:'news',label:'📰 News'},{id:'comments-admin',label:'💬 Messages'},{id:'settings',label:'⚙️ Settings'}],
     parent:[{id:'marks',label:'📊 Check Results'}],
   };
@@ -2192,7 +2200,8 @@ function setupDash(role){
     loadAnnouncements();
     loadGalleryAdmin();
   }
-  if(role==='director'){renderDirComments();renderAccounts();}
+  if(role==='director'){loadMessages();renderAccounts();}
+  if(role==='admin'){loadMessages();}
 }
 
 function showDashTab(id,btn){
@@ -2200,6 +2209,9 @@ function showDashTab(id,btn){
   btn.classList.add('active');
   document.querySelectorAll('.asub').forEach(s=>s.classList.remove('active'));
   document.getElementById('sub-'+id).classList.add('active');
+  if(id==='comments-admin') loadMessages();
+  if(id==='announcements') loadAnnouncements();
+  if(id==='gallery-admin') loadGalleryAdmin();
 }
 
 // ============================================================
@@ -2895,9 +2907,138 @@ function renderAccounts(){
 
 function delAccount(username){if(!confirm('Delete this account?'))return;accounts=accounts.filter(a=>a.username!==username);renderAccounts();}
 
-function renderDirComments(){
-  const el=document.getElementById('directorComments');if(!el)return;
-  el.innerHTML=comments.length?comments.map(c=>`<div class="comment-card"><div class="comment-header"><div class="comment-avatar">${c.name.slice(0,2).toUpperCase()}</div><div><div class="comment-name">${c.name} <span class="badge bg-amber">${c.role}</span></div><div class="comment-time">${c.date}</div></div></div>${c.subject?`<strong style="font-size:12px;display:block;margin-bottom:3px;">Re: ${c.subject}</strong>`:''}<div class="comment-text">${c.msg}</div></div>`).join(''):'<p style="color:var(--muted);font-size:13px;padding:16px;">No messages yet.</p>';
+// ============================================================
+// MESSAGES ADMIN
+// ============================================================
+let allMessages = [];
+let msgFilter = 'all';
+
+async function loadMessages() {
+  const el = document.getElementById('msgsList');
+  if (!el) return;
+  el.innerHTML = '<p style="text-align:center;color:var(--muted);padding:28px;">Loading messages…</p>';
+  try {
+    const r = await fetch(API_URL + '/comments', { headers: { 'x-admin-key': GPA_ADMIN_KEY } });
+    const data = await r.json();
+    if (!data.success) throw new Error(data.message || 'Failed to load');
+    allMessages = data.comments || [];
+    renderMsgStats();
+    filterMessages();
+  } catch(e) {
+    el.innerHTML = `<div class="card" style="text-align:center;color:var(--red);padding:28px;">❌ ${e.message}</div>`;
+  }
+}
+
+function renderMsgStats() {
+  const total  = allMessages.length;
+  const unread = allMessages.filter(m => !m.read).length;
+  const today  = allMessages.filter(m => m.received_at && new Date(m.received_at).toDateString() === new Date().toDateString()).length;
+  const parents= allMessages.filter(m => m.sender_role === 'parent').length;
+  const el = document.getElementById('msgStats');
+  if (!el) return;
+  el.innerHTML = `
+    <div class="scard"><div class="snum">${total}</div><div class="slbl">Total Messages</div></div>
+    <div class="scard"><div class="snum" style="color:var(--blue)">${unread}</div><div class="slbl">Unread</div></div>
+    <div class="scard"><div class="snum" style="color:var(--green)">${today}</div><div class="slbl">Today</div></div>
+    <div class="scard"><div class="snum" style="color:var(--amber)">${parents}</div><div class="slbl">From Parents</div></div>`;
+}
+
+function setMsgFilter(f, btn) {
+  msgFilter = f;
+  document.querySelectorAll('#msgFilters .nfbtn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filterMessages();
+}
+
+function filterMessages() {
+  const q = (document.getElementById('msgSearch')?.value || '').toLowerCase();
+  let list = allMessages;
+  if (msgFilter === 'unread') list = list.filter(m => !m.read);
+  else if (msgFilter !== 'all') list = list.filter(m => m.sender_role === msgFilter);
+  if (q) list = list.filter(m =>
+    (m.sender_name||'').toLowerCase().includes(q) ||
+    (m.sender_email||'').toLowerCase().includes(q) ||
+    (m.subject||'').toLowerCase().includes(q) ||
+    (m.message||'').toLowerCase().includes(q)
+  );
+  renderMessages(list);
+}
+
+function renderMessages(list) {
+  const el = document.getElementById('msgsList');
+  if (!el) return;
+  if (!list.length) {
+    el.innerHTML = '<div class="card" style="text-align:center;color:var(--muted);padding:30px;font-size:14px;">📭 No messages found.</div>';
+    return;
+  }
+  const ROLE_BADGE = {parent:'bg-green',student:'bg-blue',visitor:'bg-amber',teacher:'bg-purple'};
+  el.innerHTML = list.map(m => {
+    const dt = m.received_at ? new Date(m.received_at).toLocaleString() : '—';
+    const initials = (m.sender_name||'?').slice(0,2).toUpperCase();
+    const badge = ROLE_BADGE[m.sender_role] || 'bg-amber';
+    const isNew = !m.read;
+    const safeName  = (m.sender_name||'').replace(/'/g,"\\'");
+    const safeSubj  = (m.subject||'').replace(/'/g,"\\'");
+    const safeEmail = (m.sender_email||'').replace(/'/g,"\\'");
+    return `
+      <div class="card" style="margin-bottom:10px;${isNew?'border-left:4px solid var(--blue);':''}">
+        <div style="display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap;">
+          <div class="comment-avatar" style="${isNew?'background:var(--blue-light);color:var(--blue);':''}">${initials}</div>
+          <div style="flex:1;min-width:180px;">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
+              <span style="font-size:14px;font-weight:800;">${m.sender_name||'Anonymous'}</span>
+              <span class="badge ${badge}">${m.sender_role||'visitor'}</span>
+              ${isNew?'<span class="badge bg-blue" style="font-size:10px;">NEW</span>':''}
+            </div>
+            <div style="font-size:12px;color:var(--muted);margin-bottom:6px;">
+              📧 ${m.sender_email||'—'} &nbsp;·&nbsp; 🕐 ${dt}
+            </div>
+            ${m.subject?`<div style="font-size:13px;font-weight:700;color:var(--green-dark);margin-bottom:5px;">📌 ${m.subject}</div>`:''}
+            <div style="font-size:13px;color:var(--text);line-height:1.65;white-space:pre-wrap;">${m.message||''}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0;">
+            <button class="btn btn-sm btn-blue" onclick="replyMessage('${safeEmail}','${safeName}','${safeSubj}')">↩️ Reply</button>
+            ${isNew?`<button class="btn btn-sm btn-outline" onclick="markMsgRead('${m.id}')">✓ Mark Read</button>`:''}
+            <button class="btn btn-sm btn-red" onclick="deleteMessage('${m.id}')">🗑️ Delete</button>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function replyMessage(email, name, subject) {
+  if (!email) return;
+  const sub = subject ? 'Re: ' + subject : "Re: Your message to God's Plan Academy";
+  const body = `Dear ${name},\n\nThank you for your message.\n\nBest regards,\nGod's Plan Academy\nGasabo, Kigali, Rwanda`;
+  window.open(`mailto:${email}?subject=${encodeURIComponent(sub)}&body=${encodeURIComponent(body)}`, '_blank');
+}
+
+async function markMsgRead(id) {
+  try {
+    const r = await fetch(API_URL + '/comments/' + id + '/read', {
+      method: 'PATCH', headers: { 'x-admin-key': GPA_ADMIN_KEY }
+    });
+    const data = await r.json();
+    if (!data.success) throw new Error(data.message);
+    const msg = allMessages.find(m => m.id === id);
+    if (msg) msg.read = true;
+    renderMsgStats();
+    filterMessages();
+  } catch(e) { alert('Error: ' + e.message); }
+}
+
+async function deleteMessage(id) {
+  if (!confirm('Delete this message permanently? This cannot be undone.')) return;
+  try {
+    const r = await fetch(API_URL + '/comments/' + id, {
+      method: 'DELETE', headers: { 'x-admin-key': GPA_ADMIN_KEY }
+    });
+    const data = await r.json();
+    if (!data.success) throw new Error(data.message);
+    allMessages = allMessages.filter(m => m.id !== id);
+    renderMsgStats();
+    filterMessages();
+  } catch(e) { alert('Error: ' + e.message); }
 }
 
 // ============================================================

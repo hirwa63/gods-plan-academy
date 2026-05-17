@@ -368,6 +368,33 @@ app.post('/api/gallery/:id/comments', async (req, res) => {
 });
 
 // ── Contact / Comments ────────────────────────────────────────
+app.get('/api/comments', requireAdmin, async (req, res) => {
+  try { res.json({ success: true, comments: await readJson(commentsPath) }); }
+  catch { res.status(500).json({ success: false, message: 'Unable to load messages.' }); }
+});
+
+app.patch('/api/comments/:id/read', requireAdmin, async (req, res) => {
+  try {
+    const comments = await readJson(commentsPath);
+    const idx = comments.findIndex(c => c.id === req.params.id);
+    if (idx === -1) return res.status(404).json({ success: false, message: 'Message not found.' });
+    comments[idx].read = true;
+    await writeJson(commentsPath, comments);
+    res.json({ success: true });
+  } catch { res.status(500).json({ success: false, message: 'Unable to update message.' }); }
+});
+
+app.delete('/api/comments/:id', requireAdmin, async (req, res) => {
+  try {
+    let comments = await readJson(commentsPath);
+    const before = comments.length;
+    comments = comments.filter(c => c.id !== req.params.id);
+    if (comments.length === before) return res.status(404).json({ success: false, message: 'Message not found.' });
+    await writeJson(commentsPath, comments);
+    res.json({ success: true });
+  } catch { res.status(500).json({ success: false, message: 'Unable to delete message.' }); }
+});
+
 app.post('/api/comments', async (req, res) => {
   const { sender_name, sender_email, sender_role, subject, message } = req.body;
   if (!sender_name || !sender_email || !message)
@@ -377,7 +404,8 @@ app.post('/api/comments', async (req, res) => {
     id: Date.now().toString(), sender_name, sender_email,
     sender_role: sender_role || 'visitor',
     subject: subject || 'General enquiry',
-    message, received_at: new Date().toISOString()
+    message, received_at: new Date().toISOString(),
+    read: false
   };
 
   try {
