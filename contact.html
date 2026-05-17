@@ -61,8 +61,9 @@ footer{background:var(--green-deeper);color:rgba(255,255,255,0.7);padding:48px 4
 .frow{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
 .sub-btn{width:100%;background:var(--blue);color:white;padding:13px;border-radius:9px;font-size:14px;font-weight:700;border:none;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;}
 .sub-btn:hover{background:#1140a6;}
-.suc{background:#EAF3DE;border:1px solid #C0DD97;border-radius:9px;padding:11px 14px;font-size:13px;color:#173404;font-weight:600;display:none;margin-bottom:12px;}
-.suc.show{display:block;}
+.status{display:none;border-radius:12px;padding:14px 16px;font-size:14px;font-weight:600;margin-bottom:16px;line-height:1.5;}
+.status.success{display:block;background:#EAF3DE;border:1px solid #C0DD97;color:#173404;}
+.status.error{display:block;background:#FDE9E9;border:1px solid #E3B1B1;color:#7A2121;}
 @media(max-width:768px){.contact-grid,.frow{grid-template-columns:1fr!important;}.section{padding:52px 16px;}.page-hero{padding:52px 16px;}.ph-title{font-size:32px;}}
 /* ===== NAVBAR ===== */
 .navbar{
@@ -166,21 +167,23 @@ footer{background:var(--green-deeper);color:rgba(255,255,255,0.7);padding:48px 4
 
 <script>
 async function send() {
-    // 1. Get the data from your input fields
-    // Ensure your HTML inputs have these IDs: id="name", id="email", id="subject", id="message"
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const subject = document.getElementById('subject').value;
-    const message = document.getElementById('message').value;
+    const statusEl = document.getElementById('contactStatus');
+    const name = document.getElementById('name').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const subject = document.getElementById('subject').value.trim();
+    const message = document.getElementById('message').value.trim();
 
-    // Basic check to make sure they filled the form
+    statusEl.className = 'status';
+    statusEl.textContent = '';
+
     if (!name || !email || !message) {
-        alert("Please fill in all required fields.");
+        statusEl.classList.add('error');
+        statusEl.textContent = 'Please fill in your name, email, and message.';
         return;
     }
 
     try {
-        // 2. Send the data to your Railway Backend
         const API_URL = window.GPA_API_URL || 'http://localhost:3000/api';
         const response = await fetch(`${API_URL}/comments`, {
             method: 'POST',
@@ -190,25 +193,30 @@ async function send() {
             body: JSON.stringify({
                 sender_name: name,
                 sender_email: email,
-                subject: subject,
+                sender_role: phone || 'visitor',
+                subject: subject || 'General enquiry',
                 message: message
             })
         });
 
         const data = await response.json();
 
-        if (data.success) {
-            alert("Message sent successfully! Check your email soon.");
-            // Optional: Clear the form
+        if (response.ok && data.success) {
+            statusEl.classList.add('success');
+            statusEl.textContent = '✅ Message sent successfully. We will reply within 24 hours.';
             document.getElementById('name').value = '';
+            document.getElementById('phone').value = '';
             document.getElementById('email').value = '';
             document.getElementById('message').value = '';
+            setTimeout(() => statusEl.classList.remove('success'), 7000);
         } else {
-            alert("Server error: " + data.message);
+            statusEl.classList.add('error');
+            statusEl.textContent = data.message || 'Server error: Unable to send your message.';
         }
     } catch (error) {
-        console.error("Connection Error:", error);
-        alert("Could not reach the server. Make sure the backend is Online.");
+        console.error('Connection Error:', error);
+        statusEl.classList.add('error');
+        statusEl.textContent = 'Could not reach the server. Make sure the backend is online.';
     }
 }
 </script>
@@ -271,14 +279,14 @@ async function send() {
         <div class="form-card">
           <h3>Send Us a Message</h3>
           <p>We reply within 24 hours on working days.</p>
-          <div class="suc" id="suc">✅ Message sent! We will reply within 24 hours. Thank you!</div>
+          <div class="status" id="contactStatus"></div>
           <div class="frow">
-            <div class="fg"><label>Your Name</label><input type="text" id="n" placeholder="Full name"/></div>
-            <div class="fg"><label>Your Phone</label><input type="tel" id="p" placeholder="+250 7XX XXX XXX"/></div>
+            <div class="fg"><label>Your Name</label><input type="text" id="name" placeholder="Full name"/></div>
+            <div class="fg"><label>Your Phone</label><input type="tel" id="phone" placeholder="+250 7XX XXX XXX"/></div>
           </div>
-          <div class="fg"><label>Email Address</label><input type="email" id="e" placeholder="your@email.com"/></div>
+          <div class="fg"><label>Email Address</label><input type="email" id="email" placeholder="your@email.com"/></div>
           <div class="fg"><label>Subject</label>
-            <select id="s">
+            <select id="subject">
               <option>General Enquiry</option>
               <option>Admissions / Enrollment</option>
               <option>Fees &amp; Payments</option>
@@ -287,24 +295,13 @@ async function send() {
               <option>Other</option>
             </select>
           </div>
-          <div class="fg"><label>Message</label><textarea id="m" placeholder="Write your message here..."></textarea></div>
+          <div class="fg"><label>Message</label><textarea id="message" placeholder="Write your message here..."></textarea></div>
           <button class="sub-btn" onclick="send()">📧 Send Message</button>
         </div>
       </div>
     </div>
   </div>
 </section>
-<script>
-function send(){
-  const n=document.getElementById('n').value.trim();
-  const e=document.getElementById('e').value.trim();
-  const m=document.getElementById('m').value.trim();
-  if(!n||!e||!m){alert('Please fill in your name, email and message.');return;}
-  document.getElementById('suc').classList.add('show');
-  ['n','p','e','m'].forEach(id=>document.getElementById(id).value='');
-  setTimeout(()=>document.getElementById('suc').classList.remove('show'),5000);
-}
-</script>
 <script>
 function toggleMob() {
   document.getElementById('mobMenu').classList.toggle('open');

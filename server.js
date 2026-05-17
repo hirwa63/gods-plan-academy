@@ -10,13 +10,13 @@ const dotenv   = require('dotenv');
 dotenv.config();
 
 const PORT       = process.env.PORT       || 3000;
-const ADMIN_EMAIL= process.env.ADMIN_EMAIL|| 'admin@godsplanacademy.rw';
+const ADMIN_EMAIL= process.env.ADMIN_EMAIL ? process.env.ADMIN_EMAIL.trim() : 'admin@godsplanacademy.rw';
 const ADMIN_KEY  = process.env.ADMIN_KEY  || 'gpa-admin-2026';
-const SMTP_HOST  = process.env.SMTP_HOST;
+const SMTP_HOST  = process.env.SMTP_HOST ? process.env.SMTP_HOST.trim() : undefined;
 const SMTP_PORT  = Number(process.env.SMTP_PORT || 587);
 const SMTP_SECURE= process.env.SMTP_SECURE === 'true';
-const SMTP_USER  = process.env.SMTP_USER;
-const SMTP_PASS  = process.env.SMTP_PASS;
+const SMTP_USER  = process.env.SMTP_USER ? process.env.SMTP_USER.trim() : undefined;
+const SMTP_PASS  = process.env.SMTP_PASS ? process.env.SMTP_PASS.replace(/\s/g, '') : undefined;
 
 const app      = express();
 const dataDir  = path.join(__dirname, 'data');
@@ -83,11 +83,24 @@ function requireAdmin(req, res, next) {
 function createMailer() {
   if (!SMTP_HOST || !SMTP_USER || !SMTP_PASS) return null;
   return nodemailer.createTransport({
-    host: SMTP_HOST, port: SMTP_PORT, secure: SMTP_SECURE,
+    host: SMTP_HOST,
+    port: SMTP_PORT,
+    secure: SMTP_SECURE,
     auth: { user: SMTP_USER, pass: SMTP_PASS },
   });
 }
 const transporter = createMailer();
+
+async function verifyMailer() {
+  if (!transporter) return false;
+  try {
+    await transporter.verify();
+    return true;
+  } catch (err) {
+    console.error('SMTP verification failed:', err.message || err);
+    return false;
+  }
+}
 
 // Auto-update announcement statuses based on dates
 function syncAnnouncementStatuses(list) {
@@ -394,11 +407,22 @@ app.post('/api/comments', async (req, res) => {
 // ── Start ─────────────────────────────────────────────────────
 (async () => {
   await ensureDataFiles();
-  app.listen(PORT, () => {
+  app.listen(PORT, async () => {
     console.log(`\n🌱 God's Plan Academy backend → http://localhost:${PORT}`);
     console.log(`   Students API : http://localhost:${PORT}/api/students`);
     console.log(`   Announcements: http://localhost:${PORT}/api/announcements`);
     console.log(`   Gallery      : http://localhost:${PORT}/api/gallery`);
-    if (!transporter) console.warn('   ⚠️  SMTP credentials missing — email disabled.');
+
+    if (!transporter) {
+      console.warn('   ⚠️  SMTP credentials missing — email disabled. Check your .env file.');
+      return;
+    }
+
+    const smtpOk = await verifyMailer();
+    if (smtpOk) {
+      console.log('   ✅ SMTP is configured and ready to send emails.');
+    } else {
+      console.warn('   ⚠️  SMTP configuration is invalid or blocked. Contact form emails will fail until corrected.');
+    }
   });
 })();
