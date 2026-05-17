@@ -1666,6 +1666,11 @@ console.log('✅ GPA portal client ready');
 </div>
 <script>
 // ============================================================
+// GLOBALS — must be defined here (outside the API wrapper IIFE)
+// ============================================================
+const API_URL     = window.GPA_API_URL || 'http://localhost:3000/api';
+const GPA_ADMIN_KEY = 'gpa-admin-2026';
+
 // DATA
 // ============================================================
 const SUBS_N=['English','Kinyarwanda','Mathematics','Science','Creative Arts'];
