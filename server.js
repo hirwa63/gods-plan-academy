@@ -499,7 +499,11 @@ app.post('/api/parent/login', async (req, res) => {
     const token = genToken();
     const sessions = await readJson(parentSessPath);
     sessions.push({ token, parentId: parent.id, expiresAt: new Date(Date.now() + 30*24*60*60*1000).toISOString() });
-    if (sessions.length > 1000) sessions.splice(0, sessions.length - 1000);
+    // Remove expired sessions on every login
+    const now = new Date();
+    const cleaned = sessions.filter(s => new Date(s.expiresAt) > now);
+    sessions.length = 0; cleaned.forEach(s => sessions.push(s));
+    if (sessions.length > 500) sessions.splice(0, sessions.length - 500);
     await writeJson(parentSessPath, sessions);
     res.json({ success: true, token, parent: { id: parent.id, name: parent.name, email: parent.email, photo: parent.photo } });
   } catch { res.status(500).json({ success: false, message: 'Login failed.' }); }
@@ -585,7 +589,7 @@ app.get('/api/parent/dashboard', requireParent, async (req, res) => {
       return { child: { reg: child.reg, name: child.name, cls: child.cls }, unpaidFees: unpaid.length, unpaidAmount: unpaid.reduce((s,f)=>s+(f.amount-f.paid),0), latestResult: latestResult ? { term: latestResult.term, average: latestResult.average, position: latestResult.position, totalStudents: latestResult.totalStudents } : null };
     });
     const recentNotices = announcements.filter(a => a.status==='published').sort((a,b)=>new Date(b.publishDate)-new Date(a.publishDate)).slice(0,3);
-    const upcomingEvents = events.filter(e => new Date(e.date) >= new Date()).sort((a,b)=>new Date(a.date)-new Date(b.date)).slice(0,3);
+    const upcomingEvents = events.filter(e => new Date(e.date) >= new Date()).sort((a,b)=>new Date(a.date)-new Date(b.date)).slice(0,10);
     const msgs = await readJson(pMessagesPath);
     const unreadMsgs = msgs.filter(m => m.to === parent.id && !m.read).length;
     res.json({ success: true, parent: { name: parent.name }, children, recentNotices, upcomingEvents, unreadMsgs });
