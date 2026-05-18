@@ -6,6 +6,7 @@ const fs       = require('fs').promises;
 const fss      = require('fs');
 const path     = require('path');
 const dotenv   = require('dotenv');
+const crypto   = require('crypto');
 
 dotenv.config();
 
@@ -28,6 +29,15 @@ const studentsPath      = path.join(dataDir, 'students.json');
 const staffPath         = path.join(dataDir, 'staff.json');
 const announcementsPath = path.join(dataDir, 'announcements.json');
 const galleryPath       = path.join(dataDir, 'gallery.json');
+const parentsPath       = path.join(dataDir, 'parents.json');
+const parentSessPath    = path.join(dataDir, 'parent-sessions.json');
+const feesPath          = path.join(dataDir, 'fees.json');
+const resultsPath       = path.join(dataDir, 'results.json');
+const attendancePath    = path.join(dataDir, 'attendance.json');
+const timetablesPath    = path.join(dataDir, 'timetables.json');
+const eventsPath        = path.join(dataDir, 'events.json');
+const pMessagesPath     = path.join(dataDir, 'parent-messages.json');
+const resetTokensPath   = path.join(dataDir, 'reset-tokens.json');
 
 app.use(cors());
 app.use(express.json());
@@ -56,7 +66,8 @@ async function ensureDataFiles() {
   if (!fss.existsSync(uploadDir)) fss.mkdirSync(uploadDir, { recursive: true });
   await fs.mkdir(dataDir, { recursive: true });
   const files = [activitiesPath, commentsPath, studentsPath, staffPath,
-                 announcementsPath, galleryPath];
+                 announcementsPath, galleryPath,
+                 parentSessPath, resetTokensPath, pMessagesPath];
   for (const f of files) {
     try { await fs.access(f); } catch { await fs.writeFile(f, '[]', 'utf8'); }
   }
@@ -456,6 +467,260 @@ app.post('/api/comments', async (req, res) => {
     console.error('Email send failed:', err);
     res.status(500).json({ success: false, message: 'Unable to send email. Please try again later.' });
   }
+});
+
+// ── Parent Portal ─────────────────────────────────────────────
+function genToken() { return crypto.randomBytes(32).toString('hex'); }
+
+async function requireParent(req, res, next) {
+  const token = req.headers['x-parent-token'];
+  if (!token) return res.status(401).json({ success: false, message: 'Login required.' });
+  try {
+    const sessions = await readJson(parentSessPath);
+    const sess = sessions.find(s => s.token === token && new Date(s.expiresAt) > new Date());
+    if (!sess) return res.status(401).json({ success: false, message: 'Session expired. Please log in again.' });
+    const parents = await readJson(parentsPath);
+    const parent = parents.find(p => p.id === sess.parentId);
+    if (!parent) return res.status(401).json({ success: false, message: 'Account not found.' });
+    if (!parent.approved) return res.status(403).json({ success: false, message: 'Account pending admin approval.' });
+    req.parent = parent;
+    next();
+  } catch { res.status(500).json({ success: false, message: 'Auth error.' }); }
+}
+
+app.post('/api/parent/login', async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) return res.status(400).json({ success: false, message: 'Email and password required.' });
+  try {
+    const parents = await readJson(parentsPath);
+    const parent = parents.find(p => p.email.toLowerCase() === email.toLowerCase() && p.password === password);
+    if (!parent) return res.status(401).json({ success: false, message: 'Invalid email or password.' });
+    if (!parent.approved) return res.status(403).json({ success: false, message: 'Your account is pending approval by the school admin. You will be notified by email.' });
+    const token = genToken();
+    const sessions = await readJson(parentSessPath);
+    sessions.push({ token, parentId: parent.id, expiresAt: new Date(Date.now() + 30*24*60*60*1000).toISOString() });
+    if (sessions.length > 1000) sessions.splice(0, sessions.length - 1000);
+    await writeJson(parentSessPath, sessions);
+    res.json({ success: true, token, parent: { id: parent.id, name: parent.name, email: parent.email, photo: parent.photo } });
+  } catch { res.status(500).json({ success: false, message: 'Login failed.' }); }
+});
+
+app.post('/api/parent/logout', requireParent, async (req, res) => {
+  try {
+    let sessions = await readJson(parentSessPath);
+    sessions = sessions.filter(s => s.token !== req.headers['x-parent-token']);
+    await writeJson(parentSessPath, sessions);
+    res.json({ success: true });
+  } catch { res.json({ success: true }); }
+});
+
+app.post('/api/parent/register', async (req, res) => {
+  const { name, email, phone, password, childReg } = req.body;
+  if (!name || !email || !password) return res.status(400).json({ success: false, message: 'Name, email and password required.' });
+  try {
+    const parents = await readJson(parentsPath);
+    if (parents.find(p => p.email.toLowerCase() === email.toLowerCase()))
+      return res.status(400).json({ success: false, message: 'An account with this email already exists.' });
+    let children = [];
+    if (childReg) {
+      const students = await readJson(studentsPath);
+      if (!students.find(s => s.reg === childReg))
+        return res.status(400).json({ success: false, message: 'Student registration number not found. Please check with the school.' });
+      children = [childReg];
+    }
+    const parent = { id: 'par_' + Date.now(), name, email, phone: phone||'', password, approved: false, children, photo: null, notifEmail: true, notifSMS: false, createdAt: new Date().toISOString() };
+    parents.push(parent);
+    await writeJson(parentsPath, parents);
+    res.json({ success: true, message: 'Account created! Awaiting admin approval. You will be notified by email once approved.' });
+  } catch(e) { res.status(500).json({ success: false, message: 'Registration failed.' }); }
+});
+
+app.post('/api/parent/forgot-password', async (req, res) => {
+  const { email } = req.body;
+  if (!email) return res.status(400).json({ success: false, message: 'Email required.' });
+  try {
+    const parents = await readJson(parentsPath);
+    const parent = parents.find(p => p.email.toLowerCase() === email.toLowerCase());
+    if (parent) {
+      const token = genToken();
+      const rt = await readJson(resetTokensPath);
+      rt.push({ token, parentId: parent.id, expiresAt: new Date(Date.now() + 3600000).toISOString() });
+      await writeJson(resetTokensPath, rt);
+      if (transporter) {
+        await transporter.sendMail({ from: `"God's Plan Academy" <${SMTP_USER}>`, to: email, subject: "Password Reset — GPA Parent Portal", text: `Hello ${parent.name},\n\nReset your password here:\nhttp://localhost:3000/parent-portal.html?reset=${token}\n\nExpires in 1 hour.\n\nGod's Plan Academy` }).catch(()=>{});
+      }
+    }
+    res.json({ success: true, message: 'If that email is registered, a reset link has been sent.' });
+  } catch { res.status(500).json({ success: false, message: 'Request failed.' }); }
+});
+
+app.post('/api/parent/reset-password', async (req, res) => {
+  const { token, password } = req.body;
+  if (!token || !password) return res.status(400).json({ success: false, message: 'Token and password required.' });
+  try {
+    const rt = await readJson(resetTokensPath);
+    const entry = rt.find(r => r.token === token && new Date(r.expiresAt) > new Date());
+    if (!entry) return res.status(400).json({ success: false, message: 'Reset link is invalid or expired.' });
+    const parents = await readJson(parentsPath);
+    const idx = parents.findIndex(p => p.id === entry.parentId);
+    if (idx === -1) return res.status(404).json({ success: false, message: 'Account not found.' });
+    parents[idx].password = password;
+    await writeJson(parentsPath, parents);
+    await writeJson(resetTokensPath, rt.filter(r => r.token !== token));
+    res.json({ success: true, message: 'Password reset successfully. You can now log in.' });
+  } catch { res.status(500).json({ success: false, message: 'Reset failed.' }); }
+});
+
+app.get('/api/parent/dashboard', requireParent, async (req, res) => {
+  try {
+    const parent = req.parent;
+    const [students, fees, results, announcements, events] = await Promise.all([
+      readJson(studentsPath), readJson(feesPath), readJson(resultsPath),
+      readJson(announcementsPath), readJson(eventsPath)
+    ]);
+    const children = students.filter(s => parent.children.includes(s.reg)).map(child => {
+      const childFees = fees.filter(f => f.studentReg === child.reg);
+      const unpaid = childFees.filter(f => f.status !== 'paid');
+      const latestResult = results.filter(r => r.studentReg === child.reg).slice(-1)[0];
+      return { child: { reg: child.reg, name: child.name, cls: child.cls }, unpaidFees: unpaid.length, unpaidAmount: unpaid.reduce((s,f)=>s+(f.amount-f.paid),0), latestResult: latestResult ? { term: latestResult.term, average: latestResult.average, position: latestResult.position, totalStudents: latestResult.totalStudents } : null };
+    });
+    const recentNotices = announcements.filter(a => a.status==='published').sort((a,b)=>new Date(b.publishDate)-new Date(a.publishDate)).slice(0,3);
+    const upcomingEvents = events.filter(e => new Date(e.date) >= new Date()).sort((a,b)=>new Date(a.date)-new Date(b.date)).slice(0,3);
+    const msgs = await readJson(pMessagesPath);
+    const unreadMsgs = msgs.filter(m => m.to === parent.id && !m.read).length;
+    res.json({ success: true, parent: { name: parent.name }, children, recentNotices, upcomingEvents, unreadMsgs });
+  } catch(e) { res.status(500).json({ success: false, message: e.message }); }
+});
+
+app.get('/api/parent/profile', requireParent, async (req, res) => {
+  try {
+    const students = await readJson(studentsPath);
+    const children = students.filter(s => req.parent.children.includes(s.reg));
+    const { password, ...safe } = req.parent;
+    res.json({ success: true, parent: safe, children });
+  } catch { res.status(500).json({ success: false, message: 'Failed.' }); }
+});
+
+app.put('/api/parent/profile', requireParent, async (req, res) => {
+  try {
+    const parents = await readJson(parentsPath);
+    const idx = parents.findIndex(p => p.id === req.parent.id);
+    ['name','phone','notifEmail','notifSMS'].forEach(k => { if (req.body[k] !== undefined) parents[idx][k] = req.body[k]; });
+    await writeJson(parentsPath, parents);
+    res.json({ success: true });
+  } catch { res.status(500).json({ success: false, message: 'Update failed.' }); }
+});
+
+app.put('/api/parent/change-password', requireParent, async (req, res) => {
+  const { oldPassword, newPassword } = req.body;
+  if (!oldPassword || !newPassword) return res.status(400).json({ success: false, message: 'Both passwords required.' });
+  try {
+    const parents = await readJson(parentsPath);
+    const idx = parents.findIndex(p => p.id === req.parent.id);
+    if (parents[idx].password !== oldPassword) return res.status(400).json({ success: false, message: 'Current password is incorrect.' });
+    parents[idx].password = newPassword;
+    await writeJson(parentsPath, parents);
+    res.json({ success: true });
+  } catch { res.status(500).json({ success: false, message: 'Update failed.' }); }
+});
+
+app.get('/api/parent/notices', requireParent, async (req, res) => {
+  try {
+    const list = await readJson(announcementsPath);
+    res.json({ success: true, notices: list.filter(a=>a.status==='published').sort((a,b)=>new Date(b.publishDate)-new Date(a.publishDate)) });
+  } catch { res.status(500).json({ success: false, message: 'Failed.' }); }
+});
+
+app.get('/api/parent/fees', requireParent, async (req, res) => {
+  try {
+    const fees = await readJson(feesPath);
+    res.json({ success: true, fees: fees.filter(f=>req.parent.children.includes(f.studentReg)) });
+  } catch { res.status(500).json({ success: false, message: 'Failed.' }); }
+});
+
+app.get('/api/parent/results', requireParent, async (req, res) => {
+  try {
+    const results = await readJson(resultsPath);
+    res.json({ success: true, results: results.filter(r=>req.parent.children.includes(r.studentReg)) });
+  } catch { res.status(500).json({ success: false, message: 'Failed.' }); }
+});
+
+app.get('/api/parent/attendance', requireParent, async (req, res) => {
+  try {
+    const att = await readJson(attendancePath);
+    res.json({ success: true, attendance: att.filter(a=>req.parent.children.includes(a.studentReg)) });
+  } catch { res.status(500).json({ success: false, message: 'Failed.' }); }
+});
+
+app.get('/api/parent/timetable', requireParent, async (req, res) => {
+  try {
+    const [students, timetables] = await Promise.all([readJson(studentsPath), readJson(timetablesPath)]);
+    const result = {};
+    req.parent.children.forEach(reg => {
+      const stu = students.find(s => s.reg === reg);
+      if (stu) result[reg] = { studentName: stu.name, cls: stu.cls, schedule: timetables[stu.cls] || {} };
+    });
+    res.json({ success: true, timetables: result });
+  } catch { res.status(500).json({ success: false, message: 'Failed.' }); }
+});
+
+app.get('/api/parent/events', requireParent, async (req, res) => {
+  try { res.json({ success: true, events: await readJson(eventsPath) }); }
+  catch { res.status(500).json({ success: false, message: 'Failed.' }); }
+});
+
+app.get('/api/parent/messages', requireParent, async (req, res) => {
+  try {
+    const msgs = await readJson(pMessagesPath);
+    res.json({ success: true, messages: msgs.filter(m=>m.to===req.parent.id||m.from===req.parent.id).sort((a,b)=>new Date(b.date)-new Date(a.date)) });
+  } catch { res.status(500).json({ success: false, message: 'Failed.' }); }
+});
+
+app.post('/api/parent/messages', requireParent, async (req, res) => {
+  const { subject, body } = req.body;
+  if (!subject || !body) return res.status(400).json({ success: false, message: 'Subject and message required.' });
+  try {
+    const msgs = await readJson(pMessagesPath);
+    const msg = { id:'pmsg_'+Date.now(), from:req.parent.id, fromName:req.parent.name, to:'admin', subject, body, date:new Date().toISOString(), read:false };
+    msgs.unshift(msg);
+    await writeJson(pMessagesPath, msgs);
+    res.json({ success: true, message: msg });
+  } catch { res.status(500).json({ success: false, message: 'Failed.' }); }
+});
+
+app.put('/api/parent/messages/:id/read', requireParent, async (req, res) => {
+  try {
+    const msgs = await readJson(pMessagesPath);
+    const idx = msgs.findIndex(m=>m.id===req.params.id && m.to===req.parent.id);
+    if (idx >= 0) { msgs[idx].read = true; await writeJson(pMessagesPath, msgs); }
+    res.json({ success: true });
+  } catch { res.status(500).json({ success: false, message: 'Failed.' }); }
+});
+
+app.get('/api/parent/unread-count', requireParent, async (req, res) => {
+  try {
+    const msgs = await readJson(pMessagesPath);
+    res.json({ success: true, count: msgs.filter(m=>m.to===req.parent.id&&!m.read).length });
+  } catch { res.json({ success: true, count: 0 }); }
+});
+
+// Admin: list/approve parent accounts
+app.get('/api/parents', requireAdmin, async (req, res) => {
+  try {
+    const parents = await readJson(parentsPath);
+    res.json({ success: true, parents: parents.map(p=>({ ...p, password:'***' })) });
+  } catch { res.status(500).json({ success: false, message: 'Failed.' }); }
+});
+
+app.put('/api/parents/:id/approve', requireAdmin, async (req, res) => {
+  try {
+    const parents = await readJson(parentsPath);
+    const idx = parents.findIndex(p=>p.id===req.params.id);
+    if (idx === -1) return res.status(404).json({ success: false, message: 'Not found.' });
+    parents[idx].approved = req.body.approved !== false;
+    await writeJson(parentsPath, parents);
+    res.json({ success: true });
+  } catch { res.status(500).json({ success: false, message: 'Failed.' }); }
 });
 
 // ── Start ─────────────────────────────────────────────────────

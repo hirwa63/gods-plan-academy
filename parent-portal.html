@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Parent Portal – God's Plan Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --green:#1D9E75;--green-dark:#085041;--green-deeper:#04342C;--green-light:#E1F5EE;--green-mid:#9FE1CB;
+  --blue:#1a56db;--amber:#EF9F27;--amber-light:#FAEEDA;--red:#E24B4A;--red-light:#FCEBEB;
+  --purple:#7F77DD;--purple-light:#EEEDFE;
+  --text:#1a1a1a;--muted:#5a6a70;--bg:#f0f5f3;--white:#fff;--border:rgba(0,0,0,0.09);--radius:14px;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+/* ─── TOAST ─────────────────────────────── */
+.toast{position:fixed;bottom:24px;right:24px;z-index:9999;padding:12px 20px;border-radius:10px;font-size:14px;font-weight:700;color:white;max-width:320px;opacity:0;transform:translateY(12px);transition:all .3s;pointer-events:none;}
+.toast.show{opacity:1;transform:none;}
+.toast.success{background:#1D9E75;}
+.toast.error{background:#E24B4A;}
+.toast.info{background:#1a56db;}
+
+/* ─── LOADING ────────────────────────────── */
+.loading-overlay{display:none;position:fixed;inset:0;background:rgba(255,255,255,.8);z-index:8000;align-items:center;justify-content:center;}
+.loading-overlay.show{display:flex;}
+.spinner{width:44px;height:44px;border:4px solid var(--green-light);border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ─── LOGIN SCREEN ───────────────────────── */
+#loginScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,#04342C 0%,#085041 45%,#1D9E75 100%);padding:20px;}
+.login-card{background:white;border-radius:20px;padding:36px 32px;width:100%;max-width:440px;box-shadow:0 24px 64px rgba(0,0,0,.35);}
+.login-logo{text-align:center;margin-bottom:28px;}
+.login-logo .logo-icon{font-size:44px;margin-bottom:8px;}
+.login-logo h1{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--green-dark);margin-bottom:2px;}
+.login-logo p{font-size:12px;color:var(--muted);}
+.auth-tabs{display:flex;border-bottom:2px solid var(--border);margin-bottom:22px;}
+.atab{flex:1;padding:9px;text-align:center;font-weight:700;font-size:13px;cursor:pointer;border:none;background:none;font-family:'Outfit',sans-serif;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .2s;}
+.atab.active{color:var(--green);border-bottom-color:var(--green);}
+.aform{display:none;}.aform.active{display:block;}
+.fg{margin-bottom:13px;}
+.fg label{display:block;font-size:12px;font-weight:700;color:var(--text);margin-bottom:5px;text-transform:uppercase;letter-spacing:.04em;}
+.fg input{width:100%;padding:10px 13px;border-radius:9px;border:1.5px solid var(--border);font-family:'Outfit',sans-serif;font-size:14px;outline:none;transition:border-color .2s;}
+.fg input:focus{border-color:var(--green);}
+.btn-full{width:100%;padding:12px;border-radius:9px;font-size:14px;font-weight:800;cursor:pointer;font-family:'Outfit',sans-serif;border:none;transition:all .2s;}
+.btn-green{background:var(--green);color:white;}.btn-green:hover{background:var(--green-dark);}
+.btn-outline{background:none;border:2px solid var(--border);color:var(--muted);}.btn-outline:hover{border-color:var(--green);color:var(--green);}
+.forgot-link{text-align:center;margin-top:12px;font-size:13px;color:var(--muted);}
+.forgot-link a{color:var(--green);cursor:pointer;font-weight:700;text-decoration:none;}
+.alert-box{padding:10px 14px;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:12px;display:none;}
+.alert-box.show{display:block;}
+.a-err{background:var(--red-light);border:1px solid #F09595;color:#501313;}
+.a-ok{background:#EAF3DE;border:1px solid #C0DD97;color:#173404;}
+.divider{text-align:center;color:var(--muted);font-size:12px;margin:14px 0;position:relative;}
+.divider::before,.divider::after{content:'';position:absolute;top:50%;width:42%;height:1px;background:var(--border);}
+.divider::before{left:0;}.divider::after{right:0;}
+.back-to-site{display:block;text-align:center;margin-top:18px;font-size:13px;color:rgba(255,255,255,0.7);text-decoration:none;}
+.back-to-site:hover{color:white;}
+
+/* ─── PORTAL APP ─────────────────────────── */
+#portalApp{display:none;}
+
+/* NAV */
+.portal-nav{background:var(--green-dark);position:sticky;top:0;z-index:600;padding:0 20px;}
+.nav-top-row{display:flex;align-items:center;justify-content:space-between;height:58px;}
+.nav-brand-p{display:flex;align-items:center;gap:9px;color:white;font-size:16px;font-weight:800;text-decoration:none;}
+.nav-brand-p span{font-size:20px;}
+.nav-actions{display:flex;align-items:center;gap:10px;}
+.nav-badge-btn{position:relative;background:rgba(255,255,255,.12);border:none;color:white;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;}
+.nav-badge{position:absolute;top:-2px;right:-2px;background:var(--red);color:white;font-size:9px;font-weight:800;min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 3px;}
+.logout-btn{background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);color:white;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;}
+.logout-btn:hover{background:rgba(255,255,255,.22);}
+.nav-items{display:flex;gap:2px;padding:6px 0;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.nav-items::-webkit-scrollbar{display:none;}
+.nav-item{background:none;border:none;color:rgba(255,255,255,.75);font-size:12px;font-weight:700;padding:7px 12px;border-radius:8px;cursor:pointer;font-family:'Outfit',sans-serif;white-space:nowrap;transition:all .2s;display:flex;align-items:center;gap:5px;}
+.nav-item:hover,.nav-item.active{background:rgba(255,255,255,.16);color:white;}
+
+/* SECTIONS */
+.portal-main{max-width:1100px;margin:0 auto;padding:24px 18px;}
+.p-section{display:none;animation:fadeIn .3s ease;}
+.p-section.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+.sec-hdr{margin-bottom:22px;}
+.sec-hdr h2{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--green-dark);}
+.sec-hdr p{font-size:14px;color:var(--muted);margin-top:3px;}
+
+/* CARDS */
+.card{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.card-title{font-size:15px;font-weight:800;color:var(--green-dark);margin-bottom:4px;}
+.card-sub{font-size:12px;color:var(--muted);margin-bottom:14px;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.stat-card{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);padding:18px 16px;text-align:center;}
+.stat-num{font-size:26px;font-weight:900;}
+.stat-lbl{font-size:11px;color:var(--muted);margin-top:2px;}
+
+/* BADGE */
+.badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;}
+.bg-green{background:var(--green-light);color:var(--green-dark);}
+.bg-amber{background:var(--amber-light);color:#633806;}
+.bg-red{background:var(--red-light);color:#501313;}
+.bg-blue{background:#E6F1FB;color:#042C53;}
+.bg-purple{background:var(--purple-light);color:#26215C;}
+
+/* TABLE */
+.tw{overflow-x:auto;border-radius:10px;border:1px solid var(--border);}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{background:var(--green-dark);color:white;padding:9px 12px;text-align:left;font-size:12px;font-weight:700;}
+td{padding:9px 12px;border-bottom:1px solid var(--border);}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:#f5fdf9;}
+
+/* EMPTY STATE */
+.empty{text-align:center;padding:48px 20px;color:var(--muted);}
+.empty .ei{font-size:44px;margin-bottom:12px;}
+.empty p{font-size:14px;}
+
+/* DASHBOARD */
+.welcome-band{background:linear-gradient(135deg,var(--green-dark),var(--green));border-radius:var(--radius);padding:24px 28px;color:white;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;}
+.welcome-band h2{font-family:'Cormorant Garamond',serif;font-size:26px;margin-bottom:4px;}
+.welcome-band p{font-size:13px;opacity:.8;}
+.child-card{border-left:4px solid var(--green);padding-left:12px;}
+.child-name{font-size:16px;font-weight:800;color:var(--green-dark);}
+.child-cls{font-size:12px;color:var(--muted);}
+.dash-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:20px;}
+.notice-item{padding:10px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start;}
+.notice-item:last-child{border-bottom:none;}
+.notice-dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0;margin-top:5px;}
+.notice-dot.urgent{background:var(--red);}
+.event-item{display:flex;gap:12px;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);}
+.event-item:last-child{border-bottom:none;}
+.event-date-box{background:var(--green-light);color:var(--green-dark);border-radius:8px;padding:6px 10px;text-align:center;flex-shrink:0;}
+.edb-day{font-size:18px;font-weight:900;line-height:1;}
+.edb-mon{font-size:10px;font-weight:700;text-transform:uppercase;}
+
+/* NOTICES */
+.notice-card{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);padding:16px 18px;margin-bottom:10px;cursor:pointer;transition:box-shadow .2s;}
+.notice-card:hover{box-shadow:0 6px 18px rgba(0,0,0,.08);}
+.notice-card.unread{border-left:4px solid var(--green);}
+.notice-card .n-title{font-size:14px;font-weight:800;color:var(--green-dark);margin-bottom:4px;}
+.notice-card .n-meta{font-size:11px;color:var(--muted);display:flex;gap:12px;flex-wrap:wrap;}
+.filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+.fbtn{padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);background:white;font-size:12px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;}
+.fbtn.active,.fbtn:hover{background:var(--green);color:white;border-color:var(--green);}
+
+/* FEES */
+.fee-term-card{border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;margin-bottom:14px;}
+.fee-term-hdr{padding:14px 18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+.fee-term-hdr.paid{background:#EAF3DE;}
+.fee-term-hdr.partial{background:var(--amber-light);}
+.fee-term-hdr.unpaid{background:var(--red-light);}
+.fee-term-name{font-size:15px;font-weight:800;}
+.fee-balance{font-size:20px;font-weight:900;}
+.fee-balance.red{color:var(--red);}
+.fee-body{background:white;padding:14px 18px;}
+.fee-row{display:flex;justify-content:space-between;padding:5px 0;font-size:13px;border-bottom:1px solid var(--border);}
+.fee-row:last-child{border-bottom:none;font-weight:800;}
+.pay-btn{display:inline-flex;align-items:center;gap:6px;background:var(--green);color:white;padding:10px 22px;border-radius:9px;font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;}
+.pay-btn:hover{background:var(--green-dark);}
+
+/* RESULTS */
+.result-term{margin-bottom:20px;}
+.result-term-hdr{background:var(--green-dark);color:white;border-radius:10px 10px 0 0;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+.grade-A{color:var(--green);font-weight:900;}
+.grade-B{color:var(--blue);font-weight:900;}
+.grade-C{color:var(--amber);font-weight:900;}
+/* CHART */
+.chart-wrap{padding:16px 0;}
+.chart-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:12px;}
+.chart-label{width:100px;text-align:right;color:var(--muted);flex-shrink:0;}
+.chart-bar-bg{flex:1;background:#f0f0f0;border-radius:6px;height:20px;overflow:hidden;}
+.chart-bar{height:100%;border-radius:6px;background:var(--green);transition:width .6s ease;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;font-size:11px;font-weight:700;color:white;}
+.remark-box{background:#f8fdf9;border-left:4px solid var(--green);border-radius:0 8px 8px 0;padding:12px 14px;font-size:13px;color:var(--text);line-height:1.6;margin-top:10px;}
+
+/* ATTENDANCE */
+.att-stats{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:18px;}
+.att-stat{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;}
+.att-dot{width:14px;height:14px;border-radius:4px;flex-shrink:0;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:10px;}
+.cal-day-hdr{text-align:center;font-size:11px;font-weight:800;color:var(--muted);padding:4px;}
+.cal-day{aspect-ratio:1;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;background:#f0f0f0;cursor:default;position:relative;}
+.cal-day.present{background:var(--green-light);color:var(--green-dark);}
+.cal-day.absent{background:var(--red-light);color:#501313;}
+.cal-day.late{background:var(--amber-light);color:#633806;}
+.cal-day.weekend{background:transparent;color:var(--border);}
+.cal-day.empty{background:transparent;}
+.month-nav{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.month-nav button{background:var(--green-light);border:none;color:var(--green-dark);width:32px;height:32px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.month-nav h3{font-size:16px;font-weight:800;color:var(--green-dark);flex:1;text-align:center;}
+
+/* TIMETABLE */
+.tt-day{margin-bottom:16px;}
+.tt-day-hdr{background:var(--green-light);color:var(--green-dark);font-size:13px;font-weight:800;padding:8px 14px;border-radius:8px 8px 0 0;}
+.tt-row{display:grid;grid-template-columns:100px 1fr 1fr 80px;gap:8px;padding:9px 14px;background:white;border-bottom:1px solid var(--border);font-size:12px;align-items:center;}
+.tt-row:last-child{border-bottom:none;border-radius:0 0 8px 8px;}
+.tt-row.break{background:#f9f9f9;color:var(--muted);font-style:italic;}
+.tt-time{font-weight:700;color:var(--green-dark);}
+.tt-subj{font-weight:700;}
+.tt-teacher{color:var(--muted);}
+.tt-room{background:var(--green-light);color:var(--green-dark);padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;text-align:center;}
+
+/* EVENTS */
+.event-card{background:white;border-radius:var(--radius);border:1px solid var(--border);padding:18px;margin-bottom:10px;display:flex;gap:16px;align-items:flex-start;transition:box-shadow .2s;}
+.event-card:hover{box-shadow:0 6px 18px rgba(0,0,0,.07);}
+.event-cat-icon{width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.cat-academic{background:#E6F1FB;}
+.cat-sports{background:#EAF3DE;}
+.cat-cultural{background:var(--purple-light);}
+.cat-holiday{background:var(--amber-light);}
+.event-title{font-size:15px;font-weight:800;color:var(--green-dark);margin-bottom:4px;}
+.event-meta{font-size:12px;color:var(--muted);margin-bottom:6px;}
+.event-desc{font-size:13px;color:var(--text);line-height:1.6;}
+.gcal-btn{display:inline-flex;align-items:center;gap:5px;background:var(--blue);color:white;padding:5px 12px;border-radius:7px;font-size:11px;font-weight:700;text-decoration:none;margin-top:8px;transition:background .2s;}
+.gcal-btn:hover{background:#1140a6;}
+
+/* MESSAGES */
+.msg-layout{display:grid;grid-template-columns:300px 1fr;gap:16px;}
+.msg-list{border:1px solid var(--border);border-radius:var(--radius);background:white;overflow:hidden;}
+.msg-list-hdr{background:var(--green-dark);color:white;padding:12px 16px;font-size:13px;font-weight:800;display:flex;justify-content:space-between;align-items:center;}
+.msg-item{padding:12px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;}
+.msg-item:hover{background:#f5fdf9;}
+.msg-item.active{background:var(--green-light);}
+.msg-item.unread .msg-from{font-weight:900;}
+.msg-from{font-size:13px;font-weight:700;color:var(--text);}
+.msg-subj-prev{font-size:12px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.msg-date{font-size:10px;color:var(--muted);text-align:right;margin-top:2px;}
+.msg-detail{border:1px solid var(--border);border-radius:var(--radius);background:white;display:flex;flex-direction:column;}
+.msg-detail-hdr{padding:16px 20px;border-bottom:1px solid var(--border);}
+.msg-detail-hdr h3{font-size:16px;font-weight:800;color:var(--green-dark);margin-bottom:4px;}
+.msg-detail-meta{font-size:12px;color:var(--muted);}
+.msg-detail-body{padding:20px;flex:1;font-size:14px;line-height:1.8;white-space:pre-wrap;color:var(--text);}
+.msg-reply-area{padding:16px 20px;border-top:1px solid var(--border);}
+.msg-reply-area textarea{width:100%;padding:10px 12px;border-radius:9px;border:1.5px solid var(--border);font-family:'Outfit',sans-serif;font-size:13px;height:80px;resize:vertical;outline:none;transition:border-color .2s;}
+.msg-reply-area textarea:focus{border-color:var(--green);}
+.msg-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--muted);padding:40px;text-align:center;}
+.compose-btn{background:var(--green);color:white;border:none;padding:6px 14px;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;}
+
+/* PROFILE */
+.profile-avatar{width:72px;height:72px;border-radius:50%;background:var(--green-light);color:var(--green-dark);font-size:24px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.child-profile-card{background:linear-gradient(135deg,#f0f5f3,#e0efe7);border-radius:var(--radius);padding:20px;display:flex;gap:16px;align-items:center;}
+
+/* MODAL */
+.mbg{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:900;display:none;align-items:center;justify-content:center;padding:16px;}
+.mbg.open{display:flex;}
+.modal{background:white;border-radius:16px;padding:26px;max-width:480px;width:100%;max-height:90vh;overflow-y:auto;position:relative;}
+.modal-close{position:absolute;top:13px;right:15px;background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);}
+.modal h3{font-size:16px;font-weight:800;color:var(--green-dark);margin-bottom:14px;}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .dash-grid{grid-template-columns:1fr 1fr;}
+  .grid3,.grid4{grid-template-columns:1fr 1fr;}
+  .msg-layout{grid-template-columns:1fr;}
+}
+@media(max-width:600px){
+  .login-card{padding:24px 18px;}
+  .portal-main{padding:14px 10px;}
+  .dash-grid{grid-template-columns:1fr;}
+  .grid2,.grid3,.grid4{grid-template-columns:1fr;}
+  .welcome-band{padding:18px 16px;}
+  .welcome-band h2{font-size:20px;}
+  .tt-row{grid-template-columns:80px 1fr;gap:4px;}
+  .tt-row .tt-teacher,.tt-row .tt-room{display:none;}
+  .msg-layout{grid-template-columns:1fr;}
+  .msg-detail{min-height:300px;}
+  table{min-width:480px;font-size:12px;}
+  th,td{padding:7px 9px;}
+}
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div></div>
+<!-- TOAST -->
+<div class="toast" id="toastEl"></div>
+
+<!-- ═══════════════════════════════════════ LOGIN SCREEN ══ -->
+<div id="loginScreen">
+  <div style="display:flex;flex-direction:column;align-items:center;width:100%;">
+    <div class="login-card">
+      <div class="login-logo">
+        <div class="logo-icon">🌱</div>
+        <h1>God's Plan Academy</h1>
+        <p>Parent Portal — Nursery &amp; Primary School</p>
+      </div>
+
+      <div class="auth-tabs">
+        <button class="atab active" onclick="switchTab('login')">Login</button>
+        <button class="atab" onclick="switchTab('register')">Create Account</button>
+        <button class="atab" onclick="switchTab('forgot')">Forgot Password</button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <div class="aform active" id="aform-login">
+        <div class="alert-box a-err" id="loginErr"></div>
+        <div class="fg"><label>Email Address</label><input type="email" id="loginEmail" placeholder="your@email.com" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+        <div class="fg"><label>Password</label><input type="password" id="loginPass" placeholder="Your password" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+        <button class="btn-full btn-green" onclick="doLogin()">Login to Portal →</button>
+        <div style="font-size:12px;color:var(--muted);text-align:center;margin-top:12px;">Demo: <strong>parent@gpa.rw</strong> / <strong>parent123</strong></div>
+      </div>
+
+      <!-- REGISTER FORM -->
+      <div class="aform" id="aform-register">
+        <div class="alert-box a-err" id="regErr"></div>
+        <div class="alert-box a-ok" id="regOk"></div>
+        <div class="grid2">
+          <div class="fg"><label>Full Name *</label><input type="text" id="regName" placeholder="Your full name"/></div>
+          <div class="fg"><label>Phone</label><input type="tel" id="regPhone" placeholder="0788..."/></div>
+        </div>
+        <div class="fg"><label>Email Address *</label><input type="email" id="regEmail" placeholder="your@email.com"/></div>
+        <div class="fg"><label>Password *</label><input type="password" id="regPass" placeholder="Create a password"/></div>
+        <div class="fg"><label>Child's Reg. Number</label><input type="text" id="regChildReg" placeholder="e.g. GPA-2024-001"/></div>
+        <button class="btn-full btn-green" onclick="doRegister()">Create Account</button>
+        <p style="font-size:11px;color:var(--muted);text-align:center;margin-top:10px;">Account requires admin approval before you can login.</p>
+      </div>
+
+      <!-- FORGOT PASSWORD -->
+      <div class="aform" id="aform-forgot">
+        <div class="alert-box a-err" id="forgotErr"></div>
+        <div class="alert-box a-ok" id="forgotOk"></div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">Enter your email and we'll send a reset link.</p>
+        <div class="fg"><label>Email Address</label><input type="email" id="forgotEmail" placeholder="your@email.com"/></div>
+        <button class="btn-full btn-green" onclick="doForgot()">Send Reset Link</button>
+      </div>
+    </div>
+    <a class="back-to-site" href="index.html">← Back to School Website</a>
+  </div>
+</div>
+
+<!-- RESET PASSWORD SCREEN -->
+<div id="resetScreen" style="display:none;min-height:100vh;align-items:center;justify-content:center;background:linear-gradient(145deg,#04342C,#1D9E75);padding:20px;flex-direction:column;">
+  <div class="login-card">
+    <div class="login-logo"><div class="logo-icon">🔐</div><h1>Reset Password</h1></div>
+    <div class="alert-box a-err" id="resetErr"></div>
+    <div class="alert-box a-ok" id="resetOk"></div>
+    <div class="fg"><label>New Password</label><input type="password" id="resetPass1" placeholder="New password"/></div>
+    <div class="fg"><label>Confirm Password</label><input type="password" id="resetPass2" placeholder="Confirm password"/></div>
+    <button class="btn-full btn-green" onclick="doReset()">Set New Password</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ PORTAL APP ══ -->
+<div id="portalApp">
+  <nav class="portal-nav">
+    <div class="nav-top-row">
+      <a class="nav-brand-p" href="index.html"><span>🌱</span>GPA Parent Portal</a>
+      <div class="nav-actions">
+        <button class="nav-badge-btn" onclick="showSection('messages')" title="Messages">
+          💬<span class="nav-badge" id="msgBadge" style="display:none;">0</span>
+        </button>
+        <button class="logout-btn" onclick="doLogout()">⬆️ Logout</button>
+      </div>
+    </div>
+    <div class="nav-items">
+      <button class="nav-item active" data-sec="dashboard" onclick="showSection('dashboard')">🏠 Dashboard</button>
+      <button class="nav-item" data-sec="notices" onclick="showSection('notices')">📢 Notices</button>
+      <button class="nav-item" data-sec="fees" onclick="showSection('fees')">💳 Fees</button>
+      <button class="nav-item" data-sec="results" onclick="showSection('results')">📊 Results</button>
+      <button class="nav-item" data-sec="attendance" onclick="showSection('attendance')">📅 Attendance</button>
+      <button class="nav-item" data-sec="timetable" onclick="showSection('timetable')">🕐 Timetable</button>
+      <button class="nav-item" data-sec="events" onclick="showSection('events')">🗓️ Events</button>
+      <button class="nav-item" data-sec="messages" onclick="showSection('messages')">💬 Messages</button>
+      <button class="nav-item" data-sec="profile" onclick="showSection('profile')">👤 Profile</button>
+    </div>
+  </nav>
+
+  <main class="portal-main">
+
+    <!-- DASHBOARD -->
+    <section class="p-section active" id="sec-dashboard">
+      <div class="welcome-band">
+        <div><h2 id="welcomeName">Welcome!</h2><p id="welcomeSub">Loading your portal…</p></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;" id="dashChildPills"></div>
+      </div>
+      <div class="dash-grid" id="dashCards"></div>
+      <div class="grid2" style="margin-top:14px;">
+        <div class="card">
+          <div class="card-title">📢 Recent Notices</div>
+          <div id="dashNotices"><div class="empty"><div class="ei">📭</div><p>No notices</p></div></div>
+          <a href="#" onclick="showSection('notices');return false;" style="font-size:12px;color:var(--green);font-weight:700;display:block;margin-top:10px;">View all →</a>
+        </div>
+        <div class="card">
+          <div class="card-title">📅 Upcoming Events</div>
+          <div id="dashEvents"><div class="empty"><div class="ei">📅</div><p>No events</p></div></div>
+          <a href="#" onclick="showSection('events');return false;" style="font-size:12px;color:var(--green);font-weight:700;display:block;margin-top:10px;">View all →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- NOTICES -->
+    <section class="p-section" id="sec-notices">
+      <div class="sec-hdr"><h2>📢 School Notices</h2><p>All announcements from God's Plan Academy, sorted newest first.</p></div>
+      <div class="filter-row">
+        <button class="fbtn active" onclick="filterNotices('all',this)">All</button>
+        <button class="fbtn" onclick="filterNotices('urgent',this)">🔴 Urgent</button>
+        <button class="fbtn" onclick="filterNotices('exam',this)">📝 Exams</button>
+        <button class="fbtn" onclick="filterNotices('event',this)">🎉 Events</button>
+        <button class="fbtn" onclick="filterNotices('general',this)">📋 General</button>
+      </div>
+      <div id="noticesList"></div>
+    </section>
+
+    <!-- FEES -->
+    <section class="p-section" id="sec-fees">
+      <div class="sec-hdr"><h2>💳 Fee Payments</h2><p>Track your child's fee status and payment history.</p></div>
+      <div id="feesList"></div>
+    </section>
+
+    <!-- RESULTS -->
+    <section class="p-section" id="sec-results">
+      <div class="sec-hdr"><h2>📊 Academic Results</h2><p>Term results, subject scores and report cards.</p></div>
+      <div id="resultsList"></div>
+    </section>
+
+    <!-- ATTENDANCE -->
+    <section class="p-section" id="sec-attendance">
+      <div class="sec-hdr"><h2>📅 Attendance</h2><p>Monthly attendance calendar for your child.</p></div>
+      <div id="attendanceView"></div>
+    </section>
+
+    <!-- TIMETABLE -->
+    <section class="p-section" id="sec-timetable">
+      <div class="sec-hdr"><h2>🕐 Weekly Timetable</h2><p>Your child's class schedule.</p></div>
+      <div id="timetableView"></div>
+    </section>
+
+    <!-- EVENTS -->
+    <section class="p-section" id="sec-events">
+      <div class="sec-hdr"><h2>🗓️ School Events Calendar</h2><p>Upcoming school events, competitions and holidays.</p></div>
+      <div class="filter-row">
+        <button class="fbtn active" onclick="filterEvents('all',this)">All</button>
+        <button class="fbtn" onclick="filterEvents('academic',this)">📚 Academic</button>
+        <button class="fbtn" onclick="filterEvents('sports',this)">⚽ Sports</button>
+        <button class="fbtn" onclick="filterEvents('cultural',this)">🎭 Cultural</button>
+        <button class="fbtn" onclick="filterEvents('holiday',this)">🏖️ Holidays</button>
+      </div>
+      <div id="eventsList"></div>
+    </section>
+
+    <!-- MESSAGES -->
+    <section class="p-section" id="sec-messages">
+      <div class="sec-hdr" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+        <div><h2>💬 Messages</h2><p>Communicate with school admin and teachers.</p></div>
+        <button class="compose-btn" onclick="openCompose()">✉️ New Message</button>
+      </div>
+      <div class="msg-layout">
+        <div class="msg-list">
+          <div class="msg-list-hdr">Inbox <span id="inboxCount" style="background:var(--green);padding:1px 7px;border-radius:10px;font-size:11px;">0</span></div>
+          <div id="msgListEl"></div>
+        </div>
+        <div class="msg-detail" id="msgDetailEl">
+          <div class="msg-empty"><div style="font-size:40px;margin-bottom:12px;">💬</div><p>Select a message to read it</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROFILE -->
+    <section class="p-section" id="sec-profile">
+      <div class="sec-hdr"><h2>👤 Profile & Settings</h2><p>Manage your account and notification preferences.</p></div>
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title" style="margin-bottom:16px;">Parent Account</div>
+          <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
+            <div class="profile-avatar" id="profAvatar">?</div>
+            <div><div id="profName" style="font-size:16px;font-weight:800;"></div><div id="profEmail" style="font-size:13px;color:var(--muted);"></div></div>
+          </div>
+          <div class="fg"><label>Full Name</label><input type="text" id="editName"/></div>
+          <div class="fg"><label>Phone</label><input type="tel" id="editPhone"/></div>
+          <div style="display:flex;gap:10px;align-items:center;margin-bottom:14px;">
+            <input type="checkbox" id="editNotifEmail" style="width:auto;accent-color:var(--green);"/><label for="editNotifEmail" style="font-size:13px;font-weight:600;margin:0;">Email Notifications</label>
+            <input type="checkbox" id="editNotifSMS" style="width:auto;accent-color:var(--green);margin-left:10px;"/><label for="editNotifSMS" style="font-size:13px;font-weight:600;margin:0;">SMS Alerts</label>
+          </div>
+          <button class="btn-full btn-green" onclick="saveProfile()">💾 Save Changes</button>
+        </div>
+        <div class="card">
+          <div class="card-title" style="margin-bottom:16px;">Change Password</div>
+          <div class="alert-box a-err" id="pwdErr"></div>
+          <div class="alert-box a-ok" id="pwdOk"></div>
+          <div class="fg"><label>Current Password</label><input type="password" id="oldPwd"/></div>
+          <div class="fg"><label>New Password</label><input type="password" id="newPwd"/></div>
+          <div class="fg"><label>Confirm New Password</label><input type="password" id="newPwd2"/></div>
+          <button class="btn-full btn-green" onclick="changePassword()">🔐 Update Password</button>
+        </div>
+      </div>
+      <!-- Children -->
+      <div style="margin-top:16px;">
+        <div class="sec-hdr"><h2 style="font-size:20px;">Children Enrolled</h2></div>
+        <div id="childrenList"></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- COMPOSE MODAL -->
+<div class="mbg" id="composeMod">
+  <div class="modal">
+    <button class="modal-close" onclick="closeMod('composeMod')">✕</button>
+    <h3>✉️ New Message to School</h3>
+    <div class="alert-box a-err" id="composeErr"></div>
+    <div class="fg"><label>Subject</label><input type="text" id="composeSubj" placeholder="e.g. Question about fees"/></div>
+    <div class="fg"><label>Message</label><textarea id="composeBody" style="height:120px;width:100%;padding:10px 13px;border-radius:9px;border:1.5px solid var(--border);font-family:'Outfit',sans-serif;font-size:14px;outline:none;resize:vertical;" placeholder="Write your message here…"></textarea></div>
+    <button class="btn-full btn-green" onclick="sendMessage()">📤 Send Message</button>
+  </div>
+</div>
+
+<!-- NOTICE DETAIL MODAL -->
+<div class="mbg" id="noticeMod">
+  <div class="modal" style="max-width:580px;">
+    <button class="modal-close" onclick="closeMod('noticeMod')">✕</button>
+    <div id="noticeModalContent"></div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// CONFIGURATION
+const API = (window.GPA_API_URL || 'http://localhost:3000/api') + '/parent';
+const getToken = () => localStorage.getItem('gpa_parent_token');
+const setToken = t => localStorage.setItem('gpa_parent_token', t);
+const clearToken = () => localStorage.removeItem('gpa_parent_token');
+
+// ─── HELPERS ────────────────────────────────────────────────────
+let toastTimer;
+function toast(msg, type='success') {
+  const el = document.getElementById('toastEl');
+  el.textContent = msg; el.className = 'toast ' + type + ' show';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 3500);
+}
+function loading(on) { document.getElementById('loadingOverlay').classList.toggle('show', on); }
+function showAlert(id, msg, cls='a-err') {
+  const el = document.getElementById(id); if (!el) return;
+  el.className = 'alert-box ' + cls + ' show'; el.textContent = msg;
+}
+function hideAlert(id) { const el = document.getElementById(id); if (el) el.classList.remove('show'); }
+function openMod(id) { document.getElementById(id).classList.add('open'); }
+function closeMod(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.mbg').forEach(m => m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); }));
+
+async function api(method, endpoint, body) {
+  const opts = { method, headers: { 'Content-Type': 'application/json' } };
+  if (getToken()) opts.headers['x-parent-token'] = getToken();
+  if (body) opts.body = JSON.stringify(body);
+  const r = await fetch(API + endpoint, opts);
+  const d = await r.json();
+  if (r.status === 401) { clearToken(); location.reload(); }
+  return d;
+}
+
+function fmtDate(iso) {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
+}
+function fmtRwf(n) { return 'RWF ' + (n||0).toLocaleString(); }
+
+// ─── INIT ────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', async () => {
+  const params = new URLSearchParams(location.search);
+  if (params.get('reset')) { showResetScreen(); return; }
+  if (getToken()) {
+    loading(true);
+    const d = await api('GET', '/dashboard').catch(() => null);
+    loading(false);
+    if (d && d.success) { showPortal(d); }
+    else { clearToken(); }
+  }
+});
+
+function showResetScreen() {
+  document.getElementById('loginScreen').style.display = 'none';
+  const rs = document.getElementById('resetScreen');
+  rs.style.display = 'flex';
+}
+
+// ─── AUTH ────────────────────────────────────────────────────────
+function switchTab(tab) {
+  document.querySelectorAll('.atab').forEach((b,i) => b.classList.toggle('active', ['login','register','forgot'][i]===tab));
+  document.querySelectorAll('.aform').forEach(f => f.classList.remove('active'));
+  document.getElementById('aform-'+tab).classList.add('active');
+}
+
+async function doLogin() {
+  hideAlert('loginErr');
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass  = document.getElementById('loginPass').value;
+  if (!email || !pass) { showAlert('loginErr','Please enter email and password.'); return; }
+  loading(true);
+  const d = await api('POST', '/login', { email, password: pass });
+  loading(false);
+  if (!d.success) { showAlert('loginErr', d.message || 'Login failed.'); return; }
+  setToken(d.token);
+  const dash = await api('GET', '/dashboard');
+  if (dash.success) showPortal(dash);
+}
+
+async function doRegister() {
+  hideAlert('regErr'); hideAlert('regOk');
+  const name = document.getElementById('regName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const pass  = document.getElementById('regPass').value;
+  const phone = document.getElementById('regPhone').value.trim();
+  const childReg = document.getElementById('regChildReg').value.trim();
+  if (!name||!email||!pass) { showAlert('regErr','Name, email and password are required.'); return; }
+  loading(true);
+  const d = await api('POST', '/register', { name, email, password: pass, phone, childReg });
+  loading(false);
+  if (!d.success) { showAlert('regErr', d.message); return; }
+  showAlert('regOk', d.message, 'a-ok');
+}
+
+async function doForgot() {
+  hideAlert('forgotErr'); hideAlert('forgotOk');
+  const email = document.getElementById('forgotEmail').value.trim();
+  if (!email) { showAlert('forgotErr','Email required.'); return; }
+  loading(true);
+  const d = await api('POST', '/forgot-password', { email });
+  loading(false);
+  if (!d.success) { showAlert('forgotErr', d.message); return; }
+  showAlert('forgotOk', d.message, 'a-ok');
+}
+
+async function doReset() {
+  hideAlert('resetErr'); hideAlert('resetOk');
+  const pass1 = document.getElementById('resetPass1').value;
+  const pass2 = document.getElementById('resetPass2').value;
+  if (!pass1) { showAlert('resetErr','Password required.'); return; }
+  if (pass1 !== pass2) { showAlert('resetErr','Passwords do not match.'); return; }
+  const token = new URLSearchParams(location.search).get('reset');
+  loading(true);
+  const d = await api('POST', '/reset-password', { token, password: pass1 });
+  loading(false);
+  if (!d.success) { showAlert('resetErr', d.message); return; }
+  showAlert('resetOk', d.message + ' Redirecting…', 'a-ok');
+  setTimeout(() => { history.replaceState({}, '', '/parent-portal.html'); location.reload(); }, 2000);
+}
+
+async function doLogout() {
+  loading(true);
+  await api('POST', '/logout').catch(()=>{});
+  clearToken();
+  loading(false);
+  location.reload();
+}
+
+// ─── SHOW PORTAL ─────────────────────────────────────────────────
+let allNotices=[], allEvents=[], allMessages=[], attData=[], currentMsgId=null;
+
+function showPortal(dashData) {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('portalApp').style.display = 'block';
+  renderDashboard(dashData);
+  updateMsgBadge(dashData.unreadMsgs || 0);
+}
+
+// ─── NAVIGATION ──────────────────────────────────────────────────
+const sectionLoaders = {};
+function showSection(id) {
+  document.querySelectorAll('.p-section').forEach(s => s.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.toggle('active', b.dataset.sec===id));
+  if (!sectionLoaders[id]) { sectionLoaders[id] = true; loadSection(id); }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+async function loadSection(id) {
+  if (id === 'notices') await loadNotices();
+  else if (id === 'fees') await loadFees();
+  else if (id === 'results') await loadResults();
+  else if (id === 'attendance') await loadAttendance();
+  else if (id === 'timetable') await loadTimetable();
+  else if (id === 'events') await loadEvents();
+  else if (id === 'messages') await loadMessages();
+  else if (id === 'profile') await loadProfile();
+}
+
+// ─── DASHBOARD ───────────────────────────────────────────────────
+function renderDashboard(d) {
+  document.getElementById('welcomeName').textContent = 'Welcome, ' + d.parent.name + '!';
+  document.getElementById('welcomeSub').textContent = new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+
+  // Child pills
+  document.getElementById('dashChildPills').innerHTML = (d.children||[]).map(c =>
+    `<div style="background:rgba(255,255,255,.15);border-radius:10px;padding:8px 14px;text-align:center;">
+      <div style="font-size:14px;font-weight:800;">${c.child.name}</div>
+      <div style="font-size:11px;opacity:.75;">${c.child.cls}</div>
+    </div>`).join('');
+
+  // Stat cards
+  const unpaidTotal = (d.children||[]).reduce((s,c)=>s+c.unpaidAmount,0);
+  const firstChild  = d.children?.[0];
+  document.getElementById('dashCards').innerHTML = `
+    <div class="stat-card"><div class="stat-num" style="color:${unpaidTotal>0?'var(--red)':'var(--green)'};">${fmtRwf(unpaidTotal)}</div><div class="stat-lbl">Outstanding Balance</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--green);">${firstChild?.latestResult?.average?.toFixed(1)||'—'}%</div><div class="stat-lbl">Latest Average</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--blue);">${firstChild?.latestResult?.position||'—'} <span style="font-size:14px;font-weight:400;">/ ${firstChild?.latestResult?.totalStudents||'—'}</span></div><div class="stat-lbl">Class Position</div></div>
+    ${d.unreadMsgs>0?`<div class="stat-card"><div class="stat-num" style="color:var(--amber);">${d.unreadMsgs}</div><div class="stat-lbl">Unread Messages</div></div>`:''}`;
+
+  // Notices
+  const notices = d.recentNotices || [];
+  document.getElementById('dashNotices').innerHTML = notices.length ? notices.map(n =>
+    `<div class="notice-item"><div class="notice-dot${n.category==='urgent'?' urgent':''}"></div>
+    <div><div style="font-size:13px;font-weight:700;">${n.title}</div><div style="font-size:11px;color:var(--muted);">${fmtDate(n.publishDate)}</div></div></div>`).join('') :
+    '<p style="color:var(--muted);font-size:13px;padding:12px 0;">No recent notices.</p>';
+
+  // Events
+  const events = d.upcomingEvents || [];
+  document.getElementById('dashEvents').innerHTML = events.length ? events.map(e => {
+    const dt = new Date(e.date);
+    return `<div class="event-item">
+      <div class="event-date-box"><div class="edb-day">${dt.getDate()}</div><div class="edb-mon">${dt.toLocaleString('en',{month:'short'})}</div></div>
+      <div><div style="font-size:13px;font-weight:700;">${e.title}</div><div style="font-size:11px;color:var(--muted);">${e.time||''}</div></div>
+    </div>`;}).join('') : '<p style="color:var(--muted);font-size:13px;padding:12px 0;">No upcoming events.</p>';
+}
+
+// ─── NOTICES ──────────────────────────────────────────────────────
+let noticeFilter = 'all';
+async function loadNotices() {
+  document.getElementById('noticesList').innerHTML = '<div class="empty"><div class="spinner" style="margin:auto;"></div></div>';
+  const d = await api('GET', '/notices');
+  if (!d.success) { document.getElementById('noticesList').innerHTML = `<div class="empty"><p style="color:var(--red);">${d.message}</p></div>`; return; }
+  allNotices = d.notices;
+  renderNotices();
+}
+function filterNotices(f, btn) {
+  noticeFilter = f;
+  document.querySelectorAll('#sec-notices .fbtn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderNotices();
+}
+const CAT_ICONS = {urgent:'🔴',exam:'📝',event:'🎉',meeting:'📅',report:'📋',general:'📣',notice:'📌'};
+function renderNotices() {
+  const list = noticeFilter==='all' ? allNotices : allNotices.filter(n=>n.category===noticeFilter);
+  if (!list.length) { document.getElementById('noticesList').innerHTML = '<div class="empty"><div class="ei">📭</div><p>No notices in this category.</p></div>'; return; }
+  document.getElementById('noticesList').innerHTML = list.map((n,i) => `
+    <div class="notice-card unread" onclick="openNotice(${i})">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
+        <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:18px;">${CAT_ICONS[n.category]||'📣'}</span><div>
+          <div class="n-title">${n.title}</div>
+          <div class="n-meta"><span>${fmtDate(n.publishDate)}</span><span class="badge ${n.category==='urgent'?'bg-red':'bg-green'}">${n.category}</span></div>
+        </div></div>
+        <button onclick="event.stopPropagation();printNotice(${i})" style="background:none;border:1.5px solid var(--border);padding:4px 10px;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;color:var(--muted);">🖨️ Print</button>
+      </div>
+      ${n.content?`<div style="margin-top:8px;font-size:13px;color:var(--muted);line-height:1.6;">${n.content.slice(0,140)}${n.content.length>140?'…':''}</div>`:''}
+    </div>`).join('');
+}
+function openNotice(i) {
+  const n = allNotices[i];
+  document.getElementById('noticeModalContent').innerHTML = `
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+      <span style="font-size:28px;">${CAT_ICONS[n.category]||'📣'}</span>
+      <div><h3 style="font-size:18px;color:var(--green-dark);">${n.title}</h3>
+        <div style="font-size:12px;color:var(--muted);">📅 ${fmtDate(n.publishDate)} &nbsp;·&nbsp; Category: ${n.category}</div>
+      </div>
+    </div>
+    <div style="font-size:14px;line-height:1.8;white-space:pre-wrap;">${n.content||'No details provided.'}</div>`;
+  openMod('noticeMod');
+}
+function printNotice(i) {
+  const n = allNotices[i];
+  const w = window.open('','_blank');
+  w.document.write(`<html><head><title>${n.title}</title><style>body{font-family:sans-serif;padding:40px;}h1{color:#085041;}p{line-height:1.8;}</style></head><body><h1>${n.title}</h1><p style="color:#888;">Date: ${fmtDate(n.publishDate)} · Category: ${n.category}</p><hr/><p>${(n.content||'').replace(/\n/g,'<br/>')}</p><p style="margin-top:40px;font-size:12px;color:#888;">God's Plan Academy · Gasabo, Kigali, Rwanda</p></body></html>`);
+  w.document.close(); w.print();
+}
+
+// ─── FEES ─────────────────────────────────────────────────────────
+async function loadFees() {
+  document.getElementById('feesList').innerHTML = '<div class="empty"><div class="spinner" style="margin:auto;"></div></div>';
+  const d = await api('GET', '/fees');
+  if (!d.success) { document.getElementById('feesList').innerHTML = `<div class="empty"><p style="color:var(--red);">${d.message}</p></div>`; return; }
+  const fees = d.fees;
+  if (!fees.length) { document.getElementById('feesList').innerHTML = '<div class="empty"><div class="ei">💳</div><p>No fee records found.</p></div>'; return; }
+  const totalOwed = fees.filter(f=>f.status!=='paid').reduce((s,f)=>s+(f.amount-f.paid),0);
+  document.getElementById('feesList').innerHTML = (totalOwed>0?`<div style="background:var(--red-light);border:2px solid var(--red);border-radius:12px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;"><div><div style="font-size:13px;font-weight:700;color:var(--red);">⚠️ Outstanding Balance</div><div style="font-size:22px;font-weight:900;color:var(--red);">${fmtRwf(totalOwed)}</div></div><button class="pay-btn" onclick="toast('Payment gateway integration coming soon!','info')">💳 Pay Now via MTN MoMo</button></div>`:'') +
+    fees.map(f => `
+      <div class="fee-term-card">
+        <div class="fee-term-hdr ${f.status}">
+          <div><div class="fee-term-name">${f.term}</div><div style="font-size:12px;">Due: ${fmtDate(f.dueDate)}</div></div>
+          <div style="text-align:right;">
+            <div class="fee-balance${f.status!=='paid'?' red':''}">${fmtRwf(f.amount-f.paid)} <span style="font-size:12px;font-weight:400;">remaining</span></div>
+            <span class="badge ${f.status==='paid'?'bg-green':f.status==='partial'?'bg-amber':'bg-red'}">${f.status.toUpperCase()}</span>
+          </div>
+        </div>
+        <div class="fee-body">
+          <div class="fee-row"><span>Total Fee</span><span style="font-weight:700;">${fmtRwf(f.amount)}</span></div>
+          <div class="fee-row"><span>Amount Paid</span><span style="color:var(--green);font-weight:700;">${fmtRwf(f.paid)}</span></div>
+          <div class="fee-row"><span>Balance</span><span style="font-weight:900;${f.status!=='paid'?'color:var(--red)':''}">${fmtRwf(f.amount-f.paid)}</span></div>
+          ${f.payments.length ? `<div style="margin-top:10px;"><div style="font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;margin-bottom:6px;">Payment History</div>${f.payments.map(p=>`<div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:1px solid var(--border);"><span>${fmtDate(p.date)} · ${p.method}</span><span style="font-weight:700;color:var(--green);">${fmtRwf(p.amount)} <a href="#" onclick="printReceipt('${p.receipt}','${f.term}','${p.date}',${p.amount});return false;" style="color:var(--blue);font-weight:700;margin-left:6px;">🖨️</a></span></div>`).join('')}</div>` : ''}
+        </div>
+      </div>`).join('');
+}
+function printReceipt(receipt, term, date, amount) {
+  const w = window.open('','_blank');
+  w.document.write(`<html><head><title>Receipt ${receipt}</title><style>body{font-family:sans-serif;padding:40px;max-width:400px;margin:auto;}h2{color:#085041;text-align:center;}.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eee;}</style></head><body><div style="text-align:center;margin-bottom:20px;"><div style="font-size:32px;">🌱</div><h2>God's Plan Academy</h2><p style="color:#888;">Official Payment Receipt</p></div><div class="row"><span>Receipt No.</span><strong>${receipt}</strong></div><div class="row"><span>Term</span><strong>${term}</strong></div><div class="row"><span>Date</span><strong>${fmtDate(date)}</strong></div><div class="row"><span>Amount Paid</span><strong>${fmtRwf(amount)}</strong></div><p style="margin-top:30px;font-size:12px;color:#888;text-align:center;">Thank you for your payment · Gasabo, Kigali, Rwanda</p></body></html>`);
+  w.document.close(); w.print();
+}
+
+// ─── RESULTS ──────────────────────────────────────────────────────
+async function loadResults() {
+  document.getElementById('resultsList').innerHTML = '<div class="empty"><div class="spinner" style="margin:auto;"></div></div>';
+  const d = await api('GET', '/results');
+  if (!d.success) { document.getElementById('resultsList').innerHTML = `<div class="empty"><p style="color:var(--red);">${d.message}</p></div>`; return; }
+  const results = d.results;
+  if (!results.length) { document.getElementById('resultsList').innerHTML = '<div class="empty"><div class="ei">📊</div><p>No results available yet.</p></div>'; return; }
+  document.getElementById('resultsList').innerHTML = results.map(r => {
+    const gradeColor = avg => avg>=85?'var(--green)':avg>=70?'var(--blue)':'var(--amber)';
+    return `<div class="result-term" style="border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:20px;">
+      <div class="result-term-hdr">
+        <div><div style="font-size:16px;font-weight:800;">${r.term}</div><div style="font-size:12px;opacity:.75;">Student: GPA-2024-001</div></div>
+        <div style="text-align:right;"><div style="font-size:22px;font-weight:900;">${r.average?.toFixed(1)}%</div>
+          <div style="font-size:12px;opacity:.8;">Position: ${r.position} / ${r.totalStudents}</div></div>
+      </div>
+      <div style="background:white;padding:16px;">
+        <div class="tw"><table>
+          <thead><tr><th>Subject</th><th>CAT /40</th><th>Exam /60</th><th>Total /100</th><th>Grade</th><th>Comment</th></tr></thead>
+          <tbody>${r.subjects.map(s=>`<tr><td style="font-weight:700;">${s.name}</td><td>${s.cat}</td><td>${s.exam}</td><td style="font-weight:900;color:${gradeColor(s.total)};">${s.total}</td><td class="grade-${s.grade[0]}">${s.grade}</td><td style="color:var(--muted);">${s.comment}</td></tr>`).join('')}</tbody>
+        </table></div>
+        <div style="margin-top:14px;">
+          <div class="card-title" style="margin-bottom:8px;">📊 Performance Chart</div>
+          ${r.subjects.map(s=>`<div class="chart-bar-row"><div class="chart-label">${s.name}</div><div class="chart-bar-bg"><div class="chart-bar" style="width:${s.total}%;background:${gradeColor(s.total)};">${s.total}</div></div></div>`).join('')}
+        </div>
+        <div class="remark-box" style="margin-top:12px;">
+          <div style="font-size:12px;font-weight:800;color:var(--muted);margin-bottom:4px;">👩‍🏫 TEACHER'S REMARK</div>
+          <div>${r.teacherRemark||'No remark.'}</div>
+        </div>
+        <div class="remark-box" style="margin-top:8px;border-color:var(--blue);">
+          <div style="font-size:12px;font-weight:800;color:var(--muted);margin-bottom:4px;">🏫 HEAD TEACHER'S REMARK</div>
+          <div>${r.headRemark||'No remark.'}</div>
+        </div>
+        <button onclick="printReport(${JSON.stringify(r).replace(/"/g,'&quot;')})" style="margin-top:14px;background:var(--green-dark);color:white;border:none;padding:9px 20px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;">🖨️ Print Report Card</button>
+      </div>
+    </div>`;}).join('');
+}
+function printReport(r) {
+  const w = window.open('','_blank');
+  const rows = r.subjects.map(s=>`<tr><td>${s.name}</td><td style="text-align:center">${s.cat}</td><td style="text-align:center">${s.exam}</td><td style="text-align:center;font-weight:900">${s.total}</td><td style="text-align:center">${s.grade}</td><td>${s.comment}</td></tr>`).join('');
+  w.document.write(`<html><head><title>Report Card</title><style>body{font-family:sans-serif;padding:30px;font-size:13px;}table{width:100%;border-collapse:collapse;}th{background:#085041;color:white;padding:8px;}td{padding:7px;border-bottom:1px solid #eee;}.hdr{text-align:center;margin-bottom:20px;}</style></head><body><div class="hdr"><div style="font-size:32px">🌱</div><h2 style="color:#085041;margin:4px">God's Plan Academy</h2><p style="color:#888;">Academic Report Card</p></div><table><tr><th colspan="2" style="text-align:left">Student: GPA-2024-001</th><th colspan="4" style="text-align:right">Term: ${r.term} · Average: ${r.average?.toFixed(1)}% · Position: ${r.position}/${r.totalStudents}</th></tr><tr><th>Subject</th><th>CAT/40</th><th>Exam/60</th><th>Total</th><th>Grade</th><th>Comment</th></tr>${rows}</table><p style="margin-top:20px;"><strong>Teacher:</strong> ${r.teacherRemark||''}</p><p><strong>Head Teacher:</strong> ${r.headRemark||''}</p><p style="margin-top:30px;font-size:11px;color:#888;">God's Plan Academy · Gasabo, Kigali, Rwanda</p></body></html>`);
+  w.document.close(); w.print();
+}
+
+// ─── ATTENDANCE ───────────────────────────────────────────────────
+let attYear = new Date().getFullYear(), attMonth = new Date().getMonth()+1;
+async function loadAttendance() {
+  const d = await api('GET', '/attendance');
+  if (!d.success) return;
+  attData = d.attendance;
+  renderAttendance();
+}
+function renderAttendance() {
+  const view = document.getElementById('attendanceView');
+  const childAtt = attData.find(a => a.year===attYear && a.month===attMonth) ||
+                   attData.sort((a,b)=>(b.year*12+b.month)-(a.year*12+a.month))[0];
+  if (!childAtt) { view.innerHTML = '<div class="empty"><div class="ei">📅</div><p>No attendance data.</p></div>'; return; }
+  const monthName = new Date(childAtt.year, childAtt.month-1, 1).toLocaleString('en', {month:'long', year:'numeric'});
+  const recs = childAtt.records || [];
+  const present = recs.filter(r=>r.status==='present').length;
+  const absent  = recs.filter(r=>r.status==='absent').length;
+  const late    = recs.filter(r=>r.status==='late').length;
+  const total   = recs.length;
+  const pct     = total ? Math.round((present/total)*100) : 0;
+  // Build calendar
+  const daysInMonth = new Date(childAtt.year, childAtt.month, 0).getDate();
+  const firstDay    = new Date(childAtt.year, childAtt.month-1, 1).getDay();
+  let calHTML = '<div class="cal-grid">';
+  ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(d=>calHTML+=`<div class="cal-day-hdr">${d}</div>`);
+  for(let i=0;i<firstDay;i++) calHTML+='<div class="cal-day empty"></div>';
+  for(let day=1;day<=daysInMonth;day++){
+    const dow=(firstDay+day-1)%7;
+    if(dow===0||dow===6){calHTML+=`<div class="cal-day weekend">${day}</div>`;continue;}
+    const rec=recs.find(r=>r.day===day);
+    const cls=rec?rec.status:'';
+    const title=rec?.reason?`title="${rec.reason}"`:'';
+    calHTML+=`<div class="cal-day ${cls}" ${title}>${day}</div>`;
+  }
+  calHTML+='</div>';
+  view.innerHTML = `
+    <div class="card" style="margin-bottom:14px;">
+      <div class="month-nav">
+        <button onclick="attMonth--;if(attMonth<1){attMonth=12;attYear--;}renderAttendance();">‹</button>
+        <h3>${monthName}</h3>
+        <button onclick="attMonth++;if(attMonth>12){attMonth=1;attYear++;}renderAttendance();">›</button>
+      </div>
+      <div class="att-stats">
+        <div class="att-stat"><div class="att-dot" style="background:var(--green);"></div>${present} Present</div>
+        <div class="att-stat"><div class="att-dot" style="background:var(--red);"></div>${absent} Absent</div>
+        <div class="att-stat"><div class="att-dot" style="background:var(--amber);"></div>${late} Late</div>
+        <div class="att-stat" style="margin-left:auto;font-size:16px;font-weight:900;color:${pct>=90?'var(--green)':pct>=75?'var(--amber)':'var(--red)'};">${pct}% Attendance</div>
+      </div>
+      ${calHTML}
+      <div style="display:flex;gap:16px;margin-top:12px;font-size:12px;flex-wrap:wrap;">
+        <span><span style="display:inline-block;width:12px;height:12px;background:var(--green-light);border-radius:3px;margin-right:4px;"></span>Present</span>
+        <span><span style="display:inline-block;width:12px;height:12px;background:var(--red-light);border-radius:3px;margin-right:4px;"></span>Absent</span>
+        <span><span style="display:inline-block;width:12px;height:12px;background:var(--amber-light);border-radius:3px;margin-right:4px;"></span>Late</span>
+      </div>
+    </div>`;
+}
+
+// ─── TIMETABLE ────────────────────────────────────────────────────
+async function loadTimetable() {
+  document.getElementById('timetableView').innerHTML = '<div class="empty"><div class="spinner" style="margin:auto;"></div></div>';
+  const d = await api('GET', '/timetable');
+  if (!d.success) { document.getElementById('timetableView').innerHTML = `<div class="empty"><p style="color:var(--red);">${d.message}</p></div>`; return; }
+  const tts = d.timetables;
+  const keys = Object.keys(tts);
+  if (!keys.length) { document.getElementById('timetableView').innerHTML = '<div class="empty"><div class="ei">🕐</div><p>No timetable available.</p></div>'; return; }
+  let html = '';
+  keys.forEach(reg => {
+    const tt = tts[reg];
+    html += `<div style="margin-bottom:20px;"><div class="card-title" style="margin-bottom:12px;">${tt.studentName} — Class ${tt.cls}</div>`;
+    Object.entries(tt.schedule).forEach(([day, slots]) => {
+      html += `<div class="tt-day"><div class="tt-day-hdr">${day}</div>`;
+      slots.forEach(s => {
+        const isBreak = s.subject==='Break';
+        html += `<div class="tt-row${isBreak?' break':''}"><span class="tt-time">${s.time}</span><span class="tt-subj">${s.subject}</span><span class="tt-teacher">${s.teacher}</span><span class="tt-room">${s.room}</span></div>`;
+      });
+      html += '</div>';
+    });
+    html += '</div>';
+  });
+  html += `<button onclick="window.print()" style="background:var(--green-dark);color:white;border:none;padding:10px 22px;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;margin-top:8px;">🖨️ Print Timetable</button>`;
+  document.getElementById('timetableView').innerHTML = html;
+}
+
+// ─── EVENTS ───────────────────────────────────────────────────────
+let eventsFilter = 'all';
+async function loadEvents() {
+  document.getElementById('eventsList').innerHTML = '<div class="empty"><div class="spinner" style="margin:auto;"></div></div>';
+  const d = await api('GET', '/events');
+  if (!d.success) return;
+  allEvents = d.events.sort((a,b)=>new Date(a.date)-new Date(b.date));
+  renderEvents();
+}
+function filterEvents(f, btn) {
+  eventsFilter = f;
+  document.querySelectorAll('#sec-events .fbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderEvents();
+}
+const CAT_EV = {academic:'📚',sports:'⚽',cultural:'🎭',holiday:'🏖️'};
+function renderEvents() {
+  const list = eventsFilter==='all' ? allEvents : allEvents.filter(e=>e.category===eventsFilter);
+  if (!list.length) { document.getElementById('eventsList').innerHTML = '<div class="empty"><div class="ei">🗓️</div><p>No events in this category.</p></div>'; return; }
+  const now = new Date();
+  document.getElementById('eventsList').innerHTML = list.map(e => {
+    const dt = new Date(e.date);
+    const isPast = dt < now;
+    const gcalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(e.title)}&dates=${e.date.replace(/-/g,'')}/${e.date.replace(/-/g,'')}&details=${encodeURIComponent(e.description)}&location=${encodeURIComponent(e.location||"God's Plan Academy")}`;
+    return `<div class="event-card" style="${isPast?'opacity:.6;':''}">
+      <div class="event-cat-icon cat-${e.category}">${CAT_EV[e.category]||'📅'}</div>
+      <div style="flex:1;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
+          <div><div class="event-title">${e.title}</div>
+            <div class="event-meta">📅 ${dt.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}${e.time?' · '+e.time:''}${e.location?' · 📍 '+e.location:''}</div>
+          </div>
+          <span class="badge ${isPast?'bg-purple':'bg-green'}">${isPast?'Past':'Upcoming'}</span>
+        </div>
+        <div class="event-desc">${e.description}</div>
+        ${!isPast?`<a class="gcal-btn" href="${gcalUrl}" target="_blank">📅 Add to Google Calendar</a>`:''}
+      </div>
+    </div>`;}).join('');
+}
+
+// ─── MESSAGES ────────────────────────────────────────────────────
+async function loadMessages() {
+  document.getElementById('msgListEl').innerHTML = '<div style="padding:20px;text-align:center;"><div class="spinner" style="margin:auto;width:28px;height:28px;border-width:3px;"></div></div>';
+  const d = await api('GET', '/messages');
+  if (!d.success) return;
+  allMessages = d.messages;
+  renderMsgList();
+  updateMsgBadge(allMessages.filter(m=>!m.read&&m.to!=='admin').length);
+  document.getElementById('inboxCount').textContent = allMessages.length;
+}
+function updateMsgBadge(n) {
+  const b = document.getElementById('msgBadge');
+  b.textContent = n; b.style.display = n>0?'flex':'none';
+}
+function renderMsgList() {
+  if (!allMessages.length) { document.getElementById('msgListEl').innerHTML = '<div class="empty" style="padding:30px;"><p>No messages yet.</p></div>'; return; }
+  document.getElementById('msgListEl').innerHTML = allMessages.map(m => `
+    <div class="msg-item${!m.read&&m.to!=='admin'?' unread':''}${m.id===currentMsgId?' active':''}" onclick="openMsg('${m.id}')">
+      <div class="msg-from">${m.fromName||m.from}</div>
+      <div class="msg-subj-prev">${m.subject}</div>
+      <div class="msg-date">${fmtDate(m.date)}</div>
+    </div>`).join('');
+}
+async function openMsg(id) {
+  currentMsgId = id;
+  const m = allMessages.find(x=>x.id===id);
+  if (!m) return;
+  if (!m.read && m.to !== 'admin') {
+    await api('PUT', '/messages/'+id+'/read', {});
+    m.read = true;
+    updateMsgBadge(allMessages.filter(x=>!x.read&&x.to!=='admin').length);
+  }
+  renderMsgList();
+  document.getElementById('msgDetailEl').innerHTML = `
+    <div class="msg-detail-hdr">
+      <h3>${m.subject}</h3>
+      <div class="msg-detail-meta">From: <strong>${m.fromName||m.from}</strong> · ${fmtDate(m.date)}</div>
+    </div>
+    <div class="msg-detail-body">${m.body}</div>
+    <div class="msg-reply-area">
+      <textarea id="replyText" placeholder="Write a reply…"></textarea>
+      <button class="pay-btn" style="margin-top:8px;" onclick="sendReply('${m.fromName||m.from}','Re: ${m.subject.replace(/'/,"\\'")}')">📤 Send Reply</button>
+    </div>`;
+}
+async function sendReply(toName, subject) {
+  const body = document.getElementById('replyText')?.value.trim();
+  if (!body) { toast('Please write a reply first.','error'); return; }
+  loading(true);
+  const d = await api('POST', '/messages', { subject, body: `Reply to ${toName}:\n\n${body}` });
+  loading(false);
+  if (!d.success) { toast(d.message,'error'); return; }
+  toast('Reply sent!','success');
+  document.getElementById('replyText').value='';
+}
+function openCompose() { openMod('composeMod'); }
+async function sendMessage() {
+  hideAlert('composeErr');
+  const subject = document.getElementById('composeSubj').value.trim();
+  const body    = document.getElementById('composeBody').value.trim();
+  if (!subject||!body) { showAlert('composeErr','Subject and message are required.'); return; }
+  loading(true);
+  const d = await api('POST', '/messages', { subject, body });
+  loading(false);
+  if (!d.success) { showAlert('composeErr', d.message); return; }
+  toast('Message sent to school!','success');
+  closeMod('composeMod');
+  document.getElementById('composeSubj').value = '';
+  document.getElementById('composeBody').value = '';
+  sectionLoaders['messages'] = false;
+  await loadMessages();
+}
+
+// ─── PROFILE ─────────────────────────────────────────────────────
+async function loadProfile() {
+  const d = await api('GET', '/profile');
+  if (!d.success) return;
+  const p = d.parent;
+  document.getElementById('profAvatar').textContent = p.name.slice(0,2).toUpperCase();
+  document.getElementById('profName').textContent = p.name;
+  document.getElementById('profEmail').textContent = p.email;
+  document.getElementById('editName').value = p.name;
+  document.getElementById('editPhone').value = p.phone||'';
+  document.getElementById('editNotifEmail').checked = !!p.notifEmail;
+  document.getElementById('editNotifSMS').checked = !!p.notifSMS;
+  // Children
+  document.getElementById('childrenList').innerHTML = (d.children||[]).map(c => `
+    <div class="child-profile-card" style="margin-bottom:12px;">
+      <div class="profile-avatar" style="width:52px;height:52px;font-size:18px;">${c.name.slice(0,2).toUpperCase()}</div>
+      <div>
+        <div style="font-size:16px;font-weight:800;color:var(--green-dark);">${c.name}</div>
+        <div style="font-size:13px;color:var(--muted);">Class: ${c.cls} · Reg: ${c.reg}</div>
+        <div style="font-size:12px;color:var(--muted);">Status: <span class="badge bg-green">${c.status||'Active'}</span></div>
+      </div>
+    </div>`).join('') || '<p style="color:var(--muted);font-size:13px;">No children linked to your account.</p>';
+}
+async function saveProfile() {
+  loading(true);
+  const d = await api('PUT', '/profile', {
+    name: document.getElementById('editName').value.trim(),
+    phone: document.getElementById('editPhone').value.trim(),
+    notifEmail: document.getElementById('editNotifEmail').checked,
+    notifSMS: document.getElementById('editNotifSMS').checked
+  });
+  loading(false);
+  toast(d.success?'Profile updated!':'Update failed: '+d.message, d.success?'success':'error');
+  if (d.success) { sectionLoaders['profile']=false; loadProfile(); }
+}
+async function changePassword() {
+  hideAlert('pwdErr'); hideAlert('pwdOk');
+  const oldP = document.getElementById('oldPwd').value;
+  const newP = document.getElementById('newPwd').value;
+  const newP2= document.getElementById('newPwd2').value;
+  if (!oldP||!newP) { showAlert('pwdErr','All fields required.'); return; }
+  if (newP!==newP2) { showAlert('pwdErr','New passwords do not match.'); return; }
+  if (newP.length<6) { showAlert('pwdErr','Password must be at least 6 characters.'); return; }
+  loading(true);
+  const d = await api('PUT', '/change-password', { oldPassword: oldP, newPassword: newP });
+  loading(false);
+  if (!d.success) { showAlert('pwdErr', d.message); return; }
+  showAlert('pwdOk','Password changed successfully!','a-ok');
+  ['oldPwd','newPwd','newPwd2'].forEach(id=>document.getElementById(id).value='');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+[
+  {"id":"evt_001","title":"Sports Day 2026","date":"2026-06-15","time":"8:00 AM","category":"sports","description":"Annual inter-class sports competition. All parents are welcome to cheer on their children!","location":"School Grounds"},
+  {"id":"evt_002","title":"Parent-Teacher Meeting","date":"2026-06-05","time":"2:00 PM","category":"academic","description":"Mid-term parent-teacher conference. Please come discuss your child's progress.","location":"Classrooms"},
+  {"id":"evt_003","title":"Cultural Day","date":"2026-07-10","time":"9:00 AM","category":"cultural","description":"Celebrating Rwanda's rich cultural heritage. Students will perform traditional dances and songs.","location":"School Hall"},
+  {"id":"evt_004","title":"End of Term Exams","date":"2026-06-23","time":"7:00 AM","category":"academic","description":"Term 2 final examinations begin. Students must arrive by 6:45 AM.","location":"Classrooms"},
+  {"id":"evt_005","title":"Graduation Ceremony P6","date":"2026-07-18","time":"10:00 AM","category":"academic","description":"Primary 6 graduation and prize-giving ceremony. All parents of P6 students must attend.","location":"School Hall"},
+  {"id":"evt_006","title":"School Holidays Begin","date":"2026-07-19","time":"","category":"holiday","description":"Term 2 ends. Term 3 begins September 1, 2026.","location":""},
+  {"id":"evt_007","title":"Debate Competition","date":"2026-06-12","time":"10:00 AM","category":"academic","description":"Inter-school debate competition. Our P5 & P6 students will represent the school.","location":"School Hall"},
+  {"id":"evt_008","title":"Term 3 Begins","date":"2026-09-01","time":"7:00 AM","category":"academic","description":"Welcome back! Term 3 2026 begins. All students must report by 6:45 AM.","location":"School Grounds"}
+]

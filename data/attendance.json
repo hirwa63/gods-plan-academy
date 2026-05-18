@@ -1,0 +1,27 @@
+[
+  {
+    "studentReg":"GPA-2024-001","year":2026,"month":5,
+    "records":[
+      {"day":4,"status":"present"},{"day":5,"status":"present"},{"day":6,"status":"present"},{"day":7,"status":"present"},{"day":8,"status":"present"},
+      {"day":11,"status":"present"},{"day":12,"status":"absent","reason":"Sick"},{"day":13,"status":"present"},{"day":14,"status":"late","reason":"Heavy rain"},{"day":15,"status":"present"},
+      {"day":18,"status":"present"},{"day":19,"status":"present"},{"day":20,"status":"present"},{"day":21,"status":"present"},{"day":22,"status":"present"}
+    ]
+  },
+  {
+    "studentReg":"GPA-2024-001","year":2026,"month":4,
+    "records":[
+      {"day":1,"status":"present"},{"day":2,"status":"present"},{"day":3,"status":"present"},{"day":4,"status":"present"},{"day":5,"status":"absent","reason":"Family event"},
+      {"day":8,"status":"present"},{"day":9,"status":"present"},{"day":10,"status":"present"},{"day":11,"status":"present"},{"day":12,"status":"present"},
+      {"day":15,"status":"present"},{"day":16,"status":"late","reason":"Doctor visit"},{"day":17,"status":"present"},{"day":18,"status":"present"},{"day":19,"status":"present"},
+      {"day":22,"status":"present"},{"day":23,"status":"present"},{"day":24,"status":"present"},{"day":25,"status":"present"},{"day":26,"status":"present"}
+    ]
+  },
+  {
+    "studentReg":"GPA-2024-002","year":2026,"month":5,
+    "records":[
+      {"day":4,"status":"present"},{"day":5,"status":"present"},{"day":6,"status":"late","reason":"Bus delay"},{"day":7,"status":"present"},{"day":8,"status":"present"},
+      {"day":11,"status":"present"},{"day":12,"status":"present"},{"day":13,"status":"present"},{"day":14,"status":"present"},{"day":15,"status":"present"},
+      {"day":18,"status":"absent","reason":"Sick"},{"day":19,"status":"absent","reason":"Sick"},{"day":20,"status":"present"},{"day":21,"status":"present"},{"day":22,"status":"present"}
+    ]
+  }
+]

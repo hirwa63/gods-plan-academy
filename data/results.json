@@ -1,0 +1,44 @@
+[
+  {
+    "studentReg":"GPA-2024-001","term":"Term 1 2026",
+    "subjects":[
+      {"name":"English","cat":32,"exam":55,"total":87,"grade":"A","comment":"Excellent work, keep it up!"},
+      {"name":"Mathematics","cat":28,"exam":48,"total":76,"grade":"B+","comment":"Good progress, practice more"},
+      {"name":"Science","cat":35,"exam":52,"total":87,"grade":"A","comment":"Outstanding performance"},
+      {"name":"Kinyarwanda","cat":30,"exam":50,"total":80,"grade":"A-","comment":"Very good, well done"},
+      {"name":"Social Studies","cat":33,"exam":49,"total":82,"grade":"A-","comment":"Excellent understanding"},
+      {"name":"RE","cat":38,"exam":57,"total":95,"grade":"A+","comment":"Perfect, amazing!"}
+    ],
+    "position":3,"totalStudents":28,"average":84.5,
+    "teacherRemark":"Aline is a dedicated and hardworking student. Keep it up!",
+    "headRemark":"Well done. Maintain this level of excellence."
+  },
+  {
+    "studentReg":"GPA-2024-001","term":"Term 2 2026",
+    "subjects":[
+      {"name":"English","cat":35,"exam":57,"total":92,"grade":"A+","comment":"Outstanding improvement!"},
+      {"name":"Mathematics","cat":30,"exam":52,"total":82,"grade":"A-","comment":"Great improvement"},
+      {"name":"Science","cat":36,"exam":54,"total":90,"grade":"A+","comment":"Excellent work"},
+      {"name":"Kinyarwanda","cat":32,"exam":51,"total":83,"grade":"A-","comment":"Very good"},
+      {"name":"Social Studies","cat":34,"exam":50,"total":84,"grade":"A","comment":"Great work"},
+      {"name":"RE","cat":39,"exam":58,"total":97,"grade":"A+","comment":"Exceptional"}
+    ],
+    "position":2,"totalStudents":28,"average":88.0,
+    "teacherRemark":"Aline continues to impress. She is truly dedicated to her studies.",
+    "headRemark":"Excellent results. We are very proud of Aline's progress."
+  },
+  {
+    "studentReg":"GPA-2024-002","term":"Term 1 2026",
+    "subjects":[
+      {"name":"English","cat":29,"exam":47,"total":76,"grade":"B+","comment":"Good effort"},
+      {"name":"Mathematics","cat":36,"exam":58,"total":94,"grade":"A+","comment":"Exceptional talent"},
+      {"name":"Science","cat":33,"exam":53,"total":86,"grade":"A","comment":"Excellent"},
+      {"name":"Kinyarwanda","cat":28,"exam":46,"total":74,"grade":"B","comment":"Good work"},
+      {"name":"Social Studies","cat":30,"exam":48,"total":78,"grade":"B+","comment":"Good understanding"},
+      {"name":"RE","cat":35,"exam":54,"total":89,"grade":"A","comment":"Very good"}
+    ],
+    "position":5,"totalStudents":32,"average":82.8,
+    "teacherRemark":"Kevin has strong mathematical ability. Improve reading and writing skills.",
+    "headRemark":"Good results. Keep working hard Kevin!"
+  }
+]

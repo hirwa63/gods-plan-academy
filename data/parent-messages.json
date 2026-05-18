@@ -1,0 +1,23 @@
+[
+  {
+    "id":"pmsg_001",
+    "from":"admin","fromName":"School Admin",
+    "to":"par_001","subject":"Welcome to God's Plan Academy Parent Portal",
+    "body":"Dear Solange,\n\nWelcome to the God's Plan Academy Parent Portal! This is your secure space to monitor Aline's academic progress, pay fees, read school notices and communicate with teachers.\n\nIf you have any questions, please don't hesitate to send us a message.\n\nBest regards,\nGod's Plan Academy Administration",
+    "date":"2026-01-15T10:00:00Z","read":false
+  },
+  {
+    "id":"pmsg_002",
+    "from":"admin","fromName":"Class Teacher - Mrs. Mukamana",
+    "to":"par_001","subject":"Aline's Excellent Performance - Term 1",
+    "body":"Dear Mrs. Uwase,\n\nI am delighted to inform you that Aline has performed exceptionally well in Term 1 2026. She ranked 3rd in her class with an average of 84.5%.\n\nAline is a joy to teach. She is attentive, participates actively in class and always submits her homework on time.\n\nPlease continue to encourage her at home.\n\nKind regards,\nMrs. Mukamana\nClass Teacher, P3A",
+    "date":"2026-03-20T14:30:00Z","read":false
+  },
+  {
+    "id":"pmsg_003",
+    "from":"admin","fromName":"School Admin",
+    "to":"par_002","subject":"Welcome to God's Plan Academy Parent Portal",
+    "body":"Dear Emmanuel,\n\nWelcome to the God's Plan Academy Parent Portal! This is your secure space to monitor Kevin's academic progress, pay fees, read school notices and communicate with teachers.\n\nIf you have any questions, please don't hesitate to send us a message.\n\nBest regards,\nGod's Plan Academy Administration",
+    "date":"2026-01-15T10:00:00Z","read":false
+  }
+]

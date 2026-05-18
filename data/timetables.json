@@ -1,0 +1,94 @@
+{
+  "P3":{
+    "Monday":[
+      {"time":"7:00–7:40","subject":"English","teacher":"Mrs. Mukamana","room":"P3A"},
+      {"time":"7:40–8:20","subject":"Mathematics","teacher":"Mr. Habimana","room":"P3A"},
+      {"time":"8:20–9:00","subject":"Science","teacher":"Mrs. Uwimana","room":"P3A"},
+      {"time":"9:00–9:20","subject":"Break","teacher":"","room":""},
+      {"time":"9:20–10:00","subject":"Kinyarwanda","teacher":"Mr. Nkurunziza","room":"P3A"},
+      {"time":"10:00–10:40","subject":"Social Studies","teacher":"Mrs. Kayitesi","room":"P3A"},
+      {"time":"10:40–11:20","subject":"RE","teacher":"Mrs. Mukamurenzi","room":"P3A"}
+    ],
+    "Tuesday":[
+      {"time":"7:00–7:40","subject":"Mathematics","teacher":"Mr. Habimana","room":"P3A"},
+      {"time":"7:40–8:20","subject":"Kinyarwanda","teacher":"Mr. Nkurunziza","room":"P3A"},
+      {"time":"8:20–9:00","subject":"English","teacher":"Mrs. Mukamana","room":"P3A"},
+      {"time":"9:00–9:20","subject":"Break","teacher":"","room":""},
+      {"time":"9:20–10:00","subject":"Art & Craft","teacher":"Mr. Bizimana","room":"Art Room"},
+      {"time":"10:00–10:40","subject":"Science","teacher":"Mrs. Uwimana","room":"P3A"},
+      {"time":"10:40–11:20","subject":"PE","teacher":"Mr. Mugisha","room":"Field"}
+    ],
+    "Wednesday":[
+      {"time":"7:00–7:40","subject":"Science","teacher":"Mrs. Uwimana","room":"P3A"},
+      {"time":"7:40–8:20","subject":"English","teacher":"Mrs. Mukamana","room":"P3A"},
+      {"time":"8:20–9:00","subject":"Mathematics","teacher":"Mr. Habimana","room":"P3A"},
+      {"time":"9:00–9:20","subject":"Break","teacher":"","room":""},
+      {"time":"9:20–10:00","subject":"RE","teacher":"Mrs. Mukamurenzi","room":"P3A"},
+      {"time":"10:00–11:20","subject":"Music & Choir","teacher":"Mrs. Ingabire","room":"Hall"}
+    ],
+    "Thursday":[
+      {"time":"7:00–7:40","subject":"Kinyarwanda","teacher":"Mr. Nkurunziza","room":"P3A"},
+      {"time":"7:40–8:20","subject":"Social Studies","teacher":"Mrs. Kayitesi","room":"P3A"},
+      {"time":"8:20–9:00","subject":"English","teacher":"Mrs. Mukamana","room":"P3A"},
+      {"time":"9:00–9:20","subject":"Break","teacher":"","room":""},
+      {"time":"9:20–10:00","subject":"Mathematics","teacher":"Mr. Habimana","room":"P3A"},
+      {"time":"10:00–10:40","subject":"Science","teacher":"Mrs. Uwimana","room":"Lab"},
+      {"time":"10:40–11:20","subject":"ICT","teacher":"Mr. Rurangwa","room":"Computer Lab"}
+    ],
+    "Friday":[
+      {"time":"7:00–7:40","subject":"RE","teacher":"Mrs. Mukamurenzi","room":"P3A"},
+      {"time":"7:40–8:20","subject":"Mathematics","teacher":"Mr. Habimana","room":"P3A"},
+      {"time":"8:20–9:00","subject":"Kinyarwanda","teacher":"Mr. Nkurunziza","room":"P3A"},
+      {"time":"9:00–9:20","subject":"Break","teacher":"","room":""},
+      {"time":"9:20–10:00","subject":"English","teacher":"Mrs. Mukamana","room":"P3A"},
+      {"time":"10:00–10:40","subject":"PE","teacher":"Mr. Mugisha","room":"Field"},
+      {"time":"10:40–11:20","subject":"Social Studies","teacher":"Mrs. Kayitesi","room":"P3A"}
+    ]
+  },
+  "P5":{
+    "Monday":[
+      {"time":"7:00–7:40","subject":"Mathematics","teacher":"Mr. Nshimiyimana","room":"P5B"},
+      {"time":"7:40–8:20","subject":"English","teacher":"Mrs. Ingabire","room":"P5B"},
+      {"time":"8:20–9:00","subject":"Sciences","teacher":"Mr. Gasana","room":"P5B"},
+      {"time":"9:00–9:20","subject":"Break","teacher":"","room":""},
+      {"time":"9:20–10:00","subject":"Social Studies","teacher":"Mrs. Uwase","room":"P5B"},
+      {"time":"10:00–10:40","subject":"Kinyarwanda","teacher":"Mr. Havugimana","room":"P5B"},
+      {"time":"10:40–11:20","subject":"ICT","teacher":"Mr. Rurangwa","room":"Computer Lab"}
+    ],
+    "Tuesday":[
+      {"time":"7:00–7:40","subject":"English","teacher":"Mrs. Ingabire","room":"P5B"},
+      {"time":"7:40–8:20","subject":"Mathematics","teacher":"Mr. Nshimiyimana","room":"P5B"},
+      {"time":"8:20–9:00","subject":"Kinyarwanda","teacher":"Mr. Havugimana","room":"P5B"},
+      {"time":"9:00–9:20","subject":"Break","teacher":"","room":""},
+      {"time":"9:20–10:00","subject":"Sciences","teacher":"Mr. Gasana","room":"Lab"},
+      {"time":"10:00–10:40","subject":"RE","teacher":"Mrs. Mukamurenzi","room":"P5B"},
+      {"time":"10:40–11:20","subject":"PE","teacher":"Mr. Mugisha","room":"Field"}
+    ],
+    "Wednesday":[
+      {"time":"7:00–7:40","subject":"Sciences","teacher":"Mr. Gasana","room":"P5B"},
+      {"time":"7:40–8:20","subject":"Social Studies","teacher":"Mrs. Uwase","room":"P5B"},
+      {"time":"8:20–9:00","subject":"English","teacher":"Mrs. Ingabire","room":"P5B"},
+      {"time":"9:00–9:20","subject":"Break","teacher":"","room":""},
+      {"time":"9:20–10:00","subject":"Mathematics","teacher":"Mr. Nshimiyimana","room":"P5B"},
+      {"time":"10:00–11:20","subject":"Music & Choir","teacher":"Mrs. Ingabire","room":"Hall"}
+    ],
+    "Thursday":[
+      {"time":"7:00–7:40","subject":"Kinyarwanda","teacher":"Mr. Havugimana","room":"P5B"},
+      {"time":"7:40–8:20","subject":"Sciences","teacher":"Mr. Gasana","room":"P5B"},
+      {"time":"8:20–9:00","subject":"Mathematics","teacher":"Mr. Nshimiyimana","room":"P5B"},
+      {"time":"9:00–9:20","subject":"Break","teacher":"","room":""},
+      {"time":"9:20–10:00","subject":"English","teacher":"Mrs. Ingabire","room":"P5B"},
+      {"time":"10:00–10:40","subject":"Social Studies","teacher":"Mrs. Uwase","room":"P5B"},
+      {"time":"10:40–11:20","subject":"Art & Craft","teacher":"Mr. Bizimana","room":"Art Room"}
+    ],
+    "Friday":[
+      {"time":"7:00–7:40","subject":"RE","teacher":"Mrs. Mukamurenzi","room":"P5B"},
+      {"time":"7:40–8:20","subject":"English","teacher":"Mrs. Ingabire","room":"P5B"},
+      {"time":"8:20–9:00","subject":"Kinyarwanda","teacher":"Mr. Havugimana","room":"P5B"},
+      {"time":"9:00–9:20","subject":"Break","teacher":"","room":""},
+      {"time":"9:20–10:00","subject":"Sciences","teacher":"Mr. Gasana","room":"Lab"},
+      {"time":"10:00–10:40","subject":"PE","teacher":"Mr. Mugisha","room":"Field"},
+      {"time":"10:40–11:20","subject":"Mathematics","teacher":"Mr. Nshimiyimana","room":"P5B"}
+    ]
+  }
+}

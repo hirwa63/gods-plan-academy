@@ -1,0 +1,8 @@
+[
+  {"studentReg":"GPA-2024-001","term":"Term 1 2026","amount":75000,"paid":75000,"status":"paid","dueDate":"2026-02-28","payments":[{"date":"2026-02-15","amount":75000,"receipt":"RCP-2026-001","method":"MTN MoMo"}]},
+  {"studentReg":"GPA-2024-001","term":"Term 2 2026","amount":75000,"paid":30000,"status":"partial","dueDate":"2026-05-30","payments":[{"date":"2026-05-01","amount":30000,"receipt":"RCP-2026-015","method":"MTN MoMo"}]},
+  {"studentReg":"GPA-2024-001","term":"Term 3 2026","amount":75000,"paid":0,"status":"unpaid","dueDate":"2026-09-01","payments":[]},
+  {"studentReg":"GPA-2024-002","term":"Term 1 2026","amount":75000,"paid":75000,"status":"paid","dueDate":"2026-02-28","payments":[{"date":"2026-02-10","amount":75000,"receipt":"RCP-2026-002","method":"Airtel Money"}]},
+  {"studentReg":"GPA-2024-002","term":"Term 2 2026","amount":75000,"paid":75000,"status":"paid","dueDate":"2026-05-30","payments":[{"date":"2026-04-28","amount":75000,"receipt":"RCP-2026-016","method":"MTN MoMo"}]},
+  {"studentReg":"GPA-2024-002","term":"Term 3 2026","amount":75000,"paid":0,"status":"unpaid","dueDate":"2026-09-01","payments":[]}
+]

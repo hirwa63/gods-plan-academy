@@ -1,1 +1,4 @@
-[]
+[
+  {"reg":"GPA-2024-001","name":"Aline Uwase","cls":"P3","status":"active","gender":"F","dob":"2018-03-12","photo":null},
+  {"reg":"GPA-2024-002","name":"Kevin Nzabonimpa","cls":"P5","status":"active","gender":"M","dob":"2015-07-25","photo":null}
+]

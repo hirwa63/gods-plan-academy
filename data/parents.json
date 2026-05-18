@@ -1,0 +1,28 @@
+[
+  {
+    "id": "par_001",
+    "name": "Solange Uwase",
+    "email": "parent@gpa.rw",
+    "phone": "0788100200",
+    "password": "parent123",
+    "approved": true,
+    "children": ["GPA-2024-001"],
+    "photo": null,
+    "notifEmail": true,
+    "notifSMS": false,
+    "createdAt": "2026-01-10T08:00:00Z"
+  },
+  {
+    "id": "par_002",
+    "name": "Emmanuel Nzabonimpa",
+    "email": "emmanuel@gpa.rw",
+    "phone": "0722456789",
+    "password": "parent456",
+    "approved": true,
+    "children": ["GPA-2024-002"],
+    "photo": null,
+    "notifEmail": true,
+    "notifSMS": true,
+    "createdAt": "2026-01-12T09:00:00Z"
+  }
+]
