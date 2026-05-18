@@ -1623,6 +1623,10 @@ console.log('✅ GPA portal client ready');
     </div>
     <div class="fg"><label>Caption / Description</label><textarea id="galCaption" style="height:80px;" placeholder="Describe what's happening in the photo…"></textarea></div>
     <div class="fg"><label>Image *</label><input type="file" id="galImage" accept="image/*" style="padding:8px;"/></div>
+    <div id="galImageHistory" style="display:none;margin-bottom:12px;">
+      <div style="font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;">📂 Previous Photos (click to restore)</div>
+      <div id="galHistoryThumbs" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
+    </div>
     <div id="galErr" class="alert a-error"></div>
     <div id="galSuc" class="alert a-success"></div>
     <button class="btn btn-green btn-block" onclick="saveGalleryPost()">🖼️ Upload Post</button>
@@ -2558,13 +2562,42 @@ function renderGalleryAdmin() {
 function editGalleryPost(id) {
   const p = galleryPosts.find(x => x.id === id);
   if (!p) return;
-  document.getElementById('galEditId').value      = p.id;
+  document.getElementById('galEditId').value         = p.id;
   document.getElementById('galModTitle').textContent = '✏️ Edit Gallery Post';
-  document.getElementById('galTitle').value       = p.title;
-  document.getElementById('galCategory').value    = p.category;
-  document.getElementById('galCaption').value     = p.caption || '';
+  document.getElementById('galTitle').value          = p.title;
+  document.getElementById('galCategory').value       = p.category;
+  document.getElementById('galCaption').value        = p.caption || '';
+  document.getElementById('galImage').value          = '';
   hideAlert('galErr'); hideAlert('galSuc');
+  // Show image history
+  const histSection = document.getElementById('galImageHistory');
+  const histThumbs  = document.getElementById('galHistoryThumbs');
+  if (p.imageHistory && p.imageHistory.length > 0) {
+    histThumbs.innerHTML = p.imageHistory.map(h => `
+      <div style="text-align:center;">
+        <img src="${h.url}" style="width:72px;height:72px;object-fit:cover;border-radius:8px;border:2px solid var(--border);cursor:pointer;transition:transform .2s;" onclick="restoreGalImage('${p.id}','${h.url}')" title="Click to restore this photo"/>
+        <div style="font-size:10px;color:var(--muted);margin-top:3px;">${new Date(h.savedAt).toLocaleDateString()}</div>
+      </div>`).join('');
+    histSection.style.display = 'block';
+  } else {
+    histSection.style.display = 'none';
+  }
   openMod('galMod');
+}
+
+async function restoreGalImage(postId, imageUrl) {
+  if (!confirm('Restore this older photo as the current image?')) return;
+  try {
+    const r = await fetch(API_URL + '/gallery/' + postId + '/restore-image', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', 'x-admin-key': GPA_ADMIN_KEY },
+      body: JSON.stringify({ imageUrl })
+    });
+    const d = await r.json();
+    if (!d.success) throw new Error(d.message);
+    showAlert('galSuc', '✅ Photo restored successfully!');
+    setTimeout(() => { closeMod('galMod'); loadGalleryAdmin(); }, 1000);
+  } catch(e) { showAlert('galErr', '❌ ' + e.message); }
 }
 
 async function saveGalleryPost() {

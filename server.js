@@ -348,6 +348,24 @@ app.put('/api/gallery/:id', requireAdmin, upload.single('image'), async (req, re
   } catch (e) { res.status(500).json({ success: false, message: e.message }); }
 });
 
+app.patch('/api/gallery/:id/restore-image', requireAdmin, async (req, res) => {
+  try {
+    const posts = await readJson(galleryPath);
+    const idx = posts.findIndex(p => p.id === req.params.id);
+    if (idx === -1) return res.status(404).json({ success: false, message: 'Post not found.' });
+    const { imageUrl } = req.body;
+    if (!imageUrl) return res.status(400).json({ success: false, message: 'imageUrl is required.' });
+    const post = { ...posts[idx] };
+    if (!post.imageHistory) post.imageHistory = [];
+    if (post.image) post.imageHistory.unshift({ url: post.image, savedAt: new Date().toISOString() });
+    post.imageHistory = post.imageHistory.filter(h => h.url !== imageUrl);
+    post.image = imageUrl;
+    posts[idx] = post;
+    await writeJson(galleryPath, posts);
+    res.json({ success: true, post });
+  } catch(e) { res.status(500).json({ success: false, message: e.message }); }
+});
+
 app.delete('/api/gallery/:id', requireAdmin, async (req, res) => {
   try {
     let posts = await readJson(galleryPath);
