@@ -1425,6 +1425,36 @@ console.log('✅ GPA portal client ready');
       </div>
     </div>
 
+    <!-- PARENTS MANAGEMENT -->
+    <div class="asub" id="sub-parents">
+      <div class="container" style="padding:0;">
+        <!-- Stats strip -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:18px;" id="parentStats"></div>
+
+        <!-- Toolbar -->
+        <div class="card" style="padding:14px 16px;margin-bottom:14px;">
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
+            <input id="parentSearch" type="text" placeholder="🔍 Search by name or email…" oninput="filterParents()" style="flex:1;min-width:180px;padding:9px 12px;border-radius:8px;border:1.5px solid var(--border);font-family:'Nunito',sans-serif;font-size:13px;outline:none;"/>
+            <a class="btn btn-green btn-sm" href="parent-portal.html" target="_blank">🔗 Open Parent Portal</a>
+            <button class="btn btn-sm btn-outline" onclick="loadParents()">🔄 Refresh</button>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;" id="parentFilters">
+            <button class="atab-btn active" onclick="setParentFilter('all',this)">All</button>
+            <button class="atab-btn" onclick="setParentFilter('pending',this)">⏳ Pending Approval</button>
+            <button class="atab-btn" onclick="setParentFilter('approved',this)">✅ Approved</button>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="tw">
+          <table>
+            <thead><tr><th>Parent Name</th><th>Email</th><th>Phone</th><th>Children (Reg)</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead>
+            <tbody id="parentsTBody"><tr><td colspan="7" style="text-align:center;padding:20px;color:var(--muted);">Click Refresh to load parents.</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
     <!-- PAYMENTS LOG -->
     <div class="asub" id="sub-payments">
       <div class="card">
@@ -2188,8 +2218,8 @@ function setupDash(role){
 
   const tabsMap={
     teacher:[{id:'marks',label:'📝 Post Marks'}],
-    admin:[{id:'marks',label:'📝 Marks'},{id:'students',label:'👨‍🎓 Students'},{id:'staff',label:'👩‍🏫 Staff'},{id:'announcements',label:'📢 Announcements'},{id:'gallery-admin',label:'🖼️ Gallery'},{id:'comments-admin',label:'💬 Messages'},{id:'payments',label:'💳 Payments'},{id:'activity',label:'📌 Activity'},{id:'news',label:'📰 News'},{id:'settings',label:'⚙️ Settings'}],
-    director:[{id:'marks',label:'📝 Marks'},{id:'students',label:'👨‍🎓 Students'},{id:'staff',label:'👩‍🏫 Staff'},{id:'announcements',label:'📢 Announcements'},{id:'gallery-admin',label:'🖼️ Gallery'},{id:'payments',label:'💳 Payments'},{id:'activity',label:'📌 Activity'},{id:'news',label:'📰 News'},{id:'comments-admin',label:'💬 Messages'},{id:'settings',label:'⚙️ Settings'}],
+    admin:[{id:'marks',label:'📝 Marks'},{id:'students',label:'👨‍🎓 Students'},{id:'staff',label:'👩‍🏫 Staff'},{id:'announcements',label:'📢 Announcements'},{id:'gallery-admin',label:'🖼️ Gallery'},{id:'parents',label:'👨‍👩‍👧 Parents'},{id:'comments-admin',label:'💬 Messages'},{id:'payments',label:'💳 Payments'},{id:'activity',label:'📌 Activity'},{id:'news',label:'📰 News'},{id:'settings',label:'⚙️ Settings'}],
+    director:[{id:'marks',label:'📝 Marks'},{id:'students',label:'👨‍🎓 Students'},{id:'staff',label:'👩‍🏫 Staff'},{id:'announcements',label:'📢 Announcements'},{id:'gallery-admin',label:'🖼️ Gallery'},{id:'parents',label:'👨‍👩‍👧 Parents'},{id:'payments',label:'💳 Payments'},{id:'activity',label:'📌 Activity'},{id:'news',label:'📰 News'},{id:'comments-admin',label:'💬 Messages'},{id:'settings',label:'⚙️ Settings'}],
     parent:[{id:'marks',label:'📊 Check Results'}],
   };
   const tabs=tabsMap[role]||[];
@@ -2205,8 +2235,8 @@ function setupDash(role){
     loadAnnouncements();
     loadGalleryAdmin();
   }
-  if(role==='director'){loadMessages();renderAccounts();}
-  if(role==='admin'){loadMessages();}
+  if(role==='director'){loadMessages();renderAccounts();loadParents();}
+  if(role==='admin'){loadMessages();loadParents();}
 }
 
 function showDashTab(id,btn){
@@ -2217,6 +2247,7 @@ function showDashTab(id,btn){
   if(id==='comments-admin') loadMessages();
   if(id==='announcements') loadAnnouncements();
   if(id==='gallery-admin') loadGalleryAdmin();
+  if(id==='parents') loadParents();
 }
 
 // ============================================================
@@ -3072,6 +3103,122 @@ async function deleteMessage(id) {
     allMessages = allMessages.filter(m => m.id !== id);
     renderMsgStats();
     filterMessages();
+  } catch(e) { alert('Error: ' + e.message); }
+}
+
+// ============================================================
+// PARENTS MANAGEMENT (admin/director)
+// ============================================================
+let allParents = [], parentFilter = 'all';
+
+async function loadParents() {
+  const el = document.getElementById('parentsTBody');
+  if (!el) return;
+  el.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--muted);">Loading…</td></tr>';
+  try {
+    const r = await fetch(API_URL + '/parents', { headers: { 'x-admin-key': GPA_ADMIN_KEY } });
+    const d = await r.json();
+    if (!d.success) throw new Error(d.message);
+    allParents = d.parents;
+    renderParentStats();
+    filterParents();
+  } catch(e) {
+    el.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--red);padding:20px;">❌ ${e.message}</td></tr>`;
+  }
+}
+
+function renderParentStats() {
+  const total    = allParents.length;
+  const pending  = allParents.filter(p => !p.approved).length;
+  const approved = allParents.filter(p => p.approved).length;
+  const el = document.getElementById('parentStats');
+  if (!el) return;
+  el.innerHTML = `
+    <div class="scard"><div class="snum">${total}</div><div class="slbl">Total Parents</div></div>
+    <div class="scard"><div class="snum" style="color:var(--amber);">${pending}</div><div class="slbl">Pending Approval</div></div>
+    <div class="scard"><div class="snum" style="color:var(--green);">${approved}</div><div class="slbl">Approved</div></div>`;
+}
+
+function setParentFilter(f, btn) {
+  parentFilter = f;
+  document.querySelectorAll('#parentFilters .atab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filterParents();
+}
+
+function filterParents() {
+  const q = (document.getElementById('parentSearch')?.value || '').toLowerCase();
+  let list = allParents;
+  if (parentFilter === 'pending')  list = list.filter(p => !p.approved);
+  if (parentFilter === 'approved') list = list.filter(p =>  p.approved);
+  if (q) list = list.filter(p =>
+    (p.name||'').toLowerCase().includes(q) ||
+    (p.email||'').toLowerCase().includes(q)
+  );
+  renderParents(list);
+}
+
+function renderParents(list) {
+  const el = document.getElementById('parentsTBody');
+  if (!el) return;
+  if (!list.length) {
+    el.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:20px;">No parents found.</td></tr>';
+    return;
+  }
+  el.innerHTML = list.map(p => {
+    const children  = (p.children||[]).join(', ') || '—';
+    const status    = p.approved
+      ? '<span class="badge bg-green">✅ Approved</span>'
+      : '<span class="badge bg-amber">⏳ Pending</span>';
+    const joined    = p.createdAt ? new Date(p.createdAt).toLocaleDateString('en-GB') : '—';
+    const safeName  = (p.name||'').replace(/'/g,"\\'");
+    const approveBtn = !p.approved
+      ? `<button class="btn btn-sm btn-green" onclick="approveParent('${p.id}')">✅ Approve</button> ` : '';
+    return `<tr>
+      <td style="font-weight:800;">${p.name}</td>
+      <td>${p.email}</td>
+      <td>${p.phone||'—'}</td>
+      <td><code style="font-size:11px;">${children}</code></td>
+      <td>${status}</td>
+      <td>${joined}</td>
+      <td style="white-space:nowrap;">
+        ${approveBtn}<button class="btn btn-sm btn-red" onclick="deleteParent('${p.id}','${safeName}')">🗑️ Delete</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+async function approveParent(id) {
+  if (!confirm('Approve this parent? They will be able to log in to the Parent Portal.')) return;
+  try {
+    const r = await fetch(API_URL + '/parents/' + id + '/approve', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'x-admin-key': GPA_ADMIN_KEY },
+      body: JSON.stringify({ approved: true })
+    });
+    const d = await r.json();
+    if (!d.success) throw new Error(d.message);
+    const p = allParents.find(x => x.id === id);
+    if (p) p.approved = true;
+    renderParentStats();
+    filterParents();
+    recordActivity('parents', `Approved parent account: ${p?.name||id}`);
+  } catch(e) { alert('Error: ' + e.message); }
+}
+
+async function deleteParent(id, name) {
+  if (!confirm(`Delete parent account for "${name}"?\n\nThis will permanently remove their account and log them out. This cannot be undone.`)) return;
+  try {
+    const r = await fetch(API_URL + '/parents/' + id, {
+      method: 'DELETE',
+      headers: { 'x-admin-key': GPA_ADMIN_KEY }
+    });
+    const d = await r.json();
+    if (!d.success) throw new Error(d.message);
+    allParents = allParents.filter(p => p.id !== id);
+    renderParentStats();
+    filterParents();
+    recordActivity('parents', `Deleted parent account: ${name}`);
   } catch(e) { alert('Error: ' + e.message); }
 }
 

@@ -716,6 +716,20 @@ app.get('/api/parents', requireAdmin, async (req, res) => {
   } catch { res.status(500).json({ success: false, message: 'Failed.' }); }
 });
 
+app.delete('/api/parents/:id', requireAdmin, async (req, res) => {
+  try {
+    let parents = await readJson(parentsPath);
+    const before = parents.length;
+    parents = parents.filter(p => p.id !== req.params.id);
+    if (parents.length === before) return res.status(404).json({ success: false, message: 'Parent not found.' });
+    await writeJson(parentsPath, parents);
+    let sessions = await readJson(parentSessPath);
+    sessions = sessions.filter(s => s.parentId !== req.params.id);
+    await writeJson(parentSessPath, sessions);
+    res.json({ success: true });
+  } catch { res.status(500).json({ success: false, message: 'Unable to delete parent.' }); }
+});
+
 app.put('/api/parents/:id/approve', requireAdmin, async (req, res) => {
   try {
     const parents = await readJson(parentsPath);
