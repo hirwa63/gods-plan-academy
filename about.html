@@ -63,9 +63,27 @@
         .stats-row{grid-template-columns:1fr 1fr!important;}
         .img-wrap img{border-radius:12px;}
     }
+    /* LANG BAR */
+    .lang-bar{background:#04342C;display:flex;align-items:center;justify-content:center;gap:8px;padding:6px 16px;flex-wrap:wrap;}
+    .lang-btn{background:none;border:1.5px solid rgba(255,255,255,0.25);color:rgba(255,255,255,0.7);font-size:12px;font-weight:800;padding:4px 14px;border-radius:20px;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;}
+    .lang-btn:hover,.lang-btn.active{background:rgba(255,255,255,0.18);border-color:white;color:white;}
+    /* BREADCRUMB */
+    .breadcrumb{background:#f0f5f2;padding:9px 40px;display:flex;align-items:center;gap:8px;font-size:13px;border-bottom:1px solid rgba(0,0,0,0.06);}
+    .bc-home{color:#085041;font-weight:700;text-decoration:none;}
+    .bc-home:hover{text-decoration:underline;}
+    .bc-sep{color:#aaa;}
+    .bc-cur{color:#555;font-weight:600;}
+    @media(max-width:600px){.breadcrumb{padding:8px 14px;}.lang-btn{font-size:11px;padding:3px 10px;}}
 </style>
 </head>
 <body>
+
+<div class="lang-bar">
+  <span style="color:rgba(255,255,255,0.5);font-size:11px;">🌐</span>
+  <button class="lang-btn active" onclick="setLang('en')" id="lb-en">EN</button>
+  <button class="lang-btn" onclick="setLang('rw')" id="lb-rw">RW</button>
+  <button class="lang-btn" onclick="setLang('fr')" id="lb-fr">FR</button>
+</div>
 
 <nav class="navbar">
     <a class="nav-brand" href="index.html">
@@ -98,9 +116,11 @@
     <a class="mob-link" href="gods_plan_academy_portal.html" style="color:#1a56db;font-weight:800;">📊 Student Portal →</a>
 </div>
 
+<div class="breadcrumb"><a class="bc-home" href="index.html">🏠 Home</a><span class="bc-sep">›</span><span class="bc-cur" data-key="nav_about">About</span></div>
+
 <div class="page-hero">
-    <h1 class="ph-title">Our Story</h1>
-    <p>Building a foundation of faith and excellence since 2005.</p>
+    <h1 class="ph-title" data-key="hero_title">Our Story</h1>
+    <p data-key="hero_sub">Building a foundation of faith and excellence since 2005.</p>
 </div>
 
 <section class="main-section">
@@ -111,15 +131,15 @@
             </div>
         </div>
         <div class="reveal-right">
-            <h2 class="story-title">A Vision for Excellence</h2>
-            <p class="story-text">
-                Founded with a vision to combine academic rigour with Christian values, 
-                God's Plan Academy has grown from a small community initiative into 
+            <h2 class="story-title" data-key="about_title">A Vision for Excellence</h2>
+            <p class="story-text" data-key="about_p1">
+                Founded with a vision to combine academic rigour with Christian values,
+                God's Plan Academy has grown from a small community initiative into
                 one of Musanze's most respected primary schools.
             </p>
-            <p class="story-text">
-                Our mission is to provide a holistic education that nurtures the mind, 
-                body, and spirit of every child, preparing them to be the leaders of 
+            <p class="story-text" data-key="about_p2">
+                Our mission is to provide a holistic education that nurtures the mind,
+                body, and spirit of every child, preparing them to be the leaders of
                 tomorrow in Rwanda and beyond.
             </p>
         </div>
@@ -130,5 +150,24 @@
     <p>© 2026 God's Plan Academy. Musanze, Rwanda.</p>
 </footer>
 
+<script>
+const PAGE_T = {
+  en:{nav_about:'About',hero_title:'Our Story',hero_sub:'Building a foundation of faith and excellence since 2005.',about_title:'A Vision for Excellence',about_p1:'Founded with a vision to combine academic rigour with Christian values, God\'s Plan Academy has grown from a small community initiative into one of Musanze\'s most respected primary schools.',about_p2:'Our mission is to provide a holistic education that nurtures the mind, body, and spirit of every child, preparing them to be the leaders of tomorrow in Rwanda and beyond.'},
+  rw:{nav_about:'Ibyerekeye',hero_title:'Inkuru Yacu',hero_sub:'Kubaka ishingiro ry\'ukwizera n\'ubuziranenge kuva 2005.',about_title:'Inzozi z\'Ubuziranenge',about_p1:'Yashingwe n\'inzozi yo guhuza ubuhanga bw\'amashuri n\'indangagaciro z\'ubukristo, Ishuri ry\'Imana ryakuze rutura urusobe ruto mu Musanze rigira iry\'icyeshimwa.',about_p2:'Intego yacu ni gutanga uburezi bwuzuye bufata mu mutwe, umubiri n\'imitima y\'abana, bubitegurira kuba ababyeyi b\'ejo hazaza mu Rwanda no hanze.'},
+  fr:{nav_about:'À Propos',hero_title:'Notre Histoire',hero_sub:'Construire une fondation de foi et d\'excellence depuis 2005.',about_title:'Une Vision d\'Excellence',about_p1:'Fondée avec la vision de combiner la rigueur académique avec les valeurs chrétiennes, God\'s Plan Academy est passée d\'une petite initiative à l\'une des écoles primaires les plus respectées de Musanze.',about_p2:'Notre mission est de fournir une éducation holistique qui nourrit l\'esprit, le corps et l\'âme de chaque enfant, les préparant à être les leaders de demain au Rwanda et au-delà.'}
+};
+(function(){
+  const saved=localStorage.getItem('gpa_lang')||'en';
+  window.setLang=function(l){
+    localStorage.setItem('gpa_lang',l);
+    document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
+    document.getElementById('lb-'+l)?.classList.add('active');
+    document.querySelectorAll('[data-key]').forEach(el=>{
+      if(PAGE_T[l]?.[el.getAttribute('data-key')])el.innerHTML=PAGE_T[l][el.getAttribute('data-key')];
+    });
+  };
+  document.addEventListener('DOMContentLoaded',()=>window.setLang(saved));
+})();
+</script>
 </body>
 </html>

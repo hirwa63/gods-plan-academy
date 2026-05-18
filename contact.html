@@ -65,6 +65,12 @@ footer{background:var(--green-deeper);color:rgba(255,255,255,0.7);padding:48px 4
 .status.success{display:block;background:#EAF3DE;border:1px solid #C0DD97;color:#173404;}
 .status.error{display:block;background:#FDE9E9;border:1px solid #E3B1B1;color:#7A2121;}
 @media(max-width:768px){.contact-grid,.frow{grid-template-columns:1fr!important;}.section{padding:52px 16px;}.page-hero{padding:52px 16px;}.ph-title{font-size:32px;}}
+.lang-bar{background:#04342C;display:flex;align-items:center;justify-content:center;gap:8px;padding:6px 16px;flex-wrap:wrap;}
+.lang-btn{background:none;border:1.5px solid rgba(255,255,255,0.25);color:rgba(255,255,255,0.7);font-size:12px;font-weight:800;padding:4px 14px;border-radius:20px;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;}
+.lang-btn:hover,.lang-btn.active{background:rgba(255,255,255,0.18);border-color:white;color:white;}
+.breadcrumb-bar{background:#f0f5f2;padding:9px 40px;display:flex;align-items:center;gap:8px;font-size:13px;border-bottom:1px solid rgba(0,0,0,0.06);}
+.bc-home{color:#085041;font-weight:700;text-decoration:none;}.bc-home:hover{text-decoration:underline;}
+.bc-sep{color:#aaa;}.bc-cur{color:#555;font-weight:600;}
 /* ===== NAVBAR ===== */
 .navbar{
   background:white;
@@ -222,6 +228,12 @@ async function send() {
 </script>
 
 <body>
+<div class="lang-bar">
+  <span style="color:rgba(255,255,255,0.5);font-size:11px;">🌐</span>
+  <button class="lang-btn active" onclick="setLang('en')" id="lb-en">EN</button>
+  <button class="lang-btn" onclick="setLang('rw')" id="lb-rw">RW</button>
+  <button class="lang-btn" onclick="setLang('fr')" id="lb-fr">FR</button>
+</div>
 <nav class="navbar" id="navbar">
   <a class="nav-brand" href="index.html" title="Go to Home Page">
     <div class="brand-logo">🌱</div>
@@ -250,13 +262,8 @@ async function send() {
   <a class="mob-link" href="gods_plan_academy_portal.html" style="color:#1a56db;font-weight:800;">📊 Student Portal →</a>
 </div>
 
-<!-- BREADCRUMB -->
-<div style="background:#f8faf9;border-bottom:1px solid rgba(0,0,0,0.07);padding:8px 40px;display:flex;align-items:center;gap:6px;font-size:13px;color:#555;">
-  <a href="index.html" style="color:#1a56db;font-weight:700;text-decoration:none;display:flex;align-items:center;gap:4px;">🏠 Home</a>
-  <span style="color:#bbb;">›</span>
-  <span style="color:#555;font-weight:600;">Contact</span>
-</div>
-<div class="page-hero"><div class="ph-label">Get in Touch</div><h1 class="ph-title">Contact Us</h1><p class="ph-desc">We'd love to hear from you. Reach us by phone, email, WhatsApp or visit us at school.</p></div>
+<div class="breadcrumb-bar"><a class="bc-home" href="index.html">🏠 Home</a><span class="bc-sep">›</span><span class="bc-cur" data-key="nav_contact">Contact Us</span></div>
+<div class="page-hero"><div class="ph-label" data-key="ph_label">Get in Touch</div><h1 class="ph-title" data-key="hero_title">Contact Us</h1><p class="ph-desc" data-key="hero_sub">We'd love to hear from you. Reach us by phone, email, WhatsApp or visit us at school.</p></div>
 <section class="section">
   <div class="container">
     <div class="contact-grid">
@@ -308,12 +315,27 @@ function toggleMob() {
 }
 window.addEventListener('scroll', () => {
   document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => {
-    if (el.getBoundingClientRect().top < window.innerHeight - 50) {
-      el.classList.add('visible');
-    }
+    if (el.getBoundingClientRect().top < window.innerHeight - 50) el.classList.add('visible');
   });
 });
 setTimeout(() => window.dispatchEvent(new Event('scroll')), 120);
+const PAGE_T = {
+  en:{nav_contact:'Contact Us',ph_label:'Get in Touch',hero_title:'Contact Us',hero_sub:'We\'d love to hear from you. Reach us by phone, email, WhatsApp or visit us at school.'},
+  rw:{nav_contact:'Twandikire',ph_label:'Twinjire Muri Twe',hero_title:'Twandikire',hero_sub:'Twishimiye kuvugana namwe. Tuhamagare, dushyire imeyili, WhatsApp cyangwa tuze ku ishuri.'},
+  fr:{nav_contact:'Contactez-nous',ph_label:'Prenez Contact',hero_title:'Contactez-nous',hero_sub:'Nous serions ravis de vous entendre. Appelez-nous, envoyez un email, WhatsApp ou rendez-nous visite à l\'école.'}
+};
+(function(){
+  const saved=localStorage.getItem('gpa_lang')||'en';
+  window.setLang=function(l){
+    localStorage.setItem('gpa_lang',l);
+    document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
+    document.getElementById('lb-'+l)?.classList.add('active');
+    document.querySelectorAll('[data-key]').forEach(el=>{
+      if(PAGE_T[l]?.[el.getAttribute('data-key')])el.innerHTML=PAGE_T[l][el.getAttribute('data-key')];
+    });
+  };
+  document.addEventListener('DOMContentLoaded',()=>window.setLang(saved));
+})();
 </script>
 </body>
 </html>

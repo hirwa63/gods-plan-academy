@@ -63,7 +63,7 @@
 
     /* FOOTER */
     footer{background:var(--green-deeper);color:white;padding:60px 10% 20px;}
-    
+
     @media(max-width:900px){.navbar{padding:0 18px;}.nav-links{display:none;}.hamburger{display:flex;}}
     @media(max-width:768px){.section{padding:50px 16px;}.news-grid{grid-template-columns:1fr;}.gallery-grid{grid-template-columns:1fr 1fr;}}
     @media(max-width:600px){
@@ -77,9 +77,36 @@
         h2,.sec-title{font-size:26px!important;}
         .ntitle{font-size:18px!important;}
     }
+    /* LANG BAR */
+    .lang-bar{background:#04342C;display:flex;align-items:center;justify-content:center;gap:8px;padding:6px 16px;flex-wrap:wrap;}
+    .lang-btn{background:none;border:1.5px solid rgba(255,255,255,0.25);color:rgba(255,255,255,0.7);font-size:12px;font-weight:800;padding:4px 14px;border-radius:20px;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;}
+    .lang-btn:hover,.lang-btn.active{background:rgba(255,255,255,0.18);border-color:white;color:white;}
+    .breadcrumb{background:#f0f5f2;padding:9px 40px;display:flex;align-items:center;gap:8px;font-size:13px;border-bottom:1px solid rgba(0,0,0,0.06);}
+    .bc-home{color:#085041;font-weight:700;text-decoration:none;}.bc-home:hover{text-decoration:underline;}
+    .bc-sep{color:#aaa;}.bc-cur{color:#555;font-weight:600;}
+    /* LIGHTBOX */
+    .lb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.93);z-index:9000;align-items:center;justify-content:center;flex-direction:column;gap:14px;padding:16px;}
+    .lb-overlay.open{display:flex;}
+    .lb-img{max-width:92vw;max-height:76vh;border-radius:12px;object-fit:contain;box-shadow:0 20px 60px rgba(0,0,0,0.6);}
+    .lb-close{position:fixed;top:16px;right:20px;background:rgba(255,255,255,0.15);border:none;color:white;width:36px;height:36px;border-radius:50%;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+    .lb-close:hover{background:rgba(255,255,255,0.3);}
+    .lb-nav-row{display:flex;align-items:center;gap:16px;}
+    .lb-nav{background:rgba(255,255,255,0.12);border:none;color:white;width:42px;height:42px;border-radius:50%;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;}
+    .lb-nav:hover{background:rgba(255,255,255,0.28);}
+    .lb-label{color:rgba(255,255,255,0.85);font-size:14px;font-weight:700;text-align:center;min-width:160px;}
+    .lb-dl{background:var(--green);color:white;padding:8px 20px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:background .2s;}
+    .lb-dl:hover{background:var(--green-dark);}
+    .gi{cursor:pointer;}
+    @media(max-width:600px){.breadcrumb{padding:8px 14px;}.lang-btn{font-size:11px;padding:3px 10px;}.lb-img{max-height:65vh;}}
 </style>
 </head>
 <body>
+<div class="lang-bar">
+  <span style="color:rgba(255,255,255,0.5);font-size:11px;">🌐</span>
+  <button class="lang-btn active" onclick="setLang('en')" id="lb-en">EN</button>
+  <button class="lang-btn" onclick="setLang('rw')" id="lb-rw">RW</button>
+  <button class="lang-btn" onclick="setLang('fr')" id="lb-fr">FR</button>
+</div>
 
 <nav class="navbar">
     <a class="nav-brand" href="index.html">
@@ -112,9 +139,10 @@
     <a class="mob-link" href="gods_plan_academy_portal.html" style="color:#1a56db;font-weight:800;">📊 Student Portal →</a>
 </div>
 
+<div class="breadcrumb"><a class="bc-home" href="index.html">🏠 Home</a><span class="bc-sep">›</span><span class="bc-cur" data-key="nav_student_life">Student Life</span></div>
 <div class="page-hero">
-    <h1 class="ph-title">Student Life</h1>
-    <p>Precious memories and events from our school community.</p>
+    <h1 class="ph-title" data-key="hero_title">Student Life</h1>
+    <p data-key="hero_sub">Precious memories and events from our school community.</p>
 </div>
 
 <section class="section">
@@ -181,11 +209,10 @@ function initPage() {
 
     // Render Gallery
     const galleryContainer = document.getElementById('gg');
-    galleryContainer.innerHTML = galleryData.map(g => {
-        // critical: encode spaces/special chars and use the local images/ folder
+    galleryContainer.innerHTML = galleryData.map((g, idx) => {
         const safePath = `images/${encodeURIComponent(g.img)}`;
         return `
-            <div class="gi">
+            <div class="gi" onclick="openLB(${idx})" title="Click to open · ⬇️ Download">
                 <div class="gi-inner" style="background: url('${safePath}') center/cover no-repeat;"></div>
                 <div class="gi-label">${g.label}</div>
             </div>
@@ -195,7 +222,64 @@ function initPage() {
 
 // Run everything
 window.onload = initPage;
+
+// --- LIGHTBOX ---
+let lbIdx = 0;
+function openLB(idx) {
+  lbIdx = idx; showLBFrame();
+  document.getElementById('lbOverlay').classList.add('open');
+}
+function showLBFrame() {
+  const g = galleryData[lbIdx];
+  const src = 'images/' + encodeURIComponent(g.img);
+  document.getElementById('lbImg').src = src;
+  document.getElementById('lbLabel').textContent = g.label + ' (' + (lbIdx+1) + '/' + galleryData.length + ')';
+  const dl = document.getElementById('lbDl');
+  dl.href = src; dl.download = g.img;
+}
+function closeLB(e) {
+  if (!e || e.target === document.getElementById('lbOverlay'))
+    document.getElementById('lbOverlay').classList.remove('open');
+}
+function lbNav(dir) { lbIdx = (lbIdx + dir + galleryData.length) % galleryData.length; showLBFrame(); }
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('lbOverlay').classList.contains('open')) return;
+  if (e.key === 'Escape') document.getElementById('lbOverlay').classList.remove('open');
+  if (e.key === 'ArrowLeft') lbNav(-1);
+  if (e.key === 'ArrowRight') lbNav(1);
+});
+
+// --- LANGUAGE ---
+const PAGE_T = {
+  en:{nav_student_life:'Student Life',hero_title:'Student Life',hero_sub:'Precious memories and events from our school community.'},
+  rw:{nav_student_life:'Ubuzima bw\'Umunyeshuri',hero_title:'Ubuzima bw\'Umunyeshuri',hero_sub:'Ibiganiro bishimishije n\'ibikorwa mu muryango w\'ishuri ryacu.'},
+  fr:{nav_student_life:'Vie Scolaire',hero_title:'Vie Scolaire',hero_sub:'Précieux souvenirs et événements de notre communauté scolaire.'}
+};
+(function(){
+  const saved=localStorage.getItem('gpa_lang')||'en';
+  window.setLang=function(l){
+    localStorage.setItem('gpa_lang',l);
+    document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
+    document.getElementById('lb-'+l)?.classList.add('active');
+    document.querySelectorAll('[data-key]').forEach(el=>{
+      if(PAGE_T[l]?.[el.getAttribute('data-key')])el.innerHTML=PAGE_T[l][el.getAttribute('data-key')];
+    });
+  };
+  document.addEventListener('DOMContentLoaded',()=>window.setLang(saved));
+})();
 </script>
+
+<!-- LIGHTBOX -->
+<div class="lb-overlay" id="lbOverlay" onclick="closeLB(event)">
+  <button class="lb-close" onclick="document.getElementById('lbOverlay').classList.remove('open')">✕</button>
+  <img class="lb-img" id="lbImg" src="" alt="Gallery image"/>
+  <div class="lb-nav-row">
+    <button class="lb-nav" onclick="lbNav(-1)">‹</button>
+    <div class="lb-label" id="lbLabel"></div>
+    <button class="lb-nav" onclick="lbNav(1)">›</button>
+  </div>
+  <a class="lb-dl" id="lbDl" href="#" download>⬇️ Download Photo</a>
+</div>
 
 </body>
 </html>

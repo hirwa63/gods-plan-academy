@@ -132,6 +132,10 @@ body{font-family:'Outfit',sans-serif;color:var(--text);background:var(--white);o
 .pcta-ghost{background:transparent;color:white;border:2px solid rgba(255,255,255,0.4);padding:13px 28px;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;text-decoration:none;transition:all .2s;}
 .pcta-ghost:hover{border-color:white;background:rgba(255,255,255,0.1);}
 
+/* LANG BAR */
+.lang-bar{background:#04342C;display:flex;align-items:center;justify-content:center;gap:8px;padding:6px 16px;flex-wrap:wrap;}
+.lang-btn{background:none;border:1.5px solid rgba(255,255,255,0.25);color:rgba(255,255,255,0.7);font-size:12px;font-weight:800;padding:4px 14px;border-radius:20px;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;}
+.lang-btn:hover,.lang-btn.active{background:rgba(255,255,255,0.18);border-color:white;color:white;}
 /* FOOTER */
 footer{background:var(--green-deeper);color:rgba(255,255,255,0.7);padding:60px 40px 22px;}
 .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:36px;margin-bottom:44px;}
@@ -192,6 +196,12 @@ footer{background:var(--green-deeper);color:rgba(255,255,255,0.7);padding:60px 4
 </style>
 </head>
 <body>
+<div class="lang-bar">
+  <span style="color:rgba(255,255,255,0.5);font-size:11px;">🌐</span>
+  <button class="lang-btn active" onclick="setLang('en')" id="lb-en">EN</button>
+  <button class="lang-btn" onclick="setLang('rw')" id="lb-rw">RW</button>
+  <button class="lang-btn" onclick="setLang('fr')" id="lb-fr">FR</button>
+</div>
 
 <!-- NAVBAR -->
 <nav class="navbar" id="navbar">
@@ -241,8 +251,8 @@ footer{background:var(--green-deeper);color:rgba(255,255,255,0.7);padding:60px 4
   <div class="hero-overlay"></div>
 
   <div class="hero-content">
-    <h1>Welcome to God's Plan Academy</h1>
-    <p>Nurturing young minds with knowledge, faith, compassion and purpose — in the heart of Musanze, Rwanda.</p>
+    <h1 data-key="hero_title">Welcome to God's Plan Academy</h1>
+    <p data-key="hero_sub">Nurturing young minds with knowledge, faith, compassion and purpose — in the heart of Musanze, Rwanda.</p>
     <a class="hero-btn" href="#levels">Learn More ↓</a>
   </div>
   <div class="hero-arrow" onclick="document.getElementById('levels').scrollIntoView({behavior:'smooth'})">↓</div>
@@ -472,6 +482,25 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js').then(reg=>console.log('SW registered',reg.scope)).catch(err=>console.log('SW reg failed',err));
   });
 }
+</script>
+<script>
+const PAGE_T = {
+  en:{hero_title:'Welcome to God\'s Plan Academy',hero_sub:'Nurturing young minds with knowledge, faith, compassion and purpose — in the heart of Musanze, Rwanda.'},
+  rw:{hero_title:'Murakaza neza kuri God\'s Plan Academy',hero_sub:'Tworeza ubwenge, ukwizera, imbabazi n\'intego — mu mutima wa Musanze, Rwanda.'},
+  fr:{hero_title:'Bienvenue à God\'s Plan Academy',hero_sub:'Nous nourrissons les jeunes esprits avec la connaissance, la foi, la compassion et le but — au cœur de Musanze, Rwanda.'}
+};
+(function(){
+  const saved=localStorage.getItem('gpa_lang')||'en';
+  window.setLang=function(l){
+    localStorage.setItem('gpa_lang',l);
+    document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
+    document.getElementById('lb-'+l)?.classList.add('active');
+    document.querySelectorAll('[data-key]').forEach(el=>{
+      if(PAGE_T[l]?.[el.getAttribute('data-key')])el.innerHTML=PAGE_T[l][el.getAttribute('data-key')];
+    });
+  };
+  document.addEventListener('DOMContentLoaded',()=>window.setLang(saved));
+})();
 </script>
 </body>
 </html>

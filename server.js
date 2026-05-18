@@ -282,7 +282,11 @@ app.put('/api/announcements/:id', requireAdmin, upload.single('image'), async (r
       if (req.body[k] !== undefined) updated[k] = req.body[k];
     });
     if (req.body.pinned !== undefined) updated.pinned = req.body.pinned === 'true';
-    if (req.file) updated.image = '/uploads/' + req.file.filename;
+    if (req.file) {
+      if (!updated.imageHistory) updated.imageHistory = [];
+      if (updated.image) updated.imageHistory.unshift({ url: updated.image, savedAt: new Date().toISOString() });
+      updated.image = '/uploads/' + req.file.filename;
+    }
     list[idx] = updated;
     await writeJson(announcementsPath, list);
     res.json({ success: true, announcement: updated });
@@ -333,7 +337,11 @@ app.put('/api/gallery/:id', requireAdmin, upload.single('image'), async (req, re
     const idx = posts.findIndex(p => p.id === req.params.id);
     if (idx === -1) return res.status(404).json({ success: false, message: 'Post not found.' });
     const updated = { ...posts[idx], ...req.body };
-    if (req.file) updated.image = '/uploads/' + req.file.filename;
+    if (req.file) {
+      if (!updated.imageHistory) updated.imageHistory = [];
+      if (updated.image) updated.imageHistory.unshift({ url: updated.image, savedAt: new Date().toISOString() });
+      updated.image = '/uploads/' + req.file.filename;
+    }
     posts[idx] = updated;
     await writeJson(galleryPath, posts);
     res.json({ success: true, post: updated });
